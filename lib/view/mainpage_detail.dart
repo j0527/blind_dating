@@ -42,8 +42,12 @@ class MainPageDetail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(userImagePath),
-            Text(userName),
-            Text(userAge),
+            Row(
+              children: [
+                Text(userName),
+                Text(userAge),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
