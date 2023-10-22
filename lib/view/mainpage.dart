@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:blind_dating/model/%08getX_location_model.dart';
 import 'package:blind_dating/components/imageSlider_widget.dart';
-import 'package:blind_dating/model/indicatorCurrent_model.dart';
+import 'package:blind_dating/model/getX_indicatorCurrent_model.dart';
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/view/login.dart';
+import 'package:blind_dating/view/mainpage_detail.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,30 +83,42 @@ class MainPage extends StatelessWidget {
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Container(
-                      // constraints: BoxConstraints(
-                      //     maxWidth: MediaQuery.of(context).size.width, // 화면의 최대 너비로 설정
-                      //     maxHeight: MediaQuery.of(context).size.height, // 화면의 최대 높이로 설정
-                      //   ),
-                      color: const Color.fromARGB(255, 99, 182, 203),
-                      height: 400,
-                      child: Stack(
-                        children: [
-                          GetBuilder<IndicatorCurrent>(
-                            builder: (controller) {
-                              return CarouselSliderWidget(
-                                controller: sliderController,
-                                userInfoList: carouselItems,
-                                current: controller.current,
-                              );
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          const MainPageDetail(), 
+                            arguments: {
+                              'items': carouselItems,
+                              'index': indicatorCurrent.current, // 현재 아이템의 인덱스
                             },
-                          ),
-                          CarouselIndicator(
-                            userInfoList: carouselItems,
-                            current: indicatorCurrent.current,
-                            controller: sliderController,
-                          ),
-                        ],
+                          );
+                          print("carouselItems: $carouselItems");
+                      },
+                      child: Container(
+                        // constraints: BoxConstraints(
+                        //     maxWidth: MediaQuery.of(context).size.width, // 화면의 최대 너비로 설정
+                        //     maxHeight: MediaQuery.of(context).size.height, // 화면의 최대 높이로 설정
+                        //   ),
+                        color: const Color.fromARGB(255, 99, 182, 203),
+                        height: 400,
+                        child: Stack(
+                          children: [
+                            GetBuilder<IndicatorCurrent>(
+                              builder: (controller) {
+                                return CarouselSliderWidget(
+                                  controller: sliderController,
+                                  userInfoList: carouselItems,
+                                  current: controller.current,
+                                );
+                              },
+                            ),
+                            CarouselIndicator(
+                              userInfoList: carouselItems,
+                              current: indicatorCurrent.current,
+                              controller: sliderController,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
