@@ -1,4 +1,5 @@
 import 'package:blind_dating/view/chats.dart';
+import 'package:blind_dating/view/favorite.dart';
 import 'package:blind_dating/view/mainpage.dart';
 import 'package:blind_dating/view/profile.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,7 @@ class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 3, vsync: this);
-    // tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -38,8 +38,9 @@ class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateM
         controller: tabController,
         children: [
           MainPage(),      // 태영 메인 페이지
-          Chats(),         // 진 채팅 페이지       
-          Profile()        // ?? 프로필 페이지
+          const FavoritePage(),
+          const Chats(),         // 진 채팅 페이지       
+          const Profile()        // ?? 프로필 페이지
         ]
       ),
       // 화면 하단 탭바 설정
@@ -52,12 +53,12 @@ class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateM
             ),
             text: "Home",
           ),
-          // Tab(
-          //   icon: Icon(
-          //     Icons.favorite
-          //   ),
-          //   text: "",
-          // ),
+          Tab(
+            icon: Icon(
+              Icons.favorite
+            ),
+            text: "Favorites",
+          ),
           Tab(
             icon: Icon(
               Icons.chat_bubble_outline

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "999641263211",
+    "project_id": "dating-chats-b3caa",
+    "storage_bucket": "dating-chats-b3caa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999641263211:android:b57cdf8fee248ac926d52e",
+        "android_client_info": {
+          "package_name": "com.example.blind_dating"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSNWJNvvuVl2aP7_jusla0_NmWad2iaT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
