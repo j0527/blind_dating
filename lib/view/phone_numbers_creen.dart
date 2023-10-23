@@ -75,7 +75,6 @@ class _phoneNumberScreenState extends State<phoneNumberScreen> {
                   style: TextStyle(fontSize: 18),
                   controller: phoneController,
                   decoration: InputDecoration(labelText: "+821012345678",
-                  hintText: '+821012345678 형식으로 입력해 주세요.'
                   ),
                   keyboardType: TextInputType.phone,),
               ),

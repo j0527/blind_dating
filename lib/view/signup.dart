@@ -15,12 +15,16 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        
+        child: ElevatedButton(
+          onPressed: () {
+            Get.to(const HomeWidget());
+          }, 
+          child: const Text("로그인 후 화면으로 이동")
+        ),
       ),
     );
   }
 }
-
 
 
         //  ElevatedButton(
