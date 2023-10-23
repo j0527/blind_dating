@@ -41,6 +41,7 @@ dependencies:
   permission_handler: ^11.0.1 # 사용권한 동의
   firebase_core: ^2.19.0
   cloud_firestore: ^4.11.0
+  firebase_auth: ^4.11.1 # 전화인증
 
 dev_dependencies:
   flutter_test:
