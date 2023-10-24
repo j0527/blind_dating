@@ -41,7 +41,11 @@ class MainPageDetail extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(userImagePath),
+            SizedBox(
+              width: 400,
+              height: 400,
+              child: Image.network(userImagePath, fit: BoxFit.fill)
+              ),
             Row(
               children: [
                 Text(userName),

@@ -1,132 +1,157 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:blind_dating/model/%08getX_location_model.dart';
 import 'package:blind_dating/components/imageSlider_widget.dart';
-import 'package:blind_dating/model/getX_indicatorCurrent_model.dart';
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/view/login.dart';
 import 'package:blind_dating/view/mainpage_detail.dart';
+import 'package:blind_dating/viewmodel/%08getX_location_%08ctrl.dart';
+import 'package:blind_dating/viewmodel/getX_indicatorCurrent_crtl.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class MainPage extends StatelessWidget {
   MainPage({super.key});
+// 이미지 슬라이더를 제어하기 위한 기본적인 컨트롤러
+  final CarouselController sliderController = CarouselController();
+  // 현재 이미지 슬라이더의 상태를 관리하는 GetX 컨트롤러
+  final IndicatorCurrent indicatorCurrent = Get.put(IndicatorCurrent());
+  // 위치와 관련된 getXmodel
+  final GetXLocation locationController = Get.put(GetXLocation());
+  // 유저 거리를 담아놓을 변수
+  String reciveUserDistance = "";
+  // 유저 정보 JSON으로 받아올 리스트
+  List data = [];
+  // 유저의 계산된 나이를 담을 리스트
+  List userAge = [];
 
   @override
   Widget build(BuildContext context) {
-    final CarouselController sliderController =
-        CarouselController(); // 이미지 슬라이더를 제어하기 위한 기본적인 컨트롤러
-    final IndicatorCurrent indicatorCurrent =
-        Get.put(IndicatorCurrent()); // 현재 이미지 슬라이더의 상태를 관리하는 GetX 컨트롤러
-    final GetXLocation locationController =
-        Get.put(GetXLocation()); // 위치와 관련된 getXmodel
+    Future<List> getJSONData() async {
+      List data = [];
+      // 유저 정보 JSON으로 받아올 리스트
 
-    String reciveUserDistance = ""; // 유저 거리를 담아놓을 변수
-
-    // 이미지와 텍스트 가지는 더미데이터 리스트
-    final List<SliderlItems> carouselItems = [
-      SliderlItems(
-          userimagePath: 'images/불테리어.png',
-          userName: '박명수',
-          userAge: '10세',
-          userLocation: '내 코앞',
-          userDistance: reciveUserDistance,
-          userMBTI: 'LOVE'),
-      SliderlItems(
-          userimagePath: 'images/퍼그.png',
-          userName: '크리스티아누 호날두',
-          userAge: '27세',
-          userLocation: '평양 직할시',
-          userDistance: '100km',
-          userMBTI: 'ESTJ'),
-    ];
-
-    // 유저와의 거리가 계산되는 순서 및 방식
-    // 1. 앱 실행시 stateless라서 FutureBuilder를 써서 _initLocation() 함수를 쓰고 거기서 위치 권한 사용동의 창을 띄움
-    // 2. 동의시에는 내 위치를 geolocator 패키지의 position이라는 변수에 저장됨 ex): Latitude: 37.49474, Longitude: 127.030034 이런식이라서 position.Latitude 하면 사용됨
-    // 3. 그 다음 FutureBuilder에서는 _getPosition()이 내 위치를 가져오면 getXmodel부분의 myLocation변수에 position(내 위치)을 저장시킴
-    // 4. 저장된 position값으로 calculateDistance()를 불러와서 계산하고 그걸 calcDistance 변수에 저장, (calculateDistance()에는 임의로 지정해놓은 상대방의 위도 경도가 있어서 계산됨)
-    // 5. 거리가 계산되면 FutureBuilder 내부에 calculateDistance()를 인스턴스로 선언해놓은 calcDistance에 상대방과 나의 거리 값을 저장
-    // 6. carouselItems의 userDistance에 거리를 업데이트
-    // 7. imageSlider위젯의 userInfoList부분에 carouselItems를 넣어줘서 화면에 띄워주게됨
+      // Flutter 밖에서 하는거는 모두 async임
+      var url =
+          Uri.parse('http://localhost:8080/Flutter/dateapp_quary_flutter.jsp');
+      // var urlImage =
+      //     Uri.parse('http://localhost:8080/Flutter/images/cart.png');
+      var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
+      data.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
+      var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
+      List result = dataConvertedJSON['results'];
+      data.addAll(result);
+      print(result);
+      return await result;
+    }
 
     return Scaffold(
       body: Center(
-        child: FutureBuilder<Position?>(
-          // Position타입은 Latitude: , Longitude: 이런식으로 되어있음
-          future: _initLocation(), // 사용자 위치정보 권한 창을 띄우고 동의시 내 위치를 가져오게 만드는 함수
+        child: FutureBuilder<List<dynamic>>(
+          future: Future.wait([_initLocation(), getJSONData()]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
+              // if (snapshot.hasData && snapshot.data?.length == 2) {
               if (snapshot.hasData) {
-                GetXLocation locationController =
-                    Get.find(); // 위에서 선언된 Get.put을 find해서 getXmodel을 쓸 수 있게됨
-                double calcDistance = locationController.calculateDistance();
-                // 3항 연산자로 km로 변환하기 위해서 1000을 넘으면 1000으로 나누고 단위도 km로 바꿈
-                reciveUserDistance =
-                    '${calcDistance >= 1000.0 ? (calcDistance / 1000.0).toStringAsFixed(2) : calcDistance.toStringAsFixed(2)}${calcDistance >= 1000.0 ? "Km" : "m"}';
-                // 여기에서 첫번째 유저의 userDistance를 업데이트
-                carouselItems[0].userDistance = reciveUserDistance;
+                Position? userPosition = snapshot.data?[0]; // 현재 내 위치
+                List? userList = snapshot.data?[1]; // db에서 불러온 유저 정보 리스트
+                
+                if (userList != null) {
+                  locationController.userList(userList); // 컨트롤러의 userList 변수에 불러온 snapshot.data?[1] 넘겨주기
+                }
 
-                return Column(
-                  children: [
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        '오늘의 추천',
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+                // print("userList: $userList");
+
+                // 이미지와 텍스트 가지는 더미데이터 리스트
+                final List<SliderlItems> carouselItems = [
+                  SliderlItems(
+                    userimagePath: userList![0]['udogimg'],
+                    userName: userList[0]['unickname'],
+                    userAge: "${locationController.ageCalc()[0]} 세",
+                    userLocation: userList[0]['uaddress'],
+                    userDistance: reciveUserDistance,
+                    userMBTI: userList[0]['umbti'],
+                  ),
+                  SliderlItems(
+                    userimagePath: userList[1]['udogimg'],
+                    userName: userList[1]['unickname'],
+                    userAge: "${locationController.ageCalc()[1]} 세",
+                    userLocation: userList[1]['uaddress'],
+                    userDistance: '20km',
+                    userMBTI: userList[1]['umbti'],
+                  ),
+                ];
+
+                if (userPosition != null) {
+                  // GetXLocation locationController = Get.find();
+                  double calcDistance = locationController.calculateDistance();
+                  reciveUserDistance =
+                      '${calcDistance >= 1000.0 ? (calcDistance / 1000.0).toStringAsFixed(2) : calcDistance.toStringAsFixed(2)}${calcDistance >= 1000.0 ? "Km" : "m"}';
+                  carouselItems[0].userDistance = reciveUserDistance;
+
+                  return Column(
+                    children: [
+                      const SizedBox(
+                        height: 50,
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(
-                          const MainPageDetail(), 
+                      const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          '오늘의 추천',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            const MainPageDetail(),
                             arguments: {
                               'items': carouselItems,
-                              'index': indicatorCurrent.current, // 현재 아이템의 인덱스
+                              'index': indicatorCurrent.current,
                             },
                           );
                           print("carouselItems: $carouselItems");
-                      },
-                      child: Container(
-                        // constraints: BoxConstraints(
-                        //     maxWidth: MediaQuery.of(context).size.width, // 화면의 최대 너비로 설정
-                        //     maxHeight: MediaQuery.of(context).size.height, // 화면의 최대 높이로 설정
-                        //   ),
-                        color: const Color.fromARGB(255, 99, 182, 203),
-                        height: 400,
-                        child: Stack(
-                          children: [
-                            GetBuilder<IndicatorCurrent>(
-                              builder: (controller) {
-                                return CarouselSliderWidget(
-                                  controller: sliderController,
-                                  userInfoList: carouselItems,
-                                  current: controller.current,
-                                );
-                              },
-                            ),
-                            CarouselIndicator(
-                              userInfoList: carouselItems,
-                              current: indicatorCurrent.current,
-                              controller: sliderController,
-                            ),
-                          ],
+                        },
+                        child: Container(
+                          color: const Color.fromARGB(255, 99, 182, 203),
+                          height: 400,
+                          child: Stack(
+                            children: [
+                              GetBuilder<IndicatorCurrent>(
+                                builder: (controller) {
+                                  return CarouselSliderWidget(
+                                    controller: sliderController,
+                                    userInfoList: carouselItems,
+                                    current: controller.current,
+                                  );
+                                },
+                              ),
+                              CarouselIndicator(
+                                userInfoList: carouselItems,
+                                current: indicatorCurrent.current,
+                                controller: sliderController,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
+                      // Text(data[1]['unickname']),
+                      // Text("${userList[0]['unickname']}"),
+                    ],
+                  );
+                }
               } else if (snapshot.hasError) {
-                return Text('위치 가오는데에 실했습니다.: ${snapshot.error}');
+                return Text('위치 가져오는 중에 오류가 발생했습니다: ${snapshot.error}');
               }
             }
+            // }
 
             return const CircularProgressIndicator();
           },
@@ -134,7 +159,22 @@ class MainPage extends StatelessWidget {
       ),
     );
   }
-} // ---- Functions ----
+}
+
+
+  // 유저와의 거리가 계산되는 순서 및 방식
+  // 1. 앱 실행시 stateless라서 FutureBuilder를 써서 _initLocation() 함수를 쓰고 거기서 위치 권한 사용동의 창을 띄움
+  // 2. 동의시에는 내 위치를 geolocator 패키지의 position이라는 변수에 저장됨 ex): Latitude: 37.49474, Longitude: 127.030034 이런식이라서 position.Latitude 하면 사용됨
+  // 3. 그 다음 FutureBuilder에서는 _getPosition()이 내 위치를 가져오면 getXmodel부분의 myLocation변수에 position(내 위치)을 저장시킴
+  // 4. 저장된 position값으로 calculateDistance()를 불러와서 계산하고 그걸 calcDistance 변수에 저장, (calculateDistance()에는 임의로 지정해놓은 상대방의 위도 경도가 있어서 계산됨)
+  // 5. 거리가 계산되면 FutureBuilder 내부에 calculateDistance()를 인스턴스로 선언해놓은 calcDistance에 상대방과 나의 거리 값을 저장
+  // 6. carouselItems의 userDistance에 거리를 업데이트
+  // 7. imageSlider위젯의 userInfoList부분에 carouselItems를 넣어줘서 화면에 띄워주게됨
+
+
+
+
+// ---- Functions ----
 
 // 앱 처음 위치 가져오기
 Future<Position?> _initLocation() async {
@@ -240,12 +280,6 @@ Future<Position?> _getPosition() async {
     return null;
   }
 }
-
-
-
-
-
-
 
 // 앱 권한 거부됐을 때 뜨는 다이어로그
 // void _showPermissionDeniedDialog(BuildContext context) {
