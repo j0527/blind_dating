@@ -1,4 +1,5 @@
 import 'package:blind_dating/util/theme.dart';
+import 'package:blind_dating/view/chat_room_lists.dart';
 import 'package:blind_dating/view/chats.dart';
 import 'package:blind_dating/view/favorite.dart';
 import 'package:blind_dating/view/mainpage.dart';
@@ -42,7 +43,7 @@ class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateM
         children: [
           MainPage(),      // 태영 메인 페이지
           const FavoritePage(),
-          const Chats(),         // 진 채팅 페이지       
+          const ChatRoomLists(),         // 진 채팅 페이지       
           const Profile()        // ?? 프로필 페이지
         ]
       ),
