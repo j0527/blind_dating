@@ -124,7 +124,7 @@ class MainPage extends StatelessWidget {
                   ],
                 );
               } else if (snapshot.hasError) {
-                return Text('Failed to get location: ${snapshot.error}');
+                return Text('위치 가오는데에 실했습니다.: ${snapshot.error}');
               }
             }
 

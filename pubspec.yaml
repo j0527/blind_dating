@@ -43,6 +43,7 @@ dependencies:
   cloud_firestore: ^4.11.0
   firebase_auth: ^4.11.1 # 전화인증
   image_picker: ^1.0.4 # 앨범 사용 위해
+  http: ^1.1.0 # 네트워크타고 JSON 받아오기위함
 
 dev_dependencies:
   flutter_test:
