@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:blind_dating/view/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileModify extends StatefulWidget {
   const ProfileModify({super.key});
@@ -18,6 +21,21 @@ class _ProfileModifyState extends State<ProfileModify> {
   late TextEditingController PWCheckController;
   late String inputValue;
 
+  XFile? _image; //이미지를 담을 변수 선언
+  final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
+
+  //이미지를 가져오는 함수
+  Future getImage(ImageSource imageSource) async {
+    //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
+    final XFile? pickedFile = await picker.pickImage(source: imageSource);
+    if (pickedFile != null) {
+      setState(() {
+        _image = XFile(pickedFile.path); //가져온 이미지를 _image에 저장
+      });
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -26,10 +44,6 @@ class _ProfileModifyState extends State<ProfileModify> {
       PWCheckController = TextEditingController();
       inputValue = "";
   }
-
-
-
-
 
 
   @override
@@ -51,6 +65,11 @@ class _ProfileModifyState extends State<ProfileModify> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(height: 5, width: double.infinity),
+                  _buildPhotoArea(),
+                SizedBox(height: 15),
+                _buildButton(),
+                SizedBox(height: 25),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextField(style: TextStyle(fontSize: 16),
@@ -114,11 +133,42 @@ class _ProfileModifyState extends State<ProfileModify> {
       ),
     );
   }
+
+
+  Widget _buildPhotoArea() {
+    return _image != null
+        ? Container(
+            width: 250,
+            height: 250,
+            child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
+          )
+        : Container(
+            width: 250,
+            height: 250,
+            color: Color.fromARGB(255, 212, 221, 247),
+          );
+  }
+
+
+  Widget _buildButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton.icon(
+          onPressed: () {
+            getImage(ImageSource.gallery); //getImage 함수를 호출해서 갤러리에서 사진 가져오기
+          },
+          style: TextButton.styleFrom(
+                        minimumSize: Size(130, 50),
+                          shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Color.fromARGB(255, 152, 175, 250),
+                          foregroundColor: Color.fromARGB(255, 234, 234, 236)
+                      ),
+          icon: Icon(Icons.photo), 
+          label: Text("갤러리", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)),
+      ],
+    );
+  }
 }
-
-
-        //  ElevatedButton(
-        //   onPressed: () {
-        //     Get.to(const HomeWidget());
-        //   }, 
-        //   child: const Text("홈 화면으로 이동")

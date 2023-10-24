@@ -53,9 +53,9 @@ XFile? _image; //이미지를 담을 변수 선언
                   padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
                   child: Text('Sign Up', style: TextStyle(fontSize: 20, color: Color.fromRGBO(94, 88, 176, 0.945), fontWeight: FontWeight.bold),),
                 ),
-                SizedBox(height: 45, width: double.infinity),
+                SizedBox(height: 35, width: double.infinity),
                       _buildPhotoArea(),
-                SizedBox(height: 55),
+                SizedBox(height: 35),
                         _buildButton(),
           
                           
@@ -63,7 +63,7 @@ XFile? _image; //이미지를 담을 변수 선언
                     padding: const EdgeInsets.fromLTRB(15, 75, 15, 80),
                     child: ElevatedButton(
                             onPressed: () {
-                              Get.to(SignUpThird());
+                              Get.to(() => SignUpThird());
                             },
                             style: ElevatedButton.styleFrom(
                             minimumSize: Size(400, 50),
