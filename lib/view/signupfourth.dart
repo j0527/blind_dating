@@ -258,12 +258,12 @@ class _SignUpFourthState extends State<SignUpFourth> {
                             },
                             style: ElevatedButton.styleFrom(
                             minimumSize: Size(400, 50),
-                            backgroundColor: Color.fromARGB(255, 169, 170, 230),
+                            backgroundColor: Color.fromARGB(255, 146, 148, 255),
                             shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                             ),
                             ),
-                            child: const Text("홈 화면으로 이동", style: TextStyle(fontSize:16 ,color: Color.fromARGB(255, 65, 61, 156)),),),
+                            child: const Text("홈 화면으로 이동", style: TextStyle(fontSize:18, fontWeight: FontWeight.bold ,color:Color.fromARGB(255, 234, 234, 236)),),),
                   ),
               ],
             ),

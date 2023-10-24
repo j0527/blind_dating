@@ -99,7 +99,7 @@ class _ProfileModifyState extends State<ProfileModify> {
                     Get.to(const Profile());
                   },
                   style: TextButton.styleFrom(
-                        minimumSize: Size(220, 50),
+                        minimumSize: Size(170, 50),
                           shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                           ),

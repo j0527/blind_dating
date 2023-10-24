@@ -19,7 +19,7 @@ class Profile extends StatelessWidget {
               children: [
               CircleAvatar(
                 backgroundImage: AssetImage('images/퍼그.png'),
-                radius: 70,
+                radius: 100,
                   ),
                 SizedBox(height: 40,),
                 ElevatedButton(
