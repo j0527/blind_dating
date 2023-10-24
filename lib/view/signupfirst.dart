@@ -13,17 +13,20 @@ class SignUpFirst extends StatefulWidget {
 }
 
 class _SignUpFirstState extends State<SignUpFirst> {
+  late TextEditingController IDController;
+  late TextEditingController PWController;
+  late TextEditingController PWCheckController;
   late String inputValue;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+      IDController = TextEditingController();
+      PWController = TextEditingController();
+      PWCheckController = TextEditingController();
       inputValue = "";
   }
-  TextEditingController IDController = TextEditingController();
-  TextEditingController PWController = TextEditingController();
-  TextEditingController PWCheckController = TextEditingController();
+
 
 
   DateTime dateTime = DateTime(2000, 1, 1);
@@ -62,10 +65,7 @@ class _SignUpFirstState extends State<SignUpFirst> {
                     hintText: '아이디',
                     prefixIcon: Icon(Icons.person, color: Color.fromARGB(255, 88, 104, 126),)
                         ),
-                    keyboardType: TextInputType.text,
-                    onSubmitted: (value) {
-                      inputValue = PWController.text;
-                    },
+                        readOnly: true,
                   ),
                 ),
                 Padding(
