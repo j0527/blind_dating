@@ -73,6 +73,7 @@ class _ProfileModifyState extends State<ProfileModify> {
                   _buildPhotoArea(),
                 SizedBox(height: 15),
                 _buildButton(),
+                SizedBox(height: 15,),
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: TextField(style: TextStyle(fontSize: 16),
@@ -140,7 +141,7 @@ class _ProfileModifyState extends State<ProfileModify> {
                       duration: Duration(seconds: 2),
                       backgroundColor: Color.fromARGB(255, 59, 160, 237),
                       );
-                      Get.to(const HomeWidget());
+                      Get.to(() => HomeWidget());
                     },
                     style: TextButton.styleFrom(
                           minimumSize: Size(170, 50),

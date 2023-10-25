@@ -36,6 +36,11 @@ class _SignUpThirdState extends State<SignUpThird> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+                        title: Text('Sign Up', style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromRGBO(94, 88, 176, 0.945),
+                        fontWeight: FontWeight.bold),),
+
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -52,18 +57,7 @@ class _SignUpThirdState extends State<SignUpThird> {
             child: Column(
               children: [
                 Image.asset('images/stepthird.png'),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color.fromRGBO(94, 88, 176, 0.945),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(
+                                SizedBox(
                   height: 50,
                 ),
                 Padding(
@@ -78,6 +72,22 @@ class _SignUpThirdState extends State<SignUpThird> {
                 ),
                 SizedBox(height: 0, width: double.infinity),
                 _buildPhotoArea(),
+                SizedBox(height: 10), 
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
+                  child: ElevatedButton(onPressed: () {
+                    //
+                  }, 
+                        style: TextButton.styleFrom(
+                          minimumSize: Size(100, 40),
+                            shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            ),
+                            backgroundColor: Color.fromARGB(255, 152, 175, 250),
+                            foregroundColor: Color.fromARGB(255, 234, 234, 236)
+                        ),
+                  child: Text('프로필 사진 저장', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)),
+                ),
                 SizedBox(
                   height: 50,
                 ),
@@ -92,7 +102,23 @@ class _SignUpThirdState extends State<SignUpThird> {
                   ),
                 ),
                 _buildPhotoHobbyArea(),
-                SizedBox(height: 50),
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
+                  child: ElevatedButton(onPressed: () {
+                    //
+                  }, 
+                      style: TextButton.styleFrom(
+                        minimumSize: Size(100, 40),
+                          shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Color.fromARGB(255, 152, 175, 250),
+                          foregroundColor: Color.fromARGB(255, 234, 234, 236)
+                      ),
+                  child: Text('취미 사진 저장', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)),
+                ),
+                SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 50, 15, 80),
                   child: ElevatedButton(

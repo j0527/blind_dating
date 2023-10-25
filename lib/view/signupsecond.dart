@@ -33,7 +33,13 @@ XFile? _image; //이미지를 담을 변수 선언
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leading: IconButton(
+      appBar: AppBar(
+                title: Text('Sign Up', style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromRGBO(94, 88, 176, 0.945),
+                        fontWeight: FontWeight.bold),),
+
+        leading: IconButton(
         icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
                   Get.back(); // Get 패키지를 사용하여 이전 페이지로 이동합니다.
@@ -49,10 +55,6 @@ XFile? _image; //이미지를 담을 변수 선언
             child: Column(
               children: [
                 Image.asset('images/stepsecond.png'),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50, 30, 50, 0),
-                  child: Text('Sign Up', style: TextStyle(fontSize: 20, color: Color.fromRGBO(94, 88, 176, 0.945), fontWeight: FontWeight.bold),),
-                ),
                 SizedBox(height: 35, width: double.infinity),
                       _buildPhotoArea(),
                 SizedBox(height: 35),
