@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:blind_dating/homewidget.dart';
 import 'package:blind_dating/view/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -115,7 +116,14 @@ class _ProfileModifyState extends State<ProfileModify> {
                 SizedBox(height: 60,),
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(const Profile());
+                    Get.snackbar(
+                    "수정완료",
+                    "변경된 사항이 저장되었습니다.",
+                    snackPosition: SnackPosition.BOTTOM, //스낵바 위치설정
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Color.fromARGB(255, 59, 160, 237),
+                    );
+                    Get.to(const HomeWidget());
                   },
                   style: TextButton.styleFrom(
                         minimumSize: Size(170, 50),
