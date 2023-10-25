@@ -1,9 +1,10 @@
+// ignore_for_file: must_be_immutable, avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:blind_dating/components/imageSlider_widget.dart';
 import 'package:blind_dating/model/sliderItems_model.dart';
-import 'package:blind_dating/view/login.dart';
 import 'package:blind_dating/view/mainpage_detail.dart';
 import 'package:blind_dating/viewmodel/%08getX_location_%08ctrl.dart';
 import 'package:blind_dating/viewmodel/getX_indicatorCurrent_crtl.dart';
@@ -38,15 +39,13 @@ class MainPage extends StatelessWidget {
       // Flutter 밖에서 하는거는 모두 async임
       var url =
           Uri.parse('http://localhost:8080/Flutter/dateapp_quary_flutter.jsp');
-      // var urlImage =
-      //     Uri.parse('http://localhost:8080/Flutter/images/cart.png');
       var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
       data.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
       var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
       List result = dataConvertedJSON['results'];
       data.addAll(result);
-      print(result);
-      return await result;
+      // print(result);
+      return result;
     }
 
     return Scaffold(
@@ -63,6 +62,9 @@ class MainPage extends StatelessWidget {
                 if (userList != null) {
                   locationController.userList(userList); // 컨트롤러의 userList 변수에 불러온 snapshot.data?[1] 넘겨주기
                 }
+
+                // grant를 select해서 0이면 udogimg, 1이면 ufaceimg
+                // if userList[]
 
                 // print("userList: $userList");
 
@@ -142,8 +144,6 @@ class MainPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // Text(data[1]['unickname']),
-                      // Text("${userList[0]['unickname']}"),
                     ],
                   );
                 }

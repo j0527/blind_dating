@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 class SliderlItems {
   final String userimagePath; // 슬라이더의 이미지 정보
   final String userName; // 슬라이더에 뜰 유저 이름
