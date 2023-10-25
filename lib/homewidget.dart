@@ -61,7 +61,7 @@ class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateM
           decoration: BoxDecoration(color: const Color.fromARGB(255, 69, 135, 249),),
           ),
           ListTile(onTap: () {
-              // Get.to(Profile())
+              Get.to(Profile());
             },
             leading: Icon(Icons.person,
             // color: Theme.of(context).colorScheme.secondary,

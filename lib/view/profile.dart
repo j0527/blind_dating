@@ -44,7 +44,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      // Get.to(() => ProfileModify());
+                      Get.to(() => ProfileModify());
                     },
                     style: TextButton.styleFrom(
                         minimumSize: Size(170, 50),
