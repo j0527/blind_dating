@@ -8,8 +8,6 @@
 //     return Scaffold(
 //       body: StreamBuilder<QuerySnapshot>(
 //         stream: FirebaseFirestore.instance
-//           .collection('ChatRooms')
-//           .doc()
 //           .collection('chatMessages')
 //           .orderBy('sendingTime', descending: true)
 //           .snapshots(),

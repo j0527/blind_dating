@@ -45,6 +45,7 @@ dependencies:
   image_picker: ^1.0.4 # 앨범 사용 위해
   http: ^1.1.0 # 네트워크타고 JSON 받아오기위함
   shared_preferences: ^2.2.2 # 로그인 관리
+  chat_bubbles: ^1.5.0    # 채팅 말풍선
 
 dev_dependencies:
   flutter_test:
