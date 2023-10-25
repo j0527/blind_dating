@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:blind_dating/homewidget.dart';
 import 'package:blind_dating/view/mainpage.dart';
 import 'package:blind_dating/view/signupfirst.dart';
+import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +22,9 @@ class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver{
   late AppLifecycleState _lastLifeCycleState;
   late TextEditingController idText;
   late TextEditingController pwText;
+  // 유저와 관련된 getX
+  final LoadUserData userDataController = Get.put(LoadUserData());
+
 
   // 유저 정보 JSON으로 받아올 리스트
   // List data = [];
@@ -96,8 +101,9 @@ class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver{
         ),
         ElevatedButton(
           onPressed: () {
+            
             Get.to(
-              MainPage(), // 페이지로 저장시킬 id정보 넘기기
+              const HomeWidget(), // 페이지로 저장시킬 id정보 넘기기
               arguments: _saveSharePreferencese()
               );
           },
@@ -123,8 +129,8 @@ class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver{
     idText.text = prefs.getString("uid") ?? " ";
     pwText.text = prefs.getString("upw") ?? " ";
 
-    print("idText.text: ${idText.text}");
-    print("pwText.text: ${pwText.text}");
+    print("아이디 텍스트필드: ${idText.text}");
+    print("패스워드 텍스트필드: ${pwText.text}");
   }
 
   // 이 함수가 내 기기에 id정보를 저장시키는 것이고 Get.to로 넘겨주는 부분
