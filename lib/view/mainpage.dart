@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable, avoid_print
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -14,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatelessWidget {
   MainPage({super.key});
@@ -26,45 +25,83 @@ class MainPage extends StatelessWidget {
   // 유저 거리를 담아놓을 변수
   String reciveUserDistance = "";
   // 유저 정보 JSON으로 받아올 리스트
-  List data = [];
+  List userData = [];
+  // 로그인된 유저 받아올 리스트
+  List loginData = [];
   // 유저의 계산된 나이를 담을 리스트
   List userAge = [];
+  // 유저 id
+  String uid = "";
+  // 유저 password
+  String upw = "";
+
+  Future<String> initSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid') ?? " ";
+    upw = prefs.getString('upw') ?? " ";
+    print("send uid: $uid");
+    print("send upw: $upw");
+    return uid;
+  }
 
   @override
   Widget build(BuildContext context) {
-    Future<List> getJSONData() async {
-      List data = [];
-      // 유저 정보 JSON으로 받아올 리스트
-
-      // Flutter 밖에서 하는거는 모두 async임
-      var url =
-          Uri.parse('http://localhost:8080/Flutter/dateapp_quary_flutter.jsp');
+    Future<List> getLoginData() async {
+      // initSharedPreferences에서 uid만 가져와서 요청 보내기
+      String getUid = await initSharedPreferences();
+      print("getLoginData uid:$uid");
+      var url = Uri.parse(
+          'http://localhost:8080/Flutter/dateapp_login_quary_flutter.jsp?uid=$getUid');
+      print(url);
       var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
-      data.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
+      loginData.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
       var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
       List result = dataConvertedJSON['results'];
-      data.addAll(result);
-      // print(result);
+      loginData.addAll(result);
+      // print("Login result: $result");
       return result;
     }
+
+    Future<List> getUserData() async {
+
+      var url =
+          Uri.parse('http://localhost:8080/Flutter/dateapp_quary_flutter.jsp');
+
+      var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
+      userData.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
+      var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
+      List result = dataConvertedJSON['results'];
+      userData.addAll(result);
+      // print(result);
+      return await result;
+    }
+
+    // 유저와의 거리가 계산되는 순서 및 방식
+    // 1. 앱 실행시 stateless라서 FutureBuilder를 써서 _initLocation() 함수를 쓰고 거기서 위치 권한 사용동의 창을 띄움
+    // 2. 동의시에는 내 위치를 geolocator 패키지의 position이라는 변수에 저장됨 ex): Latitude: 37.49474, Longitude: 127.030034 이런식이라서 position.Latitude 하면 사용됨
+    // 3. 그 다음 FutureBuilder에서는 _getPosition()이 내 위치를 가져오면 getXmodel부분의 myLocation변수에 position(내 위치)을 저장시킴
+    // 4. 저장된 position값으로 calculateDistance()를 불러와서 계산하고 그걸 calcDistance 변수에 저장, (calculateDistance()에는 임의로 지정해놓은 상대방의 위도 경도가 있어서 계산됨)
+    // 5. 거리가 계산되면 FutureBuilder 내부에 calculateDistance()를 인스턴스로 선언해놓은 calcDistance에 상대방과 나의 거리 값을 저장
+    // 6. carouselItems의 userDistance에 거리를 업데이트
+    // 7. imageSlider위젯의 userInfoList부분에 carouselItems를 넣어줘서 화면에 띄워주게됨
 
     return Scaffold(
       body: Center(
         child: FutureBuilder<List<dynamic>>(
-          future: Future.wait([_initLocation(), getJSONData()]),
+          future: Future.wait([_initLocation(), getUserData(), getLoginData()]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               // if (snapshot.hasData && snapshot.data?.length == 2) {
               if (snapshot.hasData) {
                 Position? userPosition = snapshot.data?[0]; // 현재 내 위치
                 List? userList = snapshot.data?[1]; // db에서 불러온 유저 정보 리스트
-                
-                if (userList != null) {
-                  locationController.userList(userList); // 컨트롤러의 userList 변수에 불러온 snapshot.data?[1] 넘겨주기
-                }
+                List? loginData = snapshot.data?[2]; // 로그인된 유저의 데이터
 
-                // grant를 select해서 0이면 udogimg, 1이면 ufaceimg
-                // if userList[]
+                // print("Future Login Data: $loginData");
+                if (userList != null) {
+                  locationController.userList(
+                      userList); // 컨트롤러의 userList 변수에 불러온 snapshot.data?[1] 넘겨주기
+                }
 
                 // print("userList: $userList");
 
@@ -144,6 +181,8 @@ class MainPage extends StatelessWidget {
                           ),
                         ),
                       ),
+                      // Text(data[1]['unickname']),
+                      // Text("${userList[0]['unickname']}"),
                     ],
                   );
                 }
@@ -160,19 +199,6 @@ class MainPage extends StatelessWidget {
     );
   }
 }
-
-
-  // 유저와의 거리가 계산되는 순서 및 방식
-  // 1. 앱 실행시 stateless라서 FutureBuilder를 써서 _initLocation() 함수를 쓰고 거기서 위치 권한 사용동의 창을 띄움
-  // 2. 동의시에는 내 위치를 geolocator 패키지의 position이라는 변수에 저장됨 ex): Latitude: 37.49474, Longitude: 127.030034 이런식이라서 position.Latitude 하면 사용됨
-  // 3. 그 다음 FutureBuilder에서는 _getPosition()이 내 위치를 가져오면 getXmodel부분의 myLocation변수에 position(내 위치)을 저장시킴
-  // 4. 저장된 position값으로 calculateDistance()를 불러와서 계산하고 그걸 calcDistance 변수에 저장, (calculateDistance()에는 임의로 지정해놓은 상대방의 위도 경도가 있어서 계산됨)
-  // 5. 거리가 계산되면 FutureBuilder 내부에 calculateDistance()를 인스턴스로 선언해놓은 calcDistance에 상대방과 나의 거리 값을 저장
-  // 6. carouselItems의 userDistance에 거리를 업데이트
-  // 7. imageSlider위젯의 userInfoList부분에 carouselItems를 넣어줘서 화면에 띄워주게됨
-
-
-
 
 // ---- Functions ----
 
