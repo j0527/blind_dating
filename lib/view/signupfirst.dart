@@ -184,7 +184,7 @@ class _SignUpFirstState extends State<SignUpFirst> {
                 ),
                 SizedBox(height: 35,),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 25, 15, 50),
+                    padding: const EdgeInsets.fromLTRB(15, 25, 15, 20),
                     child: ElevatedButton(
                             onPressed: () {
                               Get.to(SignUpSecond());

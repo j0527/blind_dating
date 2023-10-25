@@ -116,21 +116,6 @@ XFile? _image; //이미지를 담을 변수 선언
                       ),
           icon: Icon(Icons.camera_alt_outlined), 
           label: Text("카메라", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)),
-          SizedBox(width: 30),
-        ElevatedButton.icon(
-          onPressed: () {
-            getImage(ImageSource.gallery); //getImage 함수를 호출해서 갤러리에서 사진 가져오기
-          },
-          style: TextButton.styleFrom(
-                        minimumSize: Size(130, 50),
-                          shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          ),
-                          backgroundColor: Color.fromARGB(255, 152, 175, 250),
-                          foregroundColor: Color.fromARGB(255, 234, 234, 236)
-                      ),
-          icon: Icon(Icons.photo), 
-          label: Text("갤러리", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)),
       ],
     );
   }
