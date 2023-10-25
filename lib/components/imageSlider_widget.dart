@@ -1,5 +1,5 @@
 import 'package:blind_dating/model/sliderItems_model.dart';
-import 'package:blind_dating/viewmodel/getX_indicatorCurrent_crtl.dart';
+import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

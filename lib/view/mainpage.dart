@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:blind_dating/components/imageSlider_widget.dart';
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/view/mainpage_detail.dart';
-import 'package:blind_dating/viewmodel/%08getX_location_%08ctrl.dart';
-import 'package:blind_dating/viewmodel/getX_indicatorCurrent_crtl.dart';
+import 'package:blind_dating/viewmodel/location_%08ctrl.dart';
+import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +34,11 @@ class MainPage extends StatelessWidget {
   String uid = "";
   // 유저 password
   String upw = "";
+  // 권한에 따라 다른 이미지를 담기위한 변수
+  String userImagepath1 = "";
+  String userImagepath2 = "";
 
+  // 위치는 원래 여기다두면 안되고 밑으로 두던가 viewmodel로 빼서 인스턴스를 불러와서 쓰는 방식으로 해야함
   Future<String> initSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     uid = prefs.getString('uid') ?? " ";
@@ -63,7 +67,6 @@ class MainPage extends StatelessWidget {
     }
 
     Future<List> getUserData() async {
-
       var url =
           Uri.parse('http://localhost:8080/Flutter/dateapp_quary_flutter.jsp');
 
@@ -97,26 +100,43 @@ class MainPage extends StatelessWidget {
                 List? userList = snapshot.data?[1]; // db에서 불러온 유저 정보 리스트
                 List? loginData = snapshot.data?[2]; // 로그인된 유저의 데이터
 
+                print("ugrant: ${loginData![0]['ugrant']}");
+                print("ufaceimg1: ${userList![0]['ufaceimg1']}");
+                // if (loginData != null) {
+                  if (loginData[0]['ugrant'] == "1") {
+                    // imagePath[0] = userList![0]['ufaceimg1'];
+                    // imagePath[1] = userList[1]['ufaceimg1'];
+                    userImagepath1 = userList![0]['ufaceimg1'];
+                    userImagepath2 = userList[1]['ufaceimg1'];
+                  } else {
+                    // imagePath[0] = userList![0]['udogimg'];
+                    // imagePath[1] = userList[1]['udogimg'];
+                    userImagepath1 = userList![0]['udogimg'];
+                    userImagepath2 = userList[1]['udogimg'];
+                  }
+                // }
+
                 // print("Future Login Data: $loginData");
                 if (userList != null) {
                   locationController.userList(
                       userList); // 컨트롤러의 userList 변수에 불러온 snapshot.data?[1] 넘겨주기
                 }
 
-                // print("userList: $userList");
+                print("userImagepath1: $userImagepath1");
+                print("userImagepath2: $userImagepath2");
 
                 // 이미지와 텍스트 가지는 더미데이터 리스트
                 final List<SliderlItems> carouselItems = [
                   SliderlItems(
-                    userimagePath: userList![0]['udogimg'],
-                    userName: userList[0]['unickname'],
+                    userimagePath: userImagepath1,
+                    userName: userList![0]['unickname'],
                     userAge: "${locationController.ageCalc()[0]} 세",
                     userLocation: userList[0]['uaddress'],
                     userDistance: reciveUserDistance,
                     userMBTI: userList[0]['umbti'],
                   ),
                   SliderlItems(
-                    userimagePath: userList[1]['udogimg'],
+                    userimagePath: userImagepath2,
                     userName: userList[1]['unickname'],
                     userAge: "${locationController.ageCalc()[1]} 세",
                     userLocation: userList[1]['uaddress'],
