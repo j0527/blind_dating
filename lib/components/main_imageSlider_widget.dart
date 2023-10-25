@@ -77,11 +77,11 @@ class CarouselSliderWidget extends StatelessWidget {
                       children: [
                         Text(item.userName,
                             style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
                                 const SizedBox(width: 10,),
                         Text(item.userAge,
                             style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
                       ],
                     ),
                     Column(
@@ -92,13 +92,13 @@ class CarouselSliderWidget extends StatelessWidget {
                             children: [
                               Text("🏠 ${item.userLocation}",
                                 style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black)),
+                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
                               const SizedBox(
                                 width: 10,
                               ),
                               Text(item.userDistance,
                                 style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black)),
+                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
                               const SizedBox(
                                 width: 10,
                               ),
@@ -112,7 +112,7 @@ class CarouselSliderWidget extends StatelessWidget {
                             children: [
                               Text(item.userMBTI,
                                 style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black)),
+                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
                             ],
                           ),
                         ),

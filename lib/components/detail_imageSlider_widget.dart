@@ -1,17 +1,21 @@
 // ignore_for_file: file_names
 
+import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DetailImageSliderWidget extends StatelessWidget {
-  const DetailImageSliderWidget({super.key});
+  DetailImageSliderWidget({super.key});
 
+    // 유저와 관련된 getX
+  final LoadUserData userDataController = Get.put(LoadUserData());
 
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-
+        
       ],
     );
   }

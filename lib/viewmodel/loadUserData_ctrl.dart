@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,34 +19,39 @@ class LoadUserData extends GetxController {
   List<int> userAge = []; // 나이를 저장하는 리스트
 
   // 두 지점 간의 거리 계산
-  double calculateDistance() {
+  List<double> calculateDistances() {
+    List<double> distances = [];
+
     if (myLocation.value == null) {
-      return 0.0;
+      return distances; // 빈 리스트 반환
     } else {
-      // 내 위치의 위도 경도 값
-      double startLatitude = myLocation.value!.latitude;
-      double startLongitude = myLocation.value!.longitude;
+      // 내 위도경도
+      double myLatitude = myLocation.value!.latitude;
+      double myLongitude = myLocation.value!.longitude;
 
-      // 더미데이터로 파파이스 강남점의 위도경도를 고정값으로 지정
-      double endLatitude = 37.49327821749438; // 상대방의 위도
-      double endLongitude = 127.02942893581022; // 상대방의 경도
+      // 사용자 2명의 위도경도
+      for (int i = 0; i < userList.length; i++) {
+        double userLatitude = userList[i]['ulat'];
+        double userLongitude = userList[i]['ulng'];
 
-      // 여기서 Geolocator에서 제공하는 distanceBetween함수를 통해서 거리가 계산됨
-      double distanceInMeters = Geolocator.distanceBetween(
-        startLatitude,
-        startLongitude,
-        endLatitude,
-        endLongitude,
-      );
-      update();
-      return distanceInMeters; // distanceBetween함수를 써서 나온 결과인 distanceInMeters를 return해줌
+        // 위도 경도간의 직선거리
+        double distanceInMeters = Geolocator.distanceBetween(
+          myLatitude,
+          myLongitude,
+          userLatitude,
+          userLongitude,
+        );
+        // 거리를 리스트에 추가
+        distances.add(distanceInMeters); 
+      }
+
+      return distances;
     }
   }
 
-
   // 받아온 생년월일을 가지고 만나이 계산
   ageCalc() {
-    for (int i = 0; i < userList.length; i++) {
+    for (int i = 0; i < userList.length - 1; i++) {
       DateTime birthDate = DateTime.parse(userList[i]['ubirth']);
       DateTime currentDate = DateTime.now();
       int age = currentDate.year - birthDate.year;
