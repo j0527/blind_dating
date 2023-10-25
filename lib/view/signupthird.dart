@@ -92,9 +92,9 @@ class _SignUpThirdState extends State<SignUpThird> {
                   ),
                 ),
                 _buildPhotoHobbyArea(),
-                SizedBox(height: 35),
+                SizedBox(height: 50),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 80),
+                  padding: const EdgeInsets.fromLTRB(15, 50, 15, 80),
                   child: ElevatedButton(
                     onPressed: () {
                       Get.to(() => SignUpFourth());

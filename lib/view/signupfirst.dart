@@ -16,6 +16,7 @@ class _SignUpFirstState extends State<SignUpFirst> {
   late TextEditingController IDController;
   late TextEditingController PWController;
   late TextEditingController PWCheckController;
+  late TextEditingController AddressController;
   late String inputValue;
 
   @override
@@ -24,6 +25,7 @@ class _SignUpFirstState extends State<SignUpFirst> {
       IDController = TextEditingController();
       PWController = TextEditingController();
       PWCheckController = TextEditingController();
+      AddressController = TextEditingController();
       inputValue = "";
   }
 
@@ -99,7 +101,20 @@ class _SignUpFirstState extends State<SignUpFirst> {
                   ),
                 ),
                 Text('비밀번호는 영문 대소문자, 숫자를 혼합하여 8~15자로 입력해 주세요.', style: TextStyle(fontSize: 12),),
-                SizedBox(height: 40,),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  child: TextField(style: TextStyle(fontSize: 16),
+                    controller: AddressController,
+                    decoration: const InputDecoration(
+                    hintText: '주소',
+                    prefixIcon: Icon(Icons.home, color: Color.fromARGB(255, 88, 104, 126),)
+                        ),
+                    keyboardType: TextInputType.text,
+                    onSubmitted: (value) {
+                    inputValue = AddressController.text;}
+                  ),
+                ),
+                SizedBox(height: 20,),
                 Row(
                   children: [
                     Padding(
@@ -174,15 +189,14 @@ class _SignUpFirstState extends State<SignUpFirst> {
                   ],
                 ),
                 SizedBox(height: 35,),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(18, 0, 10, 0),
-                      child: Text('주소', style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 54, 54, 58),fontWeight: FontWeight.bold),),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 35,),
+                // Row(
+                //   children: [
+                //     Padding(
+                //       padding: const EdgeInsets.fromLTRB(18, 0, 10, 0),
+                //       child: Text('주소', style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 54, 54, 58),fontWeight: FontWeight.bold),),
+                //     ),
+                //   ],
+                // ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 25, 15, 20),
                     child: ElevatedButton(
