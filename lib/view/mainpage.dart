@@ -84,8 +84,10 @@ class MainPage extends StatelessWidget {
                 List? loginData = snapshot.data?[2]; // 로그인된 유저의 데이터
 
                 print("로그인된 유저닉네임: ${loginData![0]['unickname']}");
-                print("로그인된 유저권한: ${loginData[0]['ugender'] == 0 ? "남성" : "여성"}");
-                print("로그인된 유저권한: ${loginData[0]['ugrant'] == 1 ? "구독자" : "무료 사용자"}");
+                print(
+                    "로그인된 유저권한: ${loginData[0]['ugender'] == 0 ? "남성" : "여성"}");
+                print(
+                    "로그인된 유저권한: ${loginData[0]['ugrant'] == 1 ? "구독자" : "무료 사용자"}");
                 print("로그인된 유저 채팅카운트: ${loginData[0]['uchatcount']}");
 
                 if (loginData != null) {
@@ -115,6 +117,7 @@ class MainPage extends StatelessWidget {
                     userLocation: userList[0]['uaddress'],
                     userDistance: reciveUserDistance,
                     userMBTI: userList[0]['umbti'],
+                    userBreed: userList[0]['ubreed'],
                   ),
                   // 두번째 유저
                   SliderlItems(
@@ -124,6 +127,7 @@ class MainPage extends StatelessWidget {
                     userLocation: userList[1]['uaddress'],
                     userDistance: reciveUserDistance,
                     userMBTI: userList[1]['umbti'],
+                    userBreed: userList[1]['ubreed'],
                   ),
                 ];
 
@@ -173,21 +177,20 @@ class MainPage extends StatelessWidget {
                   // }
 
                   Color genderColors() {
-                    print("첫 번째 유저의 성별 = ${userList[0]['ugender'] == 0 ? "남성" : "여성"}");
-                    print("두 번째 유저의 성별 = ${userList[1]['ugender'] == 0 ? "남성" : "여성"}");
-                    if (userList[0]['ugender'] == 0 &&
-                        userList[1]['ugender'] == 0) {
-                      return Color.fromARGB(255, 25, 107, 95); // 둘 다 1인 경우
-                    } else if (userList[0]['ugender'] == 1 &&
-                        userList[1]['ugender'] == 1) {
-                      return Color.fromARGB(255, 154, 47, 187); // 둘 다 0인 경우
-                    } else if (userList[0]['ugender'] == 0 ||
-                        userList[1]['ugender'] == 0) {
-                      return Color.fromARGB(255, 25, 107, 95); // 둘 중 하나만 1인 경우
-                    } else {
-                      return Colors.black; // 그 외의 경우
-                    }
+                    print(
+                        "첫 번째 유저의 성별 = ${userList[0]['ugender'] == 0 ? "남성" : "여성"}");
+                    print(
+                        "두 번째 유저의 성별 = ${userList[1]['ugender'] == 0 ? "남성" : "여성"}");
+                    bool user1IsMale = userList[0]['ugender'] == 0;
+                    bool user2IsMale = userList[1]['ugender'] == 0;
 
+                    // 여성일 때와 남성일 때의 색상을 Map에 정의
+                    Map<bool, Color> colorMap = {
+                      true: Color.fromARGB(255, 67, 136, 196), // 남성 색상
+                      false: Color.fromARGB(255, 154, 47, 187), // 여성 색상
+                    };
+
+                    return colorMap[user1IsMale] ?? Colors.black;
                   }
 
                   // ================== 조건부 Select ==================
@@ -195,11 +198,8 @@ class MainPage extends StatelessWidget {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                        // const SizedBox(
-                        //   height: 50,
-                        // ),
                         const Padding(
-                          padding: EdgeInsets.all(10.0),
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                           child: Text(
                             '오늘의 추천',
                             style: TextStyle(
