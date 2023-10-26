@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blind_dating/homewidget.dart';
+import 'package:blind_dating/model/user_messages.dart';
 import 'package:blind_dating/view/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,15 +39,14 @@ class _ProfileModifyState extends State<ProfileModify> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
-      IDController = TextEditingController();
-      PWController = TextEditingController();
-      PWCheckController = TextEditingController();
-      AddressController = TextEditingController();
-      inputValue = "";
+    IDController = TextEditingController(text: Message.id);
+    PWController = TextEditingController();
+    PWCheckController = TextEditingController();
+    AddressController = TextEditingController();
+    inputValue = "";
   }
 
 

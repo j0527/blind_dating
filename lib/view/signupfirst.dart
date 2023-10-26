@@ -1,4 +1,5 @@
 import 'package:blind_dating/homewidget.dart';
+import 'package:blind_dating/model/user_messages.dart';
 import 'package:blind_dating/view/signupsecond.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class _SignUpFirstState extends State<SignUpFirst> {
   @override
   void initState() {
     super.initState();
-    IDController = TextEditingController();
+    IDController = TextEditingController(text: Message.id);
     PWController = TextEditingController();
     PWCheckController = TextEditingController();
     AddressController = TextEditingController();

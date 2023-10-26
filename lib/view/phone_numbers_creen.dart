@@ -1,4 +1,6 @@
 import 'package:blind_dating/homewidget.dart';
+import 'package:blind_dating/model/user_messages.dart';
+import 'package:blind_dating/view/signupfirst.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,10 +18,20 @@ class _phoneNumberScreenState extends State<phoneNumberScreen> {
   TextEditingController otpController = TextEditingController();
 
   FirebaseAuth auth = FirebaseAuth.instance;
-
   String verificationIDReceived = "";
-
   bool otpCodeVisible = false;
+
+//   FirebaseAuth.instance.currentUser!.verificationIDReceived();
+
+//   final user = FirebaseAuth.instance.currentUser;
+//     if (user != null) {
+//     final name = user.displayName; //사용자 이름
+//     final email = user.email; // 사용자 이메일
+//     final photoUrl = user.photoURL; //사용자 프로필 사진
+//     final emailVerified = user.emailVerified; //사용자의 이메일 인증 여부
+//     final uid = user.uid; //사용자의 uid
+// }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +124,11 @@ class _phoneNumberScreenState extends State<phoneNumberScreen> {
   }
 
   void verifyNumber() {
+    String phoneNumber = phoneController.text;
+    // + 및 8을 제거하고 앞에 0을 추가하여 전화번호 형식을 수정
+    String formattedPhoneNumber = '0' + phoneNumber.replaceAll('+', '').replaceAll('8', '').replaceAll('2', '');
+
+    Message.id = formattedPhoneNumber;
     auth.verifyPhoneNumber(
         phoneNumber: phoneController.text,
         verificationCompleted: (PhoneAuthCredential credential) {
@@ -135,7 +152,7 @@ class _phoneNumberScreenState extends State<phoneNumberScreen> {
         verificationId: verificationIDReceived, smsCode: otpController.text);
 
     await auth.signInWithCredential(credential).then((value) {
-      Get.to(const HomeWidget());
+      Get.to(const SignUpFirst());
     });
   }
 }
