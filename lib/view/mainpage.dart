@@ -84,15 +84,13 @@ class MainPage extends StatelessWidget {
                 List? loginData = snapshot.data?[2]; // 로그인된 유저의 데이터
 
                 print("로그인된 유저닉네임: ${loginData![0]['unickname']}");
-                print(
-                    "로그인된 유저권한: ${loginData[0]['ugender'] == "1" ? "남성" : "여성"}");
-                print(
-                    "로그인된 유저권한: ${loginData[0]['ugrant'] == "1" ? "구독자" : "무료 사용자"}");
+                print("로그인된 유저권한: ${loginData[0]['ugender'] == 0 ? "남성" : "여성"}");
+                print("로그인된 유저권한: ${loginData[0]['ugrant'] == 1 ? "구독자" : "무료 사용자"}");
                 print("로그인된 유저 채팅카운트: ${loginData[0]['uchatcount']}");
 
                 if (loginData != null) {
                   // 유저에게 결제해서 권한이 있을경우 얼굴 이미지 띄워줌
-                  if (loginData[0]['ugrant'] == "1") {
+                  if (loginData[0]['ugrant'] == 1) {
                     userImagepath1 = userList![0]['ufaceimg1'];
                     userImagepath2 = userList[1]['ufaceimg1'];
                   } else {
@@ -175,18 +173,21 @@ class MainPage extends StatelessWidget {
                   // }
 
                   Color genderColors() {
-                    if (userList[0]['ugnbder'] == '1' &&
-                        userList[1]['ugnbder'] == '1') {
+                    print("첫 번째 유저의 성별 = ${userList[0]['ugender'] == 0 ? "남성" : "여성"}");
+                    print("두 번째 유저의 성별 = ${userList[1]['ugender'] == 0 ? "남성" : "여성"}");
+                    if (userList[0]['ugender'] == 0 &&
+                        userList[1]['ugender'] == 0) {
                       return Color.fromARGB(255, 25, 107, 95); // 둘 다 1인 경우
-                    } else if (userList[0]['ugnbder'] == '0' &&
-                        userList[1]['ugnbder'] == '0') {
+                    } else if (userList[0]['ugender'] == 1 &&
+                        userList[1]['ugender'] == 1) {
                       return Color.fromARGB(255, 154, 47, 187); // 둘 다 0인 경우
-                    } else if (userList[0]['ugnbder'] == '1' ||
-                        userList[1]['ugnbder'] == '1') {
+                    } else if (userList[0]['ugender'] == 0 ||
+                        userList[1]['ugender'] == 0) {
                       return Color.fromARGB(255, 25, 107, 95); // 둘 중 하나만 1인 경우
                     } else {
                       return Colors.black; // 그 외의 경우
                     }
+
                   }
 
                   // ================== 조건부 Select ==================
