@@ -16,7 +16,7 @@ class LoadUserData extends GetxController {
   Rx<Position?> myLocation = Rx<Position?>(null);
   var isPermissionGranted = false.obs;
   var userList = [].obs; // 유저 정보를 저장할 리스트
-  List<int> userAge = []; // 나이를 저장하는 리스트
+  
 
   // 두 지점 간의 거리 계산
   List<double> calculateDistances() {
@@ -51,11 +51,11 @@ class LoadUserData extends GetxController {
 
   // 받아온 생년월일을 가지고 만나이 계산
   ageCalc() {
-    for (int i = 0; i < userList.length - 1; i++) {
+    List<int> userAge = []; // 나이를 저장하는 리스트
+    for (int i = 0; i < userList.length; i++) {
       DateTime birthDate = DateTime.parse(userList[i]['ubirth']);
       DateTime currentDate = DateTime.now();
       int age = currentDate.year - birthDate.year;
-
       if (currentDate.month < birthDate.month ||
           (currentDate.month == birthDate.month &&
               currentDate.day < birthDate.day)) {
@@ -81,6 +81,11 @@ class LoadUserData extends GetxController {
   }
 
   // 로그인된 유저 정보 들고오기
+  /*
+  조회하는 기준은 로그인된 유저와 반대 성별 중에서 유저의 uaddress의 시까지 조회해서 그중에서 일치하는사람 2명 랜덤 조회
+  2명이 카운트가 안될시 전국으로 조회
+  구까지 할려고 했으나 지역명에 구가 안들어가는 지역도 있고 시가 제일 조회하기 편함
+  */
   Future<List> getLoginData() async {
     List loginData = [];
     // initSharedPreferences에서 uid만 가져와서 요청 보내기
@@ -102,14 +107,17 @@ class LoadUserData extends GetxController {
   // 전체 유저 불러오기
   Future<List> getUserData() async {
     List userData = [];
-    var url =
-        Uri.parse('http://localhost:8080/Flutter/dateapp_quary_flutter.jsp');
+    // initSharedPreferences에서 uid만 가져와서 요청 보내기
+    String getUid = await initSharedPreferences();
+    // print("getLoginData uid:$getUid");
+    var url = Uri.parse(
+        'http://localhost:8080/Flutter/dateapp_quary_flutter.jsp?uid=$getUid');
     var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
     userData.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
     var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
     List result = dataConvertedJSON['results'];
     userData.addAll(result);
-    // print(result);
+    print("result: $result");
     return result;
   }
 

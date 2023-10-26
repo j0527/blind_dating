@@ -56,84 +56,74 @@ class CarouselSliderWidget extends StatelessWidget {
       items: userInfoList.map((item) {
         return Stack(
           children: [
-            SizedBox( // 여기가 이미지 부분을 담당
+            SizedBox( // 이미지 크기
               width: MediaQuery.of(context).size.width < 400
                   ? 400
                   : MediaQuery.of(context).size.width,
-              height: 405,
-              child:
-                  Image.network(item.userimagePath, fit: BoxFit.fill),
+              height: 410,
+              child: Image.network(item.userimagePath, fit: BoxFit.fill),
             ),
-            Positioned(
-              // 텍스트 위치 지정
-              left: 0, // 왼쪽에 위치
-              bottom: 0, // 아래에 위치
+            Center(
               child: Container(
-                // color: Colors.grey.withOpacity(0.7), // 텍스트 배경색 및 투명도
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(item.userName,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(item.userAge,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ],
+                    ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(40, 5, 15, 5),
-                      child: Row(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Column(
                         children: [
-                          Text(item.userName,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                          const SizedBox(
-                            width: 10,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("지역: ${item.userLocation}",
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                              Text("현재위치: ${item.userDistance}",
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                            ],
                           ),
-                          Text(item.userAge,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("MBTI: ${item.userMBTI}",
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                              Text("견종: ${item.userBreed}",
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                            ],
+                          ),
                         ],
                       ),
                     ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                          child: Row(
-                            children: [
-                              Text("🏠 ${item.userLocation}",
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(item.userDistance,
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(item.userMBTI,
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
                   ],
                 ),
               ),
