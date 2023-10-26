@@ -56,12 +56,13 @@ class CarouselSliderWidget extends StatelessWidget {
       items: userInfoList.map((item) {
         return Stack(
           children: [
-            SizedBox(
-              width: 400,
-              height: 400,
-              child: 
-              // Image.asset(item.userimagePath, fit: BoxFit.fill), 
-              Image.network(item.userimagePath, fit: BoxFit.fill),
+            SizedBox( // 여기가 이미지 부분을 담당
+              width: MediaQuery.of(context).size.width < 400
+                  ? 400
+                  : MediaQuery.of(context).size.width,
+              height: 405,
+              child:
+                  Image.network(item.userimagePath, fit: BoxFit.fill),
             ),
             Positioned(
               // 텍스트 위치 지정
@@ -73,16 +74,25 @@ class CarouselSliderWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Text(item.userName,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-                                const SizedBox(width: 10,),
-                        Text(item.userAge,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(40, 5, 15, 5),
+                      child: Row(
+                        children: [
+                          Text(item.userName,
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(item.userAge,
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                        ],
+                      ),
                     ),
                     Column(
                       children: [
@@ -91,14 +101,18 @@ class CarouselSliderWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               Text("🏠 ${item.userLocation}",
-                                style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
                               const SizedBox(
                                 width: 10,
                               ),
                               Text(item.userDistance,
-                                style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
                               const SizedBox(
                                 width: 10,
                               ),
@@ -111,8 +125,10 @@ class CarouselSliderWidget extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(item.userMBTI,
-                                style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
                             ],
                           ),
                         ),
@@ -125,10 +141,11 @@ class CarouselSliderWidget extends StatelessWidget {
           ],
         );
       }).toList(),
-
       options: CarouselOptions(
         // height: MediaQuery.of(context).size.height, // slider 감싼 높이랑 같게 해주는게 좋음, 화면의 최대 높이로 설정
-        height: MediaQuery.of(context).size.height, // slider 감싼 높이랑 같게 해주는게 좋음, 화면의 최대 높이로 설정
+        height: MediaQuery.of(context)
+            .size
+            .height, // slider 감싼 높이랑 같게 해주는게 좋음, 화면의 최대 높이로 설정
         viewportFraction: 1.0,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 3),

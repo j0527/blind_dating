@@ -2,6 +2,7 @@
 
 import 'package:blind_dating/components/main_imageSlider_widget.dart';
 import 'package:blind_dating/model/sliderItems_model.dart';
+import 'package:blind_dating/util/theme.dart';
 import 'package:blind_dating/view/mainpage_detail.dart';
 import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
 import 'package:blind_dating/viewmodel/location_ctrl.dart';
@@ -130,7 +131,6 @@ class MainPage extends StatelessWidget {
 
                 // 유저의 위치를 가져와서 거리랑 단위 변환하는 과정
                 if (userPosition != null) {
-
                   List<double> distances =
                       userDataController.calculateDistances(); // 거리 계산하는 인스턴스
 
@@ -146,60 +146,112 @@ class MainPage extends StatelessWidget {
                     carouselItems[1].userDistance = user2DistanceText;
                   }
 
+                  // 이미지 슬라이더 컬러값 함수
+                  // Color genderColors() {
+                  //   switch (userList[0]['ugnbder']) {
+                  //     case '1':
+                  //       switch (userList[1]['ugnbder']) {
+                  //         case '1':
+                  //           return const Color.fromARGB(255, 25, 107, 95); // 둘 다 1인 경우
+                  //         case '0':
+                  //           return const Color.fromARGB(255, 25, 107, 95); // 첫 번째 사용자만 1인 경우
+                  //         default:
+                  //           return Colors.black; // 그 외의 경우
+                  //       break;
+                  //       }
+                  //     case '0':
+                  //       switch (userList[1]['ugnbder']) {
+                  //         case '1':
+                  //           return const Color.fromARGB(255, 25, 107, 95); // 두 번째 사용자만 1인 경우
+                  //         case '0':
+                  //           return const Color.fromARGB(255, 154, 47, 187); // 둘 다 0인 경우
+                  //         default:
+                  //           return Colors.black; // 그 외의 경우
+                  //       }
+                  //       break;
+                  //     default:
+                  //       return Colors.black; // 그 외의 경우
+                  //   }
+                  // }
+
+                  Color genderColors() {
+                    if (userList[0]['ugnbder'] == '1' &&
+                        userList[1]['ugnbder'] == '1') {
+                      return Color.fromARGB(255, 25, 107, 95); // 둘 다 1인 경우
+                    } else if (userList[0]['ugnbder'] == '0' &&
+                        userList[1]['ugnbder'] == '0') {
+                      return Color.fromARGB(255, 154, 47, 187); // 둘 다 0인 경우
+                    } else if (userList[0]['ugnbder'] == '1' ||
+                        userList[1]['ugnbder'] == '1') {
+                      return Color.fromARGB(255, 25, 107, 95); // 둘 중 하나만 1인 경우
+                    } else {
+                      return Colors.black; // 그 외의 경우
+                    }
+                  }
+
                   // ================== 조건부 Select ==================
 
-                  return Column(
-                    children: [
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          '오늘의 추천',
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // const SizedBox(
+                        //   height: 50,
+                        // ),
+                        const Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                            '오늘의 추천',
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(
-                            MainPageDetail(),
-                            arguments: {
-                              'items': carouselItems,
-                              'index': indicatorCurrent.current,
-                            },
-                          );
-                          print("carouselItems: $carouselItems");
-                        },
-                        child: Container(
-                          color: const Color.fromARGB(255, 99, 182, 203),
-                          height: 400,
-                          child: Stack(
-                            children: [
-                              GetBuilder<IndicatorCurrent>(
-                                builder: (controller) {
-                                  return CarouselSliderWidget(
-                                    controller: sliderController,
-                                    userInfoList: carouselItems,
-                                    current: controller.current,
-                                  );
-                                },
-                              ),
-                              CarouselIndicator(
-                                userInfoList: carouselItems,
-                                current: indicatorCurrent.current,
-                                controller: sliderController,
-                              ),
-                            ],
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              MainPageDetail(),
+                              arguments: {
+                                'items': carouselItems,
+                                'index': indicatorCurrent.current,
+                              },
+                            );
+                            print("carouselItems: $carouselItems");
+                          },
+                          child: Container(
+                            // 여기가 전체 슬라이더 크기를 담당
+                            color:
+                                genderColors(), //userList[0]['ugnbder'] == '1' ? Color.fromARGB(255, 25, 107, 95) : Color.fromARGB(255, 154, 47, 187),
+                            width: MediaQuery.of(context).size.width < 500
+                                ? 500
+                                : MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height > 800
+                                ? 500
+                                : MediaQuery.of(context).size.height,
+                            child: Stack(
+                              children: [
+                                GetBuilder<IndicatorCurrent>(
+                                  builder: (controller) {
+                                    return CarouselSliderWidget(
+                                      controller: sliderController,
+                                      userInfoList: carouselItems,
+                                      current: controller.current,
+                                    );
+                                  },
+                                ),
+                                CarouselIndicator(
+                                  userInfoList: carouselItems,
+                                  current: indicatorCurrent.current,
+                                  controller: sliderController,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      // Text(data[1]['unickname']),
-                      // Text("${userList[0]['unickname']}"),
-                    ],
+                        // Text(data[1]['unickname']),
+                        // Text("${userList[0]['unickname']}"),
+                      ],
+                    ),
                   );
                 }
               } else if (snapshot.hasError) {
