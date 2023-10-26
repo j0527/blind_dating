@@ -18,6 +18,7 @@ class _SignUpFirstState extends State<SignUpFirst> {
   late TextEditingController PWController;
   late TextEditingController PWCheckController;
   late TextEditingController AddressController;
+  late TextEditingController NickNameController;
   late String inputValue;
   String selectedGender = "";
 
@@ -28,6 +29,7 @@ class _SignUpFirstState extends State<SignUpFirst> {
     PWController = TextEditingController();
     PWCheckController = TextEditingController();
     AddressController = TextEditingController();
+    NickNameController = TextEditingController();
     inputValue = "";
   }
 
@@ -70,6 +72,22 @@ class _SignUpFirstState extends State<SignUpFirst> {
                           color: Color.fromARGB(255, 88, 104, 126),
                         )),
                     readOnly: true,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 10, 10, 10),
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    controller: NickNameController,
+                    decoration: const InputDecoration(
+                        hintText: '닉네임',
+                        prefixIcon: Icon(
+                          Icons.person_add_alt_1,
+                          color: Color.fromARGB(255, 88, 104, 126),
+                        )),
+                        keyboardType: TextInputType.text,
+                      onSubmitted: (value) {
+                      inputValue = NickNameController.text;}
                   ),
                 ),
                 Padding(
