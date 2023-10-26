@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 
 class MainPage extends StatelessWidget {
   MainPage({super.key});
-// 이미지 슬라이더를 제어하기 위한 기본적인 컨트롤러
+  // 이미지 슬라이더를 제어하기 위한 기본적인 컨트롤러
   final CarouselController sliderController = CarouselController();
   // 현재 이미지 슬라이더의 상태를 관리하는 GetX 컨트롤러
   final IndicatorCurrent indicatorCurrent = Get.put(IndicatorCurrent());
@@ -37,9 +37,6 @@ class MainPage extends StatelessWidget {
   // 권한에 따라 다른 이미지를 담기위한 변수
   String userImagepath1 = "";
   String userImagepath2 = "";
-
-  // 유저 취미사진 리스트
-  // List userHoppy
 
   /*
   saveSharedPreferences로 저장된 로그인 정보 받기
@@ -105,36 +102,53 @@ class MainPage extends StatelessWidget {
                   userDataController.userList(
                       userList); // 컨트롤러의 userList 변수에 불러온 snapshot.data?[1] 넘겨주기
                 }
+                // 흡연 여부에따라 흡연자 비흡연자를 알려주는 함수
+                isSmoke() {
+                  List<String> uSmoke = [];
+                  for (int i = 0; i < userList!.length; i++) {
+                    uSmoke.add(userList[i]['usmoke'] == 1 ? "🚬" : "❌");
+                  }
+                  return uSmoke;
+                }
 
                 // 이미지와 텍스트 가지는 데이터 리스트
                 final List<SliderlItems> carouselItems = [
                   // 첫번째 유저
                   SliderlItems(
-                    // userID: userList![0]['uid'],
-                    userimagePath: userImagepath1,
-                    userName: userList![0]['unickname'],
+                    userFaceImagePath1: userImagepath1,
+                    userFaceImagePath2: userList![0]['ufaceimg2'],
+                    userHobbyImagePath1: userList[0]['uhobbyimg1'],
+                    userHobbyImagePath2: userList[0]['uhobbyimg2'],
+                    userName: userList[0]['unickname'],
                     userAge: "${userDataController.ageCalc()[0]}세",
-                    userLocation: userList[0]['uaddress'],
+                    userAddress: userList[0]['uaddress'],
                     userDistance: reciveUserDistance,
                     userMBTI: userList[0]['umbti'],
                     userBreed: userList[0]['ubreed'],
+                    userSmoke: isSmoke()[0],
+                    loginGrant: loginData[0]['ugrant']
                   ),
                   // 두번째 유저
                   SliderlItems(
-                    userimagePath: userImagepath2,
+                    userFaceImagePath1: userImagepath2,
+                    userFaceImagePath2: userList[1]['ufaceimg2'],
+                    userHobbyImagePath1: userList[1]['uhobbyimg1'],
+                    userHobbyImagePath2: userList[1]['uhobbyimg2'],
                     userName: userList[1]['unickname'],
                     userAge: "${userDataController.ageCalc()[1]}세",
-                    userLocation: userList[1]['uaddress'],
+                    userAddress: userList[1]['uaddress'],
                     userDistance: reciveUserDistance,
                     userMBTI: userList[1]['umbti'],
                     userBreed: userList[1]['ubreed'],
+                    userSmoke: isSmoke()[1],
+                    loginGrant: loginData[0]['ugrant']
                   ),
                 ];
 
                 // 유저의 위치를 가져와서 거리랑 단위 변환하는 과정
                 if (userPosition != null) {
-                  List<double> distances =
-                      userDataController.calculateDistances(); // 거리 계산하는 인스턴스
+                  List<double> distances = userDataController
+                      .calculateDistances(); // 컨트롤러에서 거리 계산하는 인스턴스
 
                   if (distances.length >= 2) {
                     double distanceWithUser1 = distances[0]; // 첫 번째 사용자와의 거리
@@ -148,46 +162,18 @@ class MainPage extends StatelessWidget {
                     carouselItems[1].userDistance = user2DistanceText;
                   }
 
-                  // 이미지 슬라이더 컬러값 함수
-                  // Color genderColors() {
-                  //   switch (userList[0]['ugnbder']) {
-                  //     case '1':
-                  //       switch (userList[1]['ugnbder']) {
-                  //         case '1':
-                  //           return const Color.fromARGB(255, 25, 107, 95); // 둘 다 1인 경우
-                  //         case '0':
-                  //           return const Color.fromARGB(255, 25, 107, 95); // 첫 번째 사용자만 1인 경우
-                  //         default:
-                  //           return Colors.black; // 그 외의 경우
-                  //       break;
-                  //       }
-                  //     case '0':
-                  //       switch (userList[1]['ugnbder']) {
-                  //         case '1':
-                  //           return const Color.fromARGB(255, 25, 107, 95); // 두 번째 사용자만 1인 경우
-                  //         case '0':
-                  //           return const Color.fromARGB(255, 154, 47, 187); // 둘 다 0인 경우
-                  //         default:
-                  //           return Colors.black; // 그 외의 경우
-                  //       }
-                  //       break;
-                  //     default:
-                  //       return Colors.black; // 그 외의 경우
-                  //   }
-                  // }
-
+                  // 성별에 따라 다른 배경컬러 적용
                   Color genderColors() {
                     print(
                         "첫 번째 유저의 성별 = ${userList[0]['ugender'] == 0 ? "남성" : "여성"}");
                     print(
                         "두 번째 유저의 성별 = ${userList[1]['ugender'] == 0 ? "남성" : "여성"}");
                     bool user1IsMale = userList[0]['ugender'] == 0;
-                    bool user2IsMale = userList[1]['ugender'] == 0;
 
                     // 여성일 때와 남성일 때의 색상을 Map에 정의
                     Map<bool, Color> colorMap = {
-                      true: Color.fromARGB(255, 67, 136, 196), // 남성 색상
-                      false: Color.fromARGB(255, 154, 47, 187), // 여성 색상
+                      true: const Color.fromARGB(255, 67, 136, 196), // 남성 색상
+                      false: const Color.fromARGB(255, 154, 47, 187), // 여성 색상
                     };
 
                     return colorMap[user1IsMale] ?? Colors.black;
@@ -217,12 +203,11 @@ class MainPage extends StatelessWidget {
                                 'index': indicatorCurrent.current,
                               },
                             );
-                            print("carouselItems: $carouselItems");
+                            // print("carouselItems: $carouselItems");
                           },
                           child: Container(
                             // 여기가 전체 슬라이더 크기를 담당
-                            color:
-                                genderColors(), //userList[0]['ugnbder'] == '1' ? Color.fromARGB(255, 25, 107, 95) : Color.fromARGB(255, 154, 47, 187),
+                            color: genderColors(),
                             width: MediaQuery.of(context).size.width < 500
                                 ? 500
                                 : MediaQuery.of(context).size.width,
@@ -249,8 +234,6 @@ class MainPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Text(data[1]['unickname']),
-                        // Text("${userList[0]['unickname']}"),
                       ],
                     ),
                   );

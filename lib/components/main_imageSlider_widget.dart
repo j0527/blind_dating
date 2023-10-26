@@ -61,7 +61,7 @@ class CarouselSliderWidget extends StatelessWidget {
                   ? 400
                   : MediaQuery.of(context).size.width,
               height: 410,
-              child: Image.network(item.userimagePath, fit: BoxFit.fill),
+              child: Image.network(item.userFaceImagePath1, fit: BoxFit.fill),
             ),
             Center(
               child: Container(
@@ -94,7 +94,7 @@ class CarouselSliderWidget extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("지역: ${item.userLocation}",
+                              Text("지역: ${item.userAddress}",
                                   style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,

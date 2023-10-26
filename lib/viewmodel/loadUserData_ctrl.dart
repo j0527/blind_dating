@@ -117,7 +117,7 @@ class LoadUserData extends GetxController {
     var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
     List result = dataConvertedJSON['results'];
     userData.addAll(result);
-    print("result: $result");
+    // print("result: $result");
     return result;
   }
 
