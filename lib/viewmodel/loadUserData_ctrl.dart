@@ -124,6 +124,7 @@ Future<List> getUserData() async {
   List userData = [];
   String getUid = await initSharedPreferences();
 
+  // updateLocation()로 로그인된 유저 업데이트가 끝나서 true를 반환하면 진행
   try {
     if (await updateLocation()) {
       var url = Uri.parse(
@@ -135,14 +136,12 @@ Future<List> getUserData() async {
       userData.addAll(result);
       return result;
     } else {
-      // updateLocation()이 실패한 경우에 대한 처리
+      // updateLocation()이 실패한 경우
       throw Exception("updateLocation() failed");
     }
   } catch (e) {
     // 예외 처리 코드
     print(e);
-    // 예외 처리를 위한 다른 로직을 추가할 수 있습니다.
-    // 예외를 처리한 후에도 Future를 반환해야 합니다.
     return Future.error(e);
   }
 }

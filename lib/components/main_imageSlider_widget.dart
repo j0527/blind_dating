@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -10,8 +12,8 @@ class ImageSliderWidget extends StatelessWidget {
   final List<SliderlItems> userInfoList; // 슬라이더에 담길 것들 가지고있는 리스트
   final RxInt current; // 바뀌는 current를 알기위해 RxInt로 선언
 
-  ImageSliderWidget({
-    Key? key,
+  const ImageSliderWidget({
+    super.key,
     required this.controller,
     required this.userInfoList,
     required this.current,
@@ -42,8 +44,8 @@ class CarouselSliderWidget extends StatelessWidget {
   final RxInt current;
 
   // Slider에 필요한 정보들
-  CarouselSliderWidget({
-    Key? key,
+  const CarouselSliderWidget({
+    super.key,
     required this.controller,
     required this.userInfoList,
     required this.current,
@@ -56,11 +58,10 @@ class CarouselSliderWidget extends StatelessWidget {
       items: userInfoList.map((item) {
         return Stack(
           children: [
-            SizedBox( // 이미지 크기
-              width: MediaQuery.of(context).size.width < 400
-                  ? 400
-                  : MediaQuery.of(context).size.width,
-              height: 410,
+            SizedBox(
+              // 이미지 크기
+              width: MediaQuery.of(context).size.width, // 화면 최대 넓이
+              height: 510,
               child: Image.network(item.userFaceImagePath1, fit: BoxFit.fill),
             ),
             Center(
@@ -154,8 +155,8 @@ class CarouselIndicator extends StatelessWidget {
   final RxInt current;
 
   // indicator에 필요한 정보들
-  CarouselIndicator({
-    Key? key,
+  const CarouselIndicator({
+    super.key,
     required this.controller,
     required this.userInfoList,
     required this.current,

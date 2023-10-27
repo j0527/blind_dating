@@ -28,7 +28,33 @@ class MainPageDetail extends StatelessWidget {
     final RxInt current;
     // RxInt를 int로 변환
     final int intIndex = index.value;
+    final SliderlItems currentItem =
+        receivedItems[intIndex]; // 유저의 정보를 index로 구분
+
+    final int loginGrant = currentItem.loginGrant;
+    String userName = currentItem.userName;
+    final String userBreed = currentItem.userBreed;
+
+    final String detailInfoName =
+        loginGrant == 1 ? "$userName님" : "이 $userBreed";
+
     return Scaffold(
+      appBar: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+          child: Text(
+            "$detailInfoName의 은밀한 정보",
+            style: const TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            closeDetailPage(); // 디테일페이지 인디케이터 index 초기화
+            Get.back(); // Get 패키지를 사용하여 이전 페이지로 이동합니다.
+          },
+        ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -48,7 +74,7 @@ class MainPageDetail extends StatelessWidget {
               //   userInfoList: receivedItems,
               //   detailCurrent: indicatorCurrent.detailCurrent,
               // ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 50),
               // DetailUserInfoWidget(),
             ],
           ),
@@ -57,12 +83,14 @@ class MainPageDetail extends StatelessWidget {
       // ),
     );
   }
+
 // 디테일 창을 닫을 때
-void closeDetailPage() {
-  // detailCurrent 값을 원하는 값으로 설정하여 초기화
-  indicatorCurrent.detailCurrent.value = 0; // 0으로 초기화
-  Get.back(); // 디테일 창 닫기
-}
+  void closeDetailPage() {
+    // detailCurrent 값을 원하는 값으로 설정하여 초기화
+    // indicatorCurrent.current.value = 0; // 0으로 초기화
+    indicatorCurrent.detailCurrent.value = 0; // 0으로 초기화
+    // Get.back(); // 디테일 창 닫기
+  }
 }// --- Functions ---
 
 

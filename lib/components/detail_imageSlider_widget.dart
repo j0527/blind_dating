@@ -97,36 +97,35 @@ class detailImageSliderWidget extends StatelessWidget {
       // mainAxisAlignment: MainAxisAlignment.center,
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
-          child: Text(
-            "$detailInfoName의 정보",
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+        //   child: Text(
+        //     "$detailInfoName의 은밀한 정보",
+        //     style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
         CarouselSlider(
-          items: images
-              .map(
-                (imageUrl) {
-                  // print("imageUrl: $images");
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 500,
-                        width: 400,
-                        child: Image.network(
-                          imageUrl,
-                          fit: BoxFit.fill,
-                        // child: imageUrl,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ).toList(),
+          items: images.map(
+            (imageUrl) {
+              // print("imageUrl: $images");
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 600,
+                    width: MediaQuery.of(context).size.width, // 화면 최대 넓이
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.fill,
+                      // child: imageUrl,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ).toList(),
           options: CarouselOptions(
-            height: 500,
+            height: 600,
             viewportFraction: 1.0,
             // autoPlay: true,
             // autoPlayInterval: const Duration(seconds: 3),
@@ -205,20 +204,12 @@ class DetailUserInfoWidget extends StatelessWidget {
         ),
         // 디테일 정보 시작
         Container(
-          height: 1.0,
-          width: 500.0,
+          height: 2.0,
+          width: MediaQuery.of(context).size.width, // 화면 최대 넓이
           color: Colors.grey,
         ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text("상세 정보")],
-          ),
-        ),
-        // Test
         Padding(
-          padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+          padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
           child: Row(
             children: [
               const Padding(
@@ -231,10 +222,16 @@ class DetailUserInfoWidget extends StatelessWidget {
                       style: TextStyle(
                           color: Colors.grey, fontWeight: FontWeight.bold),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text(
                       "MBTI",
                       style: TextStyle(
                           color: Colors.grey, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Text(
                       "흡연여부",
@@ -250,7 +247,13 @@ class DetailUserInfoWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(userAddress),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Text(userMBTI),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Text(userSmoke),
                   ],
                 ),
@@ -258,13 +261,20 @@ class DetailUserInfoWidget extends StatelessWidget {
             ],
           ),
         ),
-        // const SizedBox(height: 100,),
         ElevatedButton(
-          onPressed: () {
-            //
-          },
-          child: const Text("채팅 보내기"),
-        ),
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orangeAccent,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(150, 40), // 버튼 사이즈 조절해서 통일성주기
+                shape: RoundedRectangleBorder(
+                  // 버튼 모양 다듬기
+                  borderRadius: BorderRadius.circular(10),
+                )),
+            child: const Text('대화 걸기',
+            style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+            ),
+            ),
       ],
     );
   }
@@ -277,7 +287,8 @@ class DetailCarouselIndicatorWidget extends StatelessWidget {
   final RxInt detailCurrent;
 
   // indicator에 필요한 정보들
-  const DetailCarouselIndicatorWidget({super.key, 
+  const DetailCarouselIndicatorWidget({
+    super.key,
     required this.controller,
     required this.userInfoList,
     required this.detailCurrent,
