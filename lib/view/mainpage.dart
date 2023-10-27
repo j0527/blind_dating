@@ -66,11 +66,19 @@ class MainPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: FutureBuilder<List<dynamic>>(
-          future: Future.wait([
-            userDataController.initLocation(), // 내 위치 가져오기
-            userDataController.getUserData(), // 추천받을 유저 띄우기
-            userDataController.getLoginData() // 로그인된 유저 정보 가져오기
-          ]),
+          // future: Future.wait([
+          //   userDataController.initLocation(), // 내 위치 가져오기
+          //   userDataController.getUserData(), // 추천받을 유저 띄우기
+          //   userDataController.getLoginData() // 로그인된 유저 정보 가져오기
+          // ]),
+          future: () async { // 리스트로 집어넣어서 순서를 줌으로써 기존의 future빌더의 wait의 모두 실행될때까지라는 조건의 단점을 보완함 (이거 안해주면 null값 불러와서 오류남)
+            List results = [];
+            results.add(await userDataController.initLocation()); // 내 위치 가져오기
+            results.add(await userDataController.getUserData()); // 먼저 내 위치를 업데이트 해주고 추천받을 유저 띄우기
+            results.add(
+                await userDataController.getLoginData()); // 로그인된 유저 정보 가져오기
+            return results;
+          }(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               // if (snapshot.hasData && snapshot.data?.length == 2) {
@@ -115,41 +123,42 @@ class MainPage extends StatelessWidget {
                 final List<SliderlItems> carouselItems = [
                   // 첫번째 유저
                   SliderlItems(
-                    userFaceImagePath1: userImagepath1,
-                    userFaceImagePath2: userList![0]['ufaceimg2'],
-                    userHobbyImagePath1: userList[0]['uhobbyimg1'],
-                    userHobbyImagePath2: userList[0]['uhobbyimg2'],
-                    userName: userList[0]['unickname'],
-                    userAge: "${userDataController.ageCalc()[0]}세",
-                    userAddress: userList[0]['uaddress'],
-                    userDistance: reciveUserDistance,
-                    userMBTI: userList[0]['umbti'],
-                    userBreed: userList[0]['ubreed'],
-                    userSmoke: isSmoke()[0],
-                    loginGrant: loginData[0]['ugrant']
-                  ),
+                      userFaceImagePath1: userImagepath1,
+                      userFaceImagePath2: userList![0]['ufaceimg2'],
+                      userHobbyImagePath1: userList[0]['uhobbyimg1'],
+                      userHobbyImagePath2: userList[0]['uhobbyimg2'],
+                      userName: userList[0]['unickname'],
+                      userAge: "${userDataController.ageCalc()[0]}세",
+                      userAddress: userList[0]['uaddress'],
+                      userDistance: reciveUserDistance,
+                      userMBTI: userList[0]['umbti'],
+                      userBreed: userList[0]['ubreed'],
+                      userSmoke: isSmoke()[0],
+                      loginUid: loginData[0]['uid'],
+                      loginGrant: loginData[0]['ugrant'],
+                      loginName: loginData[0]['unickname']),
                   // 두번째 유저
                   SliderlItems(
-                    userFaceImagePath1: userImagepath2,
-                    userFaceImagePath2: userList[1]['ufaceimg2'],
-                    userHobbyImagePath1: userList[1]['uhobbyimg1'],
-                    userHobbyImagePath2: userList[1]['uhobbyimg2'],
-                    userName: userList[1]['unickname'],
-                    userAge: "${userDataController.ageCalc()[1]}세",
-                    userAddress: userList[1]['uaddress'],
-                    userDistance: reciveUserDistance,
-                    userMBTI: userList[1]['umbti'],
-                    userBreed: userList[1]['ubreed'],
-                    userSmoke: isSmoke()[1],
-                    loginGrant: loginData[0]['ugrant']
-                  ),
+                      userFaceImagePath1: userImagepath2,
+                      userFaceImagePath2: userList[1]['ufaceimg2'],
+                      userHobbyImagePath1: userList[1]['uhobbyimg1'],
+                      userHobbyImagePath2: userList[1]['uhobbyimg2'],
+                      userName: userList[1]['unickname'],
+                      userAge: "${userDataController.ageCalc()[1]}세",
+                      userAddress: userList[1]['uaddress'],
+                      userDistance: reciveUserDistance,
+                      userMBTI: userList[1]['umbti'],
+                      userBreed: userList[1]['ubreed'],
+                      userSmoke: isSmoke()[1],
+                      loginUid: loginData[0]['uid'],
+                      loginGrant: loginData[0]['ugrant'],
+                      loginName: loginData[0]['unickname']),
                 ];
 
                 // 유저의 위치를 가져와서 거리랑 단위 변환하는 과정
                 if (userPosition != null) {
                   List<double> distances = userDataController
                       .calculateDistances(); // 컨트롤러에서 거리 계산하는 인스턴스
-
                   if (distances.length >= 2) {
                     double distanceWithUser1 = distances[0]; // 첫 번째 사용자와의 거리
                     double distanceWithUser2 = distances[1]; // 두 번째 사용자와의 거리

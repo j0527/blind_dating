@@ -16,7 +16,6 @@ class LoadUserData extends GetxController {
   Rx<Position?> myLocation = Rx<Position?>(null);
   var isPermissionGranted = false.obs;
   var userList = [].obs; // 유저 정보를 저장할 리스트
-  
 
   // 두 지점 간의 거리 계산
   List<double> calculateDistances() {
@@ -42,7 +41,7 @@ class LoadUserData extends GetxController {
           userLongitude,
         );
         // 거리를 리스트에 추가
-        distances.add(distanceInMeters); 
+        distances.add(distanceInMeters);
       }
 
       return distances;
@@ -105,21 +104,74 @@ class LoadUserData extends GetxController {
   // ================== 로그인 관리 ==================
 
   // 전체 유저 불러오기
-  Future<List> getUserData() async {
-    List userData = [];
-    // initSharedPreferences에서 uid만 가져와서 요청 보내기
-    String getUid = await initSharedPreferences();
-    // print("getLoginData uid:$getUid");
-    var url = Uri.parse(
-        'http://localhost:8080/Flutter/dateapp_quary_flutter.jsp?uid=$getUid');
-    var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
-    userData.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
-    var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
-    List result = dataConvertedJSON['results'];
-    userData.addAll(result);
-    // print("result: $result");
-    return result;
+  // Future<List> getUserData() async {
+  //   List userData = [];
+  //   // initSharedPreferences에서 uid만 가져와서 요청 보내기
+  //   String getUid = await initSharedPreferences();
+
+  //   // print("getLoginData uid:$getUid");
+  //   var url = Uri.parse(
+  //       'http://localhost:8080/Flutter/dateapp_quary_flutter.jsp?uid=$getUid');
+  //   var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
+  //   userData.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
+  //   var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
+  //   List result = dataConvertedJSON['results'];
+  //   userData.addAll(result);
+  //   // print("result: $result");
+  //   return result;
+  // }
+Future<List> getUserData() async {
+  List userData = [];
+  String getUid = await initSharedPreferences();
+
+  try {
+    if (await updateLocation()) {
+      var url = Uri.parse(
+          'http://localhost:8080/Flutter/dateapp_quary_flutter.jsp?uid=$getUid');
+      var response = await http.get(url);
+      userData.clear();
+      var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
+      List result = dataConvertedJSON['results'];
+      userData.addAll(result);
+      return result;
+    } else {
+      // updateLocation()이 실패한 경우에 대한 처리
+      throw Exception("updateLocation() failed");
+    }
+  } catch (e) {
+    // 예외 처리 코드
+    print(e);
+    // 예외 처리를 위한 다른 로직을 추가할 수 있습니다.
+    // 예외를 처리한 후에도 Future를 반환해야 합니다.
+    return Future.error(e);
   }
+}
+
+
+  // ================== 로그인한 유저 현재 위치 업데이트 ==================
+Future<bool> updateLocation() async {
+  String getUid = await initSharedPreferences();
+  if (myLocation.value == null) {
+    return false; // 위치가 없을 때 false 반환
+  } else {
+    double myLatitude = myLocation.value!.latitude;
+    double myLongitude = myLocation.value!.longitude;
+
+    var url = Uri.parse(
+        'http://localhost:8080/Flutter/dateapp_update_location_flutter.jsp?ulat=$myLatitude&ulng=$myLongitude&uid=$getUid');
+    var response = await http.get(url);
+    var dataConvertedJSON =
+        json.decode(utf8.decode(response.bodyBytes)); // 딕셔너리로 바꾸는 과정
+    var result = dataConvertedJSON['result']; // return 해주는게 result라는 키값이라서
+    if (result == 'OK') {
+      print("사용자 업데이트가 성공되었습니다.");
+      return true;
+    } else {
+      print("사용자 업데이트가 실패하였습니다.");
+      return false;
+    }
+  }
+}
 
   // ================== 위치 관리 ==================
   // 앱 처음 위치 가져오기

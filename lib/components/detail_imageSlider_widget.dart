@@ -2,14 +2,12 @@
 
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
-import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DetailImageSliderWidget extends StatelessWidget {
-  DetailImageSliderWidget(
+  const DetailImageSliderWidget(
       {super.key,
       required this.controller,
       required this.userInfoList,
@@ -21,20 +19,23 @@ class DetailImageSliderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center, // 자식 위젯을 세로 중앙에 배치
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // 각각의 위젯에 정보 넣어주기
-        detailImageSliderWidget(
-            controller: controller,
-            userInfoList: userInfoList,
-            detailCurrent: detailCurrent),
-        DetailCarouselIndicator(
-            controller: controller,
-            userInfoList: userInfoList,
-            detailCurrent: detailCurrent),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center, // 자식 위젯을 세로 중앙에 배치
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // 각각의 위젯에 정보 넣어주기
+          detailImageSliderWidget(
+              controller: controller,
+              userInfoList: userInfoList,
+              detailCurrent: detailCurrent),
+          DetailCarouselIndicatorWidget(
+              controller: controller,
+              userInfoList: userInfoList,
+              detailCurrent: detailCurrent),
+          const DetailUserInfoWidget(),
+        ],
+      ),
     );
   }
 }
@@ -47,7 +48,7 @@ class detailImageSliderWidget extends StatelessWidget {
   final RxInt detailCurrent;
   // final List items = SliderlItems as List;
 
-  detailImageSliderWidget({
+  const detailImageSliderWidget({
     super.key,
     required this.controller,
     required this.userInfoList,
@@ -59,6 +60,7 @@ class detailImageSliderWidget extends StatelessWidget {
     final Map<String, dynamic> data = Get.arguments;
 
     final List<SliderlItems> receivedItems = data['items'];
+    // ignore: non_constant_identifier_names
     final RxInt Index = data['index']; // RxInt로 받음
 
     // final RxInt detailCurrent;
@@ -72,69 +74,75 @@ class detailImageSliderWidget extends StatelessWidget {
     final String userHobbyImagePath1 = currentItem.userHobbyImagePath1;
     final String userHobbyImagePath2 = currentItem.userHobbyImagePath2;
     final int loginGrant = currentItem.loginGrant;
-    final String userSmoke = currentItem.userSmoke;
     final String userName = currentItem.userName;
-    final String userAge = currentItem.userAge;
-    final String userAddress = currentItem.userAddress;
-    final String userDistance = currentItem.userDistance;
-    final String userMBTI = currentItem.userMBTI;
     final String userBreed = currentItem.userBreed;
+
+    final String detailInfoName =
+        loginGrant == 1 ? "$userName님" : "이 $userBreed";
 
     final List<String> images = [];
 
 // userFaceImagePath1는 항상 추가
     images.add(userFaceImagePath1);
 // userFaceImagePath2 조건에 따라 추가
-    if (loginGrant == 1 && userFaceImagePath2 != null) {
+    if (loginGrant == 1) {
       images.add(userFaceImagePath2);
     }
 // userHobbyImagePath1는 항상 추가
     images.add(userHobbyImagePath1);
 // userHobbyImagePath2는 항상 추가
     images.add(userHobbyImagePath2);
-    return CarouselSlider(
-      items: images.map(
-        (imageUrl) {
-          print("imageUrl: $images");
-          return Stack(
-            children: [
-              SizedBox(
-                width: 400,
-                height: 600,
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ],
-          );
-        },
-      ).toList(),
-      options: CarouselOptions(
-        viewportFraction: 1.0,
-        // autoPlay: true,
-        // autoPlayInterval: const Duration(seconds: 3),
-        onPageChanged: (index, reason) {
-          detailCurrent.value = index;
-        },
-      ),
+
+    return Column(
+      // mainAxisAlignment: MainAxisAlignment.center,
+      // crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
+          child: Text(
+            "$detailInfoName의 정보",
+            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
+        CarouselSlider(
+          items: images
+              .map(
+                (imageUrl) {
+                  // print("imageUrl: $images");
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 500,
+                        width: 400,
+                        child: Image.network(
+                          imageUrl,
+                          fit: BoxFit.fill,
+                        // child: imageUrl,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ).toList(),
+          options: CarouselOptions(
+            height: 500,
+            viewportFraction: 1.0,
+            // autoPlay: true,
+            // autoPlayInterval: const Duration(seconds: 3),
+            onPageChanged: (index, reason) {
+              detailCurrent.value = index;
+            },
+          ),
+        ),
+      ],
     );
   }
 }
 
-// indicator를 담당하는 위젯
-class DetailCarouselIndicator extends StatelessWidget {
-  final CarouselController controller;
-  final List<SliderlItems> userInfoList;
-  final RxInt detailCurrent;
-
-  // indicator에 필요한 정보들
-  DetailCarouselIndicator({
-    Key? key,
-    required this.controller,
-    required this.userInfoList,
-    required this.detailCurrent,
-  });
+// 디테일창 유저 정보 위젯
+class DetailUserInfoWidget extends StatelessWidget {
+  const DetailUserInfoWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +157,143 @@ class DetailCarouselIndicator extends StatelessWidget {
     final SliderlItems currentItem =
         receivedItems[intIndex]; // 유저의 정보를 index로 구분
 
+    final int loginGrant = currentItem.loginGrant;
+    final String loginUName = currentItem.loginName;
+    final String userSmoke = currentItem.userSmoke;
+    final String userName = currentItem.userName;
+    final String userAge = currentItem.userAge;
+    final String userAddress = currentItem.userAddress;
+    final String userDistance = currentItem.userDistance;
+    final String userMBTI = currentItem.userMBTI;
+    final String userBreed = currentItem.userBreed;
+
+    final String detailInfoName = loginGrant == 1 ? "사람" : "강아지";
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                children: [
+                  Text(
+                    userName,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(userAge),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                children: [
+                  // Text(
+                  //   userName,
+                  //   style: const TextStyle(fontSize: 20),
+                  // ),
+                  Text("$loginUName님과 마음의 거리 ❤️ $userDistance"),
+                ],
+              ),
+            ),
+          ],
+        ),
+        // 디테일 정보 시작
+        Container(
+          height: 1.0,
+          width: 500.0,
+          color: Colors.grey,
+        ),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text("상세 정보")],
+          ),
+        ),
+        // Test
+        Padding(
+          padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+          child: Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "지역",
+                      style: TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "MBTI",
+                      style: TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "흡연여부",
+                      style: TextStyle(
+                          color: Colors.grey, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(userAddress),
+                    Text(userMBTI),
+                    Text(userSmoke),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        // const SizedBox(height: 100,),
+        ElevatedButton(
+          onPressed: () {
+            //
+          },
+          child: const Text("채팅 보내기"),
+        ),
+      ],
+    );
+  }
+}
+
+// indicator를 담당하는 위젯
+class DetailCarouselIndicatorWidget extends StatelessWidget {
+  final CarouselController controller;
+  final List<SliderlItems> userInfoList;
+  final RxInt detailCurrent;
+
+  // indicator에 필요한 정보들
+  const DetailCarouselIndicatorWidget({super.key, 
+    required this.controller,
+    required this.userInfoList,
+    required this.detailCurrent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<String, dynamic> data = Get.arguments;
+
+    final List<SliderlItems> receivedItems = data['items'];
+    final RxInt Index = data['index']; // RxInt로 받음
+
+    final int intIndex = Index.value;
+    final SliderlItems currentItem =
+        receivedItems[intIndex]; // 유저의 정보를 index로 구분
+
     final String userFaceImagePath1 = currentItem.userFaceImagePath1;
     final String userFaceImagePath2 = currentItem.userFaceImagePath2;
     final String userHobbyImagePath1 = currentItem.userHobbyImagePath1;
@@ -160,7 +305,7 @@ class DetailCarouselIndicator extends StatelessWidget {
 // userFaceImagePath1는 항상 추가
     images.add(userFaceImagePath1);
 // userFaceImagePath2 조건에 따라 추가
-    if (loginGrant == 1 && userFaceImagePath2 != null) {
+    if (loginGrant == 1) {
       images.add(userFaceImagePath2);
     }
 // userHobbyImagePath1는 항상 추가

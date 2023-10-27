@@ -13,7 +13,9 @@ class SliderlItems {
   final String userMBTI; // 유저 mbti
   final String userBreed; // 유저 닮은 견종
   final String userSmoke; // 유저 흡연여부
-  final int loginGrant; // 유저 구독 여부
+  final String loginUid; // 로그인된 유저 id
+  final int loginGrant; // 로그인된 유저 구독 여부
+  final String loginName; // 로그인된 유저 닉네임
 
   SliderlItems({
       required this.userFaceImagePath1,
@@ -27,7 +29,9 @@ class SliderlItems {
       required this.userMBTI,
       required this.userBreed,
       required this.userSmoke,
-      required this.loginGrant
+      required this.loginUid,
+      required this.loginGrant,
+      required this.loginName
       });
 
 }

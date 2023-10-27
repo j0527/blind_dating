@@ -25,44 +25,17 @@ class MainPageDetail extends StatelessWidget {
     final List<SliderlItems> receivedItems = data['items'];
     final RxInt index = data['index']; // RxInt로 받음
 
-    // Get.to(detailImageSliderWidget(
-    //   userInfoList: receivedItems, detailCurrent: index,
-    //   ),
-    //   arguments: {'userList': receivedItems, 'currentIndex' : index}
-    //   );
-
     final RxInt current;
     // RxInt를 int로 변환
     final int intIndex = index.value;
-    // final SliderlItems currentItem =
-    //     receivedItems[intIndex]; // 유저의 정보를 index로 구분
-
-    // final String userFaceImagePath1 = currentItem.userFaceImagePath1;
-    // final String userFaceImagePath2 = currentItem.userFaceImagePath2;
-    // final String userHobbyImagePath1 = currentItem.userHobbyImagePath1;
-    // final String userHobbyImagePath2 = currentItem.userHobbyImagePath2;
-    // final int loginGrant = currentItem.loginGrant;
-    // final String userSmoke = currentItem.userSmoke;
-    // final String userName = currentItem.userName;
-    // final String userAge = currentItem.userAge;
-    // final String userAddress = currentItem.userAddress;
-    // final String userDistance = currentItem.userDistance;
-    // final String userMBTI = currentItem.userMBTI;
-    // final String userBreed = currentItem.userBreed;
     return Scaffold(
       body: Center(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width < 500
-              ? 500
-              : MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height > 800
-              ? 500
-              : MediaQuery.of(context).size.height,
-          child: Stack(
+        child: SingleChildScrollView(
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GetBuilder<IndicatorCurrent>(
                 builder: (controller) {
-                  print("receivedItems: $receivedItems");
                   return DetailImageSliderWidget(
                     controller: sliderController,
                     userInfoList: receivedItems,
@@ -70,15 +43,18 @@ class MainPageDetail extends StatelessWidget {
                   );
                 },
               ),
-              // DetailCarouselIndicator(
+              // DetailCarouselIndicatorWidget(
               //   controller: sliderController,
               //   userInfoList: receivedItems,
               //   detailCurrent: indicatorCurrent.detailCurrent,
               // ),
+              const SizedBox(height: 100),
+              // DetailUserInfoWidget(),
             ],
           ),
         ),
       ),
+      // ),
     );
   }
 // 디테일 창을 닫을 때
