@@ -87,9 +87,7 @@ class MainPageDetail extends StatelessWidget {
 // 디테일 창을 닫을 때
   void closeDetailPage() {
     // detailCurrent 값을 원하는 값으로 설정하여 초기화
-    // indicatorCurrent.current.value = 0; // 0으로 초기화
     indicatorCurrent.detailCurrent.value = 0; // 0으로 초기화
-    // Get.back(); // 디테일 창 닫기
   }
 }// --- Functions ---
 

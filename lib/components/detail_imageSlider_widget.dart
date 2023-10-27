@@ -81,6 +81,10 @@ class detailImageSliderWidget extends StatelessWidget {
         loginGrant == 1 ? "$userName님" : "이 $userBreed";
 
     final List<String> images = [];
+    final List<String> categories = loginGrant == 1
+        ? ["얼굴사진1", "얼굴사진1", "취미1", "취미2"]
+        : ["닮은 강아지", "취미1", "취미2"];
+    int currentIndex = 0; // 슬라이드의 현재 페이지 인덱스
 
 // userFaceImagePath1는 항상 추가
     images.add(userFaceImagePath1);
@@ -97,38 +101,32 @@ class detailImageSliderWidget extends StatelessWidget {
       // mainAxisAlignment: MainAxisAlignment.center,
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-        //   child: Text(
-        //     "$detailInfoName의 은밀한 정보",
-        //     style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        //   ),
-        // ),
         CarouselSlider(
-          items: images.map(
-            (imageUrl) {
-              // print("imageUrl: $images");
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 600,
-                    width: MediaQuery.of(context).size.width, // 화면 최대 넓이
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.fill,
-                      // child: imageUrl,
-                    ),
+          items: images.asMap().entries.map((entry) { // asMap은 이미지 entry로는 배열에 담긴 문자 뽑아오기
+            final int index = entry.key;
+            final String imageUrl = entry.value;
+            final String category = categories[index];
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(category,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10,),
+                SizedBox(
+                  height: 550,
+                  width: MediaQuery.of(context).size.width,
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.fill,
                   ),
-                ],
-              );
-            },
-          ).toList(),
+                ),
+              ],
+            );
+          }).toList(),
           options: CarouselOptions(
             height: 600,
             viewportFraction: 1.0,
-            // autoPlay: true,
-            // autoPlayInterval: const Duration(seconds: 3),
             onPageChanged: (index, reason) {
               detailCurrent.value = index;
             },
@@ -156,7 +154,6 @@ class DetailUserInfoWidget extends StatelessWidget {
     final SliderlItems currentItem =
         receivedItems[intIndex]; // 유저의 정보를 index로 구분
 
-    final int loginGrant = currentItem.loginGrant;
     final String loginUName = currentItem.loginName;
     final String userSmoke = currentItem.userSmoke;
     final String userName = currentItem.userName;
@@ -164,9 +161,6 @@ class DetailUserInfoWidget extends StatelessWidget {
     final String userAddress = currentItem.userAddress;
     final String userDistance = currentItem.userDistance;
     final String userMBTI = currentItem.userMBTI;
-    final String userBreed = currentItem.userBreed;
-
-    final String detailInfoName = loginGrant == 1 ? "사람" : "강아지";
 
     return Column(
       children: [
@@ -179,7 +173,8 @@ class DetailUserInfoWidget extends StatelessWidget {
                 children: [
                   Text(
                     userName,
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     width: 10,
@@ -189,13 +184,9 @@ class DetailUserInfoWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                 children: [
-                  // Text(
-                  //   userName,
-                  //   style: const TextStyle(fontSize: 20),
-                  // ),
                   Text("$loginUName님과 마음의 거리 ❤️ $userDistance"),
                 ],
               ),
@@ -262,27 +253,24 @@ class DetailUserInfoWidget extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-            onPressed: () {
-
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orangeAccent,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(150, 40), // 버튼 사이즈 조절해서 통일성주기
-                shape: RoundedRectangleBorder(
-                  // 버튼 모양 다듬기
-                  borderRadius: BorderRadius.circular(10),
-                )),
-            child: const Text('대화 걸기',
-            style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-            ),
-            ),
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orangeAccent,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(150, 40), // 버튼 사이즈 조절해서 통일성주기
+              shape: RoundedRectangleBorder(
+                // 버튼 모양 다듬기
+                borderRadius: BorderRadius.circular(10),
+              )),
+          child: const Text(
+            '대화 걸기',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
       ],
     );
   }
 }
-
-// Widget 
 
 // indicator를 담당하는 위젯
 class DetailCarouselIndicatorWidget extends StatelessWidget {
