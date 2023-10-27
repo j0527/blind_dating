@@ -22,8 +22,6 @@ class _ProfileModifyState extends State<ProfileModify> {
   late TextEditingController PWController;
   late TextEditingController PWCheckController;
   late TextEditingController AddressController;
-  late TextEditingController NickNameController;
-  
   late String inputValue;
 
 
@@ -48,7 +46,6 @@ class _ProfileModifyState extends State<ProfileModify> {
     PWController = TextEditingController();
     PWCheckController = TextEditingController();
     AddressController = TextEditingController();
-    NickNameController = TextEditingController();
     inputValue = "";
   }
 
@@ -88,23 +85,6 @@ class _ProfileModifyState extends State<ProfileModify> {
                         readOnly: true,
                   ),
                 ),
-                                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 10, 10, 10),
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    controller: NickNameController,
-                    decoration: const InputDecoration(
-                        hintText: '닉네임',
-                        prefixIcon: Icon(
-                          Icons.person_add_alt_1,
-                          color: Color.fromARGB(255, 88, 104, 126),
-                        )),
-                        keyboardType: TextInputType.text,
-                      onSubmitted: (value) {
-                      inputValue = NickNameController.text;}
-                  ),
-                ),
-
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: TextField(style: TextStyle(fontSize: 18),
