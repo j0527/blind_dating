@@ -17,14 +17,12 @@ class TestLogin extends StatefulWidget {
 }
 
 // 여기서 with WidgetsBindingObserver 추가해줘야됨
-class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver{
-
+class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver {
   late AppLifecycleState _lastLifeCycleState;
   late TextEditingController idText;
   late TextEditingController pwText;
   // 유저와 관련된 getX
   final LoadUserData userDataController = Get.put(LoadUserData());
-
 
   // 유저 정보 JSON으로 받아올 리스트
   // List data = [];
@@ -33,101 +31,100 @@ class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver{
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addObserver(this);  // opserver 만들기
+    WidgetsBinding.instance.addObserver(this); // opserver 만들기
     idText = TextEditingController();
     pwText = TextEditingController();
     // loadUserData();
     _initSharedPreferences(); // SharedPreference 초기화
   }
 
-    @override
+  @override
   void dispose() {
     _disposeSharedPreferences();
     super.dispose();
   }
 
-    @override
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state){
+    switch (state) {
       case AppLifecycleState.detached: // 떨어졌다
-      print('detached');
-      break;
+        print('detached');
+        break;
       case AppLifecycleState.resumed: // 뒤에 숨어있다 나옴
-      print("resumed");
-      break;
+        print("resumed");
+        break;
       case AppLifecycleState.inactive: // 죽었다
-      print('inactivive');
-      break;
+        print('inactivive');
+        break;
       case AppLifecycleState.paused:
-      print('paused');
-      break;
+        print('paused');
+        break;
       case AppLifecycleState.hidden:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
     }
     _lastLifeCycleState = state;
     super.didChangeAppLifecycleState(state);
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextField(
-          controller: idText, // 글씨가 들어온줄 인식하는곳이 controller
-          decoration: const InputDecoration(
-            labelText: '전화번호 형식의 ID를 입력해주세요', // 텍스트필드에 작게 가이드해주는 텍스트
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-            ), // textfield 테두리
-          ),
-          keyboardType: TextInputType.number, // keyboard타입 정해주기
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: idText, // 글씨가 들어온줄 인식하는곳이 controller
+              decoration: const InputDecoration(
+                labelText: '전화번호 형식의 ID를 입력해주세요', // 텍스트필드에 작게 가이드해주는 텍스트
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ), // textfield 테두리
+              ),
+              keyboardType: TextInputType.number, // keyboard타입 정해주기
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextField(
+              controller: pwText, // 글씨가 들어온줄 인식하는곳이 controller
+              decoration: const InputDecoration(
+                labelText: 'Password를 입력해주세요', // 텍스트필드에 작게 가이드해주는 텍스트
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ), // textfield 테두리
+              ),
+            ),
+            const SizedBox(
+              height: 100,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Get.to(const HomeWidget(), // 페이지로 저장시킬 id정보 넘기기
+                    arguments: _saveSharePreferencese());
+              },
+              child: const Text('로그인'),
+            ),
+            const SizedBox(
+              height: 100,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Get.to(const SignUpFirst());
+              },
+              child: const Text('회원가입'),
+            ),
+          ],
         ),
-        const SizedBox(
-          height: 20,
-        ),
-        TextField(
-          controller: pwText, // 글씨가 들어온줄 인식하는곳이 controller
-          decoration: const InputDecoration(
-            labelText: 'Password를 입력해주세요', // 텍스트필드에 작게 가이드해주는 텍스트
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-            ), // textfield 테두리
-          ),
-        ),
-        const SizedBox(
-          height: 100,
-        ),
-        ElevatedButton(
-          onPressed: () {
-            
-            Get.to(
-              const HomeWidget(), // 페이지로 저장시킬 id정보 넘기기
-              arguments: _saveSharePreferencese()
-              );
-          },
-          child: const Text('로그인'),
-        ),
-        const SizedBox(
-          height: 100,
-        ),
-        ElevatedButton(
-          onPressed: () {
-            Get.to(
-              const SignUpFirst());
-          },
-          child: const Text('회원가입'),
-        ),
-        
-      ],
+      ),
     );
   }
-    // 초기 id, pw를 Textfiled에서 가져와서 key값 uid, vlaue값 idText.text으로 구성되게 해줌
-    _initSharedPreferences() async {
+
+  // 초기 id, pw를 Textfiled에서 가져와서 key값 uid, vlaue값 idText.text으로 구성되게 해줌
+  _initSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    idText.text = prefs.getString("uid") ?? " ";
-    pwText.text = prefs.getString("upw") ?? " ";
+    idText.text = prefs.getString("uid") ?? "";
+    pwText.text = prefs.getString("upw") ?? "";
 
     print("아이디 텍스트필드: ${idText.text}");
     print("패스워드 텍스트필드: ${pwText.text}");
@@ -135,18 +132,16 @@ class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver{
 
   // 이 함수가 내 기기에 id정보를 저장시키는 것이고 Get.to로 넘겨주는 부분
   //_initSharedPreferences에서 설정한 key값 uid, upw를 넘김
-    _saveSharePreferencese() async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString('uid', idText.text);
-  prefs.setString('upw', pwText.text);
+  _saveSharePreferencese() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('uid', idText.text.trim());
+    prefs.setString('upw', pwText.text.trim());
   }
 
-  _disposeSharedPreferences()async{
+  _disposeSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
   }
-
-
 
   //   Future<List> loadUserData() async {
   //   var url = Uri.parse(
@@ -161,4 +156,3 @@ class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver{
   //   return result;
   // }
 }
-

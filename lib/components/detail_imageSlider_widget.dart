@@ -262,7 +262,9 @@ class DetailUserInfoWidget extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+
+            },
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orangeAccent,
                 foregroundColor: Colors.white,
@@ -279,6 +281,8 @@ class DetailUserInfoWidget extends StatelessWidget {
     );
   }
 }
+
+// Widget 
 
 // indicator를 담당하는 위젯
 class DetailCarouselIndicatorWidget extends StatelessWidget {

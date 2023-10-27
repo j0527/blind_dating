@@ -1,8 +1,7 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, must_be_immutable
 
 import 'package:blind_dating/components/main_imageSlider_widget.dart';
 import 'package:blind_dating/model/sliderItems_model.dart';
-import 'package:blind_dating/util/theme.dart';
 import 'package:blind_dating/view/mainpage_detail.dart';
 import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
 import 'package:blind_dating/viewmodel/location_ctrl.dart';
@@ -199,11 +198,11 @@ class MainPage extends StatelessWidget {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                               child: Text(
-                                '오늘의 추천',
-                                style: TextStyle(
+                                '${loginData[0]['unickname']}님을 위한 추천',
+                                style: const TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,
                                 ),

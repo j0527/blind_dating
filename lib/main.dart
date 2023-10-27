@@ -1,5 +1,6 @@
 import 'package:blind_dating/firebase_options.dart';
 import 'package:blind_dating/home.dart';
+import 'package:blind_dating/view/test_login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Home(),
+      home: const TestLogin(),
     );
   }
 }
