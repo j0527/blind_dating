@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:blind_dating/model/user_messages.dart';
 import 'package:blind_dating/view/signupfourth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart'; 
+import 'package:firebase_storage/firebase_storage.dart';
 
 class SignUpThird extends StatefulWidget {
   const SignUpThird({super.key});
@@ -76,7 +78,26 @@ class _SignUpThirdState extends State<SignUpThird> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
                   child: ElevatedButton(onPressed: () {
-                    //
+                    List<File> profiles = [];
+                    for (XFile? xFile in _imageprofile){
+                      if (xFile != null){
+                        File file = File(xFile.path);
+                        profiles.add(file);
+                      }
+                    }
+
+                    int i = 1;
+                    for (File file in profiles){
+                      print("프로필");
+                      print(profiles.length);
+                      FirebaseStorage.instance
+                                    .ref("user/profile/${Message.id}_profile_$i")
+                                    .putFile(file);
+                      i++;
+                    }
+                    
+
+
                   }, 
                         style: TextButton.styleFrom(
                           minimumSize: Size(100, 40),
@@ -106,7 +127,21 @@ class _SignUpThirdState extends State<SignUpThird> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
                   child: ElevatedButton(onPressed: () {
-                    //
+                    List<File> hobbies = [];
+                    for (XFile? xFile in _imagehobby){
+                      if (xFile != null){
+                        File file = File(xFile.path);
+                        hobbies.add(file);
+                      }
+                    }
+
+                    int i = 1;
+                    for (File file in hobbies){
+                      FirebaseStorage.instance
+                                    .ref("user/hobby/${Message.id}_hobby_$i")
+                                    .putFile(file);
+                      i++;
+                    }
                   }, 
                       style: TextButton.styleFrom(
                         minimumSize: Size(100, 40),

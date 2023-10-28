@@ -2,6 +2,7 @@ import 'package:blind_dating/homewidget.dart';
 import 'package:blind_dating/view/profilemodify.dart';
 import 'package:blind_dating/view/signupfirst.dart';
 import 'package:blind_dating/view/signupsecond.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/route_manager.dart';
@@ -16,12 +17,20 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late TextEditingController SubscriptionController;
   late TextEditingController ContractController;
+  late Future<String> _imageURL;
 
   @override
   void initState() {
     super.initState();
     SubscriptionController = TextEditingController();
     ContractController = TextEditingController();
+  _imageURL = loadImageURL('user/profile/0105749143_profile_1');
+  }
+
+  Future<String> loadImageURL(String path) async {
+    Reference _ref = FirebaseStorage.instance.ref().child(path);
+    String url = await _ref.getDownloadURL();
+    return url;
   }
 
   @override
@@ -35,9 +44,21 @@ class _ProfileState extends State<Profile> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                CircleAvatar(
-                  backgroundImage: AssetImage('images/퍼그.png'),
-                  radius: 100,
+                FutureBuilder<String>(
+                  future: _imageURL,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // While waiting for the image to load, you can display a loading indicator or placeholder.
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error loading image');
+                    } else {
+                      return CircleAvatar(
+                        backgroundImage: NetworkImage(snapshot.data!),
+                        radius: 100,
+                      );
+                    }
+                  },
                 ),
                 SizedBox(
                   height: 40,
