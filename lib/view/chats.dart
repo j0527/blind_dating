@@ -27,12 +27,32 @@ class _ChatsState extends State<Chats> {
 
   final FirebaseFirestore chatRoomsRef = FirebaseFirestore.instance;
   // final chatMessages = chatRoomsRef;
+
+  // 메시지 작성 text field controller
+  late TextEditingController textEditingController;
+
+  // 화면 스크롤 조정 컨트롤러
+  late ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    textEditingController = TextEditingController();
+    scrollController = ScrollController();
+  }
   
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // print("chatRoomId : ${value[0]}, chatRoomName : ${value[1]} - 지니 확인용");
     print("chatRoomId : ${value[0]}, chatRoomName : ${value[1]} - 지니 확인용 (넘긴 후)");
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
           '${value[1]}'
@@ -91,9 +111,65 @@ class _ChatsState extends State<Chats> {
                   //   },
                   // );
                   
-                  return Column(
-                    // mainAxisAlignment: ,
-                    children: chats.map((e) => _buildItemWidget(e)).toList()
+                  return GestureDetector(
+                    onTap: () => FocusScope.of(context).unfocus(),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            controller: scrollController,
+                            itemCount: chats.length,
+                            itemBuilder: (context, index) {
+                              return _buildItemWidget(chats[index]);
+                            },
+                            // children: chats.map((e) => _buildItemWidget(e)).toList()
+                          ),
+                        ),   // firebase에서 받아온 메시지
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: textEditingController,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5)
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize:20
+                                  ),
+                                  onSubmitted: (value) {
+                                    // 엔터키 눌렀을 때 firebase에 텍스트 필드 내용이 전송되도록
+                                    textEditingController.clear();
+                                  },
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  // firebase로 메시지 추가하는 기능
+                                  FirebaseFirestore.instance.collection('chatRooms').doc(value[0])
+                                  .collection('chats')
+                                  .add(
+                                    {
+                                      'content': textEditingController.text,
+                                      'sender': loginData[0]['uid'],
+                                      'chatedAt': FieldValue.serverTimestamp()
+                                    }
+                                  );
+                                  textEditingController.clear();    // 메시지 추가 후 필드 지우기
+                                }, 
+                                icon: Icon(
+                                  Icons.send,
+                                  // color: Colors.deepPurple[200],
+                                  size: 35,
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   );
 
                   // return build(context, index) {
@@ -156,45 +232,9 @@ class _ChatsState extends State<Chats> {
         ),
       ],
     ); 
-    // isSender = (chats.sender == loginData[0]['uid']);
-    // return Dismissible(
-    //   direction: DismissDirection.endToStart,
-    //   background: Container(
-    //     color: Colors.red,
-    //     alignment: Alignment.centerRight,
-    //     child: const Icon(Icons.delete_forever),
-    //   ),
-    //   key: ValueKey(doc), 
-    //   onDismissed: (direction) {
-    //     // FirebaseFirestore.instance
-    //     // .collection('message')
-    //     // .doc(doc.id)
-    //     // .delete();
-    //   },
-    //   child: Column(
-    //     crossAxisAlignment: 
-    //       isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-    //       children: [
-    //         Text(
-    //           chats.content,
-    //           style: TextStyle(
-    //             fontSize: 15
-    //           ),
-    //         )
-    //       ],
-    //   ),
-      
-    // );
 
 
   }
 
-  // 채팅말풍선 꾸미기
-  // Widget chatings(BuildContext context) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment
-  //       chats.sender == loginData[0]['uid'] ? MainAxisAlignment.end : MainAxisAlignment,
-  //   )
-  // }
 
 }

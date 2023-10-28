@@ -68,7 +68,8 @@ class _FavoritePageState extends State<FavoritePage> {
                               Row(
                                 children: [
                                   Text(
-                                    "상대 닉네임"
+                                    // "상대 닉네임"
+                                    fromUid
                                   ),
                                   Text(
                                     "상대 거주 지역"

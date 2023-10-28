@@ -1,5 +1,6 @@
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/util/theme.dart';
+import 'package:blind_dating/view/alarm.dart';
 import 'package:blind_dating/view/appbarWidget.dart';
 import 'package:blind_dating/view/chat_room_lists.dart';
 import 'package:blind_dating/view/chats.dart';
@@ -62,8 +63,9 @@ class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateM
         physics: const NeverScrollableScrollPhysics(),
         children: [
           MainPage(),      // 태영 메인 페이지
-          const FavoritePage(),
           const ChatRoomLists(),         // 진 채팅 페이지       
+          // const FavoritePage(),
+          const AlarmPage(),
           const Profile()        // ?? 프로필 페이지
         ]
       ),
@@ -128,15 +130,15 @@ class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateM
           ),
           Tab(
             icon: Icon(
-              Icons.favorite
-            ),
-            text: "Favorites",
-          ),
-          Tab(
-            icon: Icon(
               Icons.chat_bubble_outline
             ),
             text: "Chats",
+          ),
+          Tab(
+            icon: Icon(
+              Icons.notifications_rounded
+            ),
+            text: "Alarms",
           ),
           Tab(
             icon: Icon(

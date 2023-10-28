@@ -21,6 +21,7 @@ class _ChatListsState extends State<ChatRoomLists> {
   final LoadUserData userDataController = Get.put(LoadUserData());
   // 사용자 로그인 정보 받아둘 리스트
   late List loginData = [];
+  late List userData = [];
   
   @override
   void initState() {
@@ -31,11 +32,12 @@ class _ChatListsState extends State<ChatRoomLists> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: userDataController.getLoginData(), 
+        future: Future.wait([userDataController.getLoginData(), userDataController.getUserData()]),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              loginData = snapshot.data!;
+              loginData = snapshot.data![0];
+              userData = snapshot.data![1];
               return StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                   .collection('chatRooms')
