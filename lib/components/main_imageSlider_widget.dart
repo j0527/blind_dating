@@ -62,7 +62,7 @@ class CarouselSliderWidget extends StatelessWidget {
               // 이미지 크기
               width: MediaQuery.of(context).size.width, // 화면 최대 넓이
               height: 510,
-              child: Image.network(item.userFaceImagePath1, fit: BoxFit.fill),
+              child: Image.network(item.userMainImagePath, fit: BoxFit.cover),
             ),
             Center(
               child: Container(

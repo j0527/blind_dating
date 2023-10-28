@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'dart:ui';
+
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -69,58 +71,130 @@ class detailImageSliderWidget extends StatelessWidget {
     final SliderlItems currentItem =
         receivedItems[intIndex]; // 유저의 정보를 index로 구분
 
-    final String userFaceImagePath1 = currentItem.userFaceImagePath1;
-    final String userFaceImagePath2 = currentItem.userFaceImagePath2;
-    final String userHobbyImagePath1 = currentItem.userHobbyImagePath1;
-    final String userHobbyImagePath2 = currentItem.userHobbyImagePath2;
-    final int loginGrant = currentItem.loginGrant;
-    final String userName = currentItem.userName;
-    final String userBreed = currentItem.userBreed;
+    final String userImagePath1 = currentItem.userDogImagePath; // 닮은 견종 사진
+    final String userImagePath2 = currentItem.userFaceImagePath1; // 얼굴 사진1
+    final String userImagePath3 = currentItem.userFaceImagePath2; // 얼굴 사진2
+    final String userImagePath4 = currentItem.userHobbyImagePath1; // 취미 사진1
+    final String userImagePath5 = currentItem.userHobbyImagePath2; // 취미 사진2
+    final String userImagePath6 = currentItem.userHobbyImagePath3; // 취미 사진3
+    final int loginGrant = currentItem.loginGrant; // 로그인된 유저 구독 여부
+    final String userName = currentItem.userName; // 유저 이름
+    final String userBreed = currentItem.userBreed; // 유저 견종
+
+    List<String> imagesUrl = [
+      currentItem.userDogImagePath,
+      currentItem.userFaceImagePath1,
+      currentItem.userFaceImagePath2,
+      currentItem.userHobbyImagePath1,
+      currentItem.userHobbyImagePath2,
+      currentItem.userHobbyImagePath3,
+    ];
+
+// final List<Widget> images = [];
 
     final String detailInfoName =
         loginGrant == 1 ? "$userName님" : "이 $userBreed";
 
-    final List<String> images = [];
+    // final List<String> images = [];
+    List<Widget> images = [];
     final List<String> categories = loginGrant == 1
-        ? ["얼굴사진1", "얼굴사진1", "취미1", "취미2"]
-        : ["닮은 강아지", "취미1", "취미2"];
+        ? ["닮은 강아지", "얼굴사진1", "얼굴사진2", "취미힌트1", "취미힌트2", "취미힌트3"]
+        : ["닮은 강아지", "얼굴사진1", "얼굴사진2", "취미힌트1", "취미힌트2", "취미힌트3"];
     int currentIndex = 0; // 슬라이드의 현재 페이지 인덱스
 
-// userFaceImagePath1는 항상 추가
-    images.add(userFaceImagePath1);
-// userFaceImagePath2 조건에 따라 추가
-    if (loginGrant == 1) {
-      images.add(userFaceImagePath2);
+// // userFaceImagePath1는 항상 추가
+// if (loginGrant == 1) {
+//     images.add(userFaceImagePath1);
+// // userFaceImagePath2 조건에 따라 추가
+
+//       images.add(userFaceImagePath2);
+//     }
+// // userHobbyImagePath1는 항상 추가
+//     images.add(userHobbyImagePath1);
+// // userHobbyImagePath2는 항상 추가
+//     images.add(userHobbyImagePath2);
+  // for (images in imagesUrl){
+
+  // }
+
+
+if (loginGrant == 1) {
+  for (int i = 0; i < categories.length; i++) {
+    images.add(
+      SizedBox(
+        height: 550,
+        width: MediaQuery.of(context).size.width,
+        child: Image.network(
+          imagesUrl[i],
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+} else {
+  for (int i = 0; i < categories.length; i++) {
+    if (i == 1 || i == 2) {
+      images.add(
+        Container(
+          height: 550,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(imagesUrl[i]),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+            child: Container(color: Colors.black.withOpacity(0.1)),
+          ),
+        ),
+      );
+    } else {
+      images.add(
+        SizedBox(
+          height: 550,
+          width: MediaQuery.of(context).size.width,
+          child: Image.network(
+            imagesUrl[i],
+            fit: BoxFit.cover,
+          ),
+        )
+      );
+      }
     }
-// userHobbyImagePath1는 항상 추가
-    images.add(userHobbyImagePath1);
-// userHobbyImagePath2는 항상 추가
-    images.add(userHobbyImagePath2);
+  }
 
     return Column(
       // mainAxisAlignment: MainAxisAlignment.center,
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CarouselSlider(
-          items: images.asMap().entries.map((entry) { // asMap은 이미지 entry로는 배열에 담긴 문자 뽑아오기
+          items: images.asMap().entries.map((entry) {
+            // asMap은 이미지 entry로는 배열에 담긴 문자 뽑아오기
             final int index = entry.key;
-            final String imageUrl = entry.value;
+            // final dynamic imageUrl = entry.value;
             final String category = categories[index];
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(category,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Text(
+                  category,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 10,),
-                SizedBox(
-                  height: 550,
-                  width: MediaQuery.of(context).size.width,
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.fill,
-                  ),
+                const SizedBox(
+                  height: 10,
                 ),
+                // SizedBox(
+                //   height: 550,
+                //   width: MediaQuery.of(context).size.width,
+                //   child: Image.network(
+                //     imageUrl,
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
+                images[index]
               ],
             );
           }).toList(),
@@ -154,6 +228,8 @@ class DetailUserInfoWidget extends StatelessWidget {
     final SliderlItems currentItem =
         receivedItems[intIndex]; // 유저의 정보를 index로 구분
 
+    final int loginGrant = currentItem.loginGrant;
+    final int loginChatCount = currentItem.loginChatCount;
     final String loginUName = currentItem.loginName;
     final String userSmoke = currentItem.userSmoke;
     final String userName = currentItem.userName;
@@ -255,7 +331,65 @@ class DetailUserInfoWidget extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            // if (user)
+            if (loginGrant == 0 && loginChatCount > 0) {
+              // 구독은 안하고 잔여 채팅은 남아있을 때
+              Get.defaultDialog(
+                  title: '채팅 보내기 ❤️',
+                  middleText: '채팅 기회가$loginChatCount번 남았습니다\n 채팅을 진행하시겠습니까?',
+                  backgroundColor: Colors.yellowAccent,
+                  barrierDismissible: false,
+                  actions: [
+                    Column(
+                      children: [
+                        TextButton(
+                          onPressed: () => Get.back(),
+                          child: const Text('채팅 보내기'),
+                        ),
+                        TextButton(
+                          onPressed: () => Get.back(),
+                          child: const Text('Exit'),
+                        ),
+                      ],
+                    ),
+                  ]);
+            } else if (loginGrant == 0 && loginChatCount < 1) {
+              // 구독도 안하고 채팅 카운드도 다쓴경우
+              Get.defaultDialog(
+                  title: '채팅 보내기 ❤️',
+                  middleText: '무료 채팅 기회가 모두 소진되었습니다.\n구독권 구매를 진행하시겠습니까?',
+                  backgroundColor: Colors.yellowAccent,
+                  barrierDismissible: false,
+                  actions: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text(
+                        '취소',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text('구매하기'),
+                    ),
+                  ]);
+            } else {
+              // 구독한 경우
+              Get.defaultDialog(
+                  title: '채팅 보내기 ❤️',
+                  middleText: '무료 채팅 기회가 모두 소진되었습니다.\n채팅을 진행하시겠습니까?',
+                  backgroundColor: Colors.yellowAccent,
+                  barrierDismissible: false,
+                  actions: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text('채팅 보내기'),
+                    ),
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text('취소'),
+                    ),
+                  ]);
+            }
           },
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.orangeAccent,
@@ -275,6 +409,20 @@ class DetailUserInfoWidget extends StatelessWidget {
   }
 }
 
+// Future isGrant() {
+//   return Get.defaultDialog(
+//       title: 'Dialog',
+//       middleText: '$loginChatCount',
+//       backgroundColor: Colors.yellowAccent,
+//       barrierDismissible: false,
+//       actions: [
+//         TextButton(
+//           onPressed: () => Get.back(),
+//           child: const Text('Exit'),
+//         ),
+//       ]);
+// }
+
 // indicator를 담당하는 위젯
 class DetailCarouselIndicatorWidget extends StatelessWidget {
   final CarouselController controller;
@@ -291,33 +439,28 @@ class DetailCarouselIndicatorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> data = Get.arguments;
+    // final Map<String, dynamic> data = Get.arguments;
 
-    final List<SliderlItems> receivedItems = data['items'];
-    final RxInt Index = data['index']; // RxInt로 받음
+    // final List<SliderlItems> receivedItems = data['items'];
+    // final RxInt Index = data['index']; // RxInt로 받음
 
-    final int intIndex = Index.value;
-    final SliderlItems currentItem =
-        receivedItems[intIndex]; // 유저의 정보를 index로 구분
+    // final int intIndex = Index.value;
+    // final SliderlItems currentItem =
+    //     receivedItems[intIndex]; // 유저의 정보를 index로 구분
 
-    final String userFaceImagePath1 = currentItem.userFaceImagePath1;
-    final String userFaceImagePath2 = currentItem.userFaceImagePath2;
-    final String userHobbyImagePath1 = currentItem.userHobbyImagePath1;
-    final String userHobbyImagePath2 = currentItem.userHobbyImagePath2;
-    final int loginGrant = currentItem.loginGrant;
-
-    final List<String> images = [];
-
-// userFaceImagePath1는 항상 추가
-    images.add(userFaceImagePath1);
-// userFaceImagePath2 조건에 따라 추가
-    if (loginGrant == 1) {
-      images.add(userFaceImagePath2);
-    }
-// userHobbyImagePath1는 항상 추가
-    images.add(userHobbyImagePath1);
-// userHobbyImagePath2는 항상 추가
-    images.add(userHobbyImagePath2);
+    // final String userFaceImagePath1 = currentItem.userFaceImagePath1;
+    // final String userFaceImagePath2 = currentItem.userFaceImagePath2;
+    // final String userHobbyImagePath1 = currentItem.userHobbyImagePath1;
+    // final String userHobbyImagePath2 = currentItem.userHobbyImagePath2;
+    // final int loginGrant = currentItem.loginGrant;
+    final List<String> images = [
+      "닮은 강아지",
+      "얼굴사진1",
+      "얼굴사진2",
+      "취미힌트1",
+      "취미힌트2",
+      "취미힌트3"
+    ];
 
     return GetBuilder<IndicatorCurrent>(
       builder: (indicatorCurrent) {

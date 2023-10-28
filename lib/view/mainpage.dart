@@ -36,6 +36,7 @@ class MainPage extends StatelessWidget {
   // 권한에 따라 다른 이미지를 담기위한 변수
   String userImagepath1 = "";
   String userImagepath2 = "";
+  String userImagepath3 = "";
 
   /*
   saveSharedPreferences로 저장된 로그인 정보 받기
@@ -105,9 +106,11 @@ class MainPage extends StatelessWidget {
                         if (loginData[0]['ugrant'] == 1) {
                           userImagepath1 = userList![0]['ufaceimg1'];
                           userImagepath2 = userList[1]['ufaceimg1'];
+                          userImagepath3 = userList[2]['ufaceimg1'];
                         } else {
                           userImagepath1 = userList![0]['udogimg'];
                           userImagepath2 = userList[1]['udogimg'];
+                          userImagepath3 = userList[2]['udogimg'];
                         }
                       }
                       //
@@ -128,10 +131,13 @@ class MainPage extends StatelessWidget {
                       final List<SliderlItems> carouselItems = [
                         // 첫번째 유저
                         SliderlItems(
-                            userFaceImagePath1: userImagepath1,
-                            userFaceImagePath2: userList![0]['ufaceimg2'],
+                            userMainImagePath: userImagepath1,
+                            userFaceImagePath1: userList![0]['ufaceimg1'],
+                            userFaceImagePath2: userList[0]['ufaceimg2'],
                             userHobbyImagePath1: userList[0]['uhobbyimg1'],
                             userHobbyImagePath2: userList[0]['uhobbyimg2'],
+                            userHobbyImagePath3: userList[0]['uhobbyimg3'],
+                            userDogImagePath: userList[0]['udogimg'],
                             userName: userList[0]['unickname'],
                             userAge: "${userDataController.ageCalc()[0]}세",
                             userAddress: userList[0]['uaddress'],
@@ -141,13 +147,17 @@ class MainPage extends StatelessWidget {
                             userSmoke: isSmoke()[0],
                             loginUid: loginData[0]['uid'],
                             loginGrant: loginData[0]['ugrant'],
-                            loginName: loginData[0]['unickname']),
+                            loginName: loginData[0]['unickname'],
+                            loginChatCount: loginData[0]['uchatcount']),
                         // 두번째 유저
                         SliderlItems(
-                            userFaceImagePath1: userImagepath2,
+                            userMainImagePath: userImagepath2,
+                            userFaceImagePath1: userList[1]['ufaceimg1'],
                             userFaceImagePath2: userList[1]['ufaceimg2'],
                             userHobbyImagePath1: userList[1]['uhobbyimg1'],
                             userHobbyImagePath2: userList[1]['uhobbyimg2'],
+                            userHobbyImagePath3: userList[1]['uhobbyimg3'],
+                            userDogImagePath: userList[1]['udogimg'],
                             userName: userList[1]['unickname'],
                             userAge: "${userDataController.ageCalc()[1]}세",
                             userAddress: userList[1]['uaddress'],
@@ -157,7 +167,30 @@ class MainPage extends StatelessWidget {
                             userSmoke: isSmoke()[1],
                             loginUid: loginData[0]['uid'],
                             loginGrant: loginData[0]['ugrant'],
-                            loginName: loginData[0]['unickname']),
+                            loginName: loginData[0]['unickname'],
+                            loginChatCount: loginData[0]['uchatcount']
+                            ),
+                            // 세번째 유저
+                        SliderlItems(
+                            userMainImagePath: userImagepath3,
+                            userFaceImagePath1: userList[2]['ufaceimg1'],
+                            userFaceImagePath2: userList[2]['ufaceimg2'],
+                            userHobbyImagePath1: userList[2]['uhobbyimg1'],
+                            userHobbyImagePath2: userList[2]['uhobbyimg2'],
+                            userHobbyImagePath3: userList[2]['uhobbyimg3'],
+                            userDogImagePath: userList[2]['udogimg'],
+                            userName: userList[2]['unickname'],
+                            userAge: "${userDataController.ageCalc()[2]}세",
+                            userAddress: userList[2]['uaddress'],
+                            userDistance: reciveUserDistance,
+                            userMBTI: userList[2]['umbti'],
+                            userBreed: userList[2]['ubreed'],
+                            userSmoke: isSmoke()[2],
+                            loginUid: loginData[0]['uid'],
+                            loginGrant: loginData[0]['ugrant'],
+                            loginName: loginData[0]['unickname'],
+                            loginChatCount: loginData[0]['uchatcount']
+                            ),
                       ];
         
                       // 유저의 위치를 가져와서 거리랑 단위 변환하는 과정
@@ -167,21 +200,25 @@ class MainPage extends StatelessWidget {
                         if (distances.length >= 2) {
                           double distanceWithUser1 = distances[0]; // 첫 번째 사용자와의 거리
                           double distanceWithUser2 = distances[1]; // 두 번째 사용자와의 거리
+                          double distanceWithUser3 = distances[2]; // 두 번째 사용자와의 거리
                           String user1DistanceText =
                               getFormattedDistance(distanceWithUser1);
                           String user2DistanceText =
                               getFormattedDistance(distanceWithUser2);
+                          String user3DistanceText =
+                              getFormattedDistance(distanceWithUser3);
         
                           carouselItems[0].userDistance = user1DistanceText;
                           carouselItems[1].userDistance = user2DistanceText;
+                          carouselItems[2].userDistance = user3DistanceText;
                         }
         
                         // 성별에 따라 다른 배경컬러 적용
                         Color genderColors() {
-                          print(
-                              "첫 번째 유저의 성별 = ${userList[0]['ugender'] == 0 ? "남성" : "여성"}");
-                          print(
-                              "두 번째 유저의 성별 = ${userList[1]['ugender'] == 0 ? "남성" : "여성"}");
+                          // print(
+                          //     "첫 번째 유저의 성별 = ${userList[0]['ugender'] == 0 ? "남성" : "여성"}");
+                          // print(
+                          //     "두 번째 유저의 성별 = ${userList[1]['ugender'] == 0 ? "남성" : "여성"}");
                           bool user1IsMale = userList[0]['ugender'] == 0;
         
                           // 여성일 때와 남성일 때의 색상을 Map에 정의
