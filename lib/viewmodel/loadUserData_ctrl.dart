@@ -102,24 +102,7 @@ class LoadUserData extends GetxController {
     return result;
   }
   // ================== 로그인 관리 ==================
-
   // 전체 유저 불러오기
-  // Future<List> getUserData() async {
-  //   List userData = [];
-  //   // initSharedPreferences에서 uid만 가져와서 요청 보내기
-  //   String getUid = await initSharedPreferences();
-
-  //   // print("getLoginData uid:$getUid");
-  //   var url = Uri.parse(
-  //       'http://localhost:8080/Flutter/dateapp_quary_flutter.jsp?uid=$getUid');
-  //   var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
-  //   userData.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
-  //   var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
-  //   List result = dataConvertedJSON['results'];
-  //   userData.addAll(result);
-  //   // print("result: $result");
-  //   return result;
-  // }
 Future<List> getUserData() async {
   List userData = [];
   String getUid = await initSharedPreferences();

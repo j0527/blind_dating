@@ -161,6 +161,7 @@ class DetailUserInfoWidget extends StatelessWidget {
     final String userAddress = currentItem.userAddress;
     final String userDistance = currentItem.userDistance;
     final String userMBTI = currentItem.userMBTI;
+    // 챗 카운트도 쓰기
 
     return Column(
       children: [
@@ -253,7 +254,9 @@ class DetailUserInfoWidget extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            // if (user)
+          },
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.orangeAccent,
               foregroundColor: Colors.white,
