@@ -20,8 +20,8 @@ class _ChatListsState extends State<ChatRoomLists> {
   // class 아래 BuildContext 위에 유저 데이터를 관리하는 컨트롤러 인스턴스 선언
   final LoadUserData userDataController = Get.put(LoadUserData());
   // 사용자 로그인 정보 받아둘 리스트
-  late List loginData = [];
-  late List userData = [];
+  late List loginData = [];     // 현재 사용자
+  late List userData = [];      // 상대 사용자
   
   @override
   void initState() {

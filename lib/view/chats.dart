@@ -134,13 +134,23 @@ class _ChatsState extends State<Chats> {
                                   controller: textEditingController,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 5)
+                                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10)
                                   ),
                                   style: const TextStyle(
                                     fontSize:20
                                   ),
-                                  onSubmitted: (value) {
+                                  onSubmitted: (textFieldValue) {
                                     // 엔터키 눌렀을 때 firebase에 텍스트 필드 내용이 전송되도록
+                                    FirebaseFirestore.instance.collection('chatRooms').doc(value[0])
+                                    .collection('chats')
+                                    .add(
+                                      {
+                                        // 'content': textEditingController.text,
+                                        'content': textFieldValue,
+                                        'sender': loginData[0]['uid'],
+                                        'chatedAt': FieldValue.serverTimestamp()
+                                      }
+                                    );
                                     textEditingController.clear();
                                   },
                                 ),
@@ -161,7 +171,7 @@ class _ChatsState extends State<Chats> {
                                 }, 
                                 icon: Icon(
                                   Icons.send,
-                                  // color: Colors.deepPurple[200],
+                                  color: Colors.blue,
                                   size: 35,
                                 ),
                               )
@@ -205,14 +215,29 @@ class _ChatsState extends State<Chats> {
   Widget _buildItemWidget(DocumentSnapshot doc) {
     final content = doc['content'];
     final sender = doc['sender'];
+    DateTime dateTime = doc['chatedAt'].toDate();
+    int dateHour = dateTime.hour;
+    // 시간을 12시간제로 변환
+    String chatTime = (dateHour > 12)
+      ? '${(dateHour - 12).toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')} PM'
+      : '${dateHour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')} ${dateHour < 12 ? 'AM' : 'PM'}';
+    // 0 AM을 12 AM으로 표시
+    chatTime = (chatTime.startsWith('00')) ? '12${chatTime.substring(2)}' : chatTime;
 
     return loginData[0]['uid'] == sender 
     ? Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        Text(
+          chatTime,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey
+          ),
+        ),
         BubbleSpecialThree(
           text: content,
-          color: Colors.blue,
+          color: const Color.fromARGB(255, 133, 195, 246),
           isSender: true,
         ),
       ],
@@ -220,15 +245,41 @@ class _ChatsState extends State<Chats> {
     : Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CircleAvatar(
-          backgroundImage: AssetImage(
-            "images/퍼그.png"
-          ),
+        const CircleAvatar(
+          backgroundImage: AssetImage("images/퍼그.png"),
         ),
-        BubbleSpecialThree(
-          text: content,
-          color: Colors.grey,
-          isSender: false,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                children: [
+                  SizedBox(width: 20),
+                  Text(
+                    "김정은",
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  BubbleSpecialThree(
+                    text: content,
+                    color: Color.fromARGB(255, 236, 234, 234),
+                    isSender: false,
+                  ),
+                  Expanded(
+                    child: Text(
+                      chatTime,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     ); 

@@ -49,6 +49,7 @@ dependencies:
   firebase_storage: ^11.4.0 #이미지 업로드 위해
   camera: ^0.10.5+5 #camera실시간 사용
   cached_network_image: ^3.3.0 # 이미지 캐싱
+  firebase_messaging: ^14.7.2     # 앱 알림
 
 dev_dependencies:
   flutter_test:
