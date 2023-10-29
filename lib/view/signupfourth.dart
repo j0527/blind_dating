@@ -1,7 +1,9 @@
+import 'package:blind_dating/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:http/http.dart' as http;
 
 import '../homewidget.dart';
 
@@ -19,28 +21,27 @@ class _SignUpFourthState extends State<SignUpFourth> {
   String selectedSensing = "";
   String selectedThinking = "";
   String selectedJudging = "";
+  List<String> mbtiValues = []; // 선택된 MBTI 버튼 값을 저장할 리스트
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    inputValue = "";
+  void saveDataToUserSecondModel() {
+    UserModel.usmoke = (selectedSmoke == "흡연") ? '1' : '0';
+    UserModel.umbti = (selectedExtroverted +
+        selectedSensing +
+        selectedThinking +
+        selectedJudging);
   }
-
-  TextEditingController IDController = TextEditingController();
-  TextEditingController PWController = TextEditingController();
-  TextEditingController PWCheckController = TextEditingController();
-
-  DateTime dateTime = DateTime(2000, 1, 1);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign Up', style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromRGBO(94, 88, 176, 0.945),
-                        fontWeight: FontWeight.bold),),
+        title: Text(
+          'Sign Up',
+          style: TextStyle(
+              fontSize: 20,
+              color: Color.fromRGBO(94, 88, 176, 0.945),
+              fontWeight: FontWeight.bold),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -208,8 +209,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                       TextButton(
                           onPressed: () {
                             setState(() {
-                            selectedSensing = 'S';
-                          });
+                              selectedSensing = 'S';
+                            });
                           },
                           style: TextButton.styleFrom(
                               minimumSize: Size(170, 50),
@@ -217,8 +218,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               backgroundColor: selectedSensing == 'S'
-                                ? Color.fromARGB(255, 254, 145, 145)
-                                : Color.fromARGB(255, 239, 238, 238),
+                                  ? Color.fromARGB(255, 254, 145, 145)
+                                  : Color.fromARGB(255, 239, 238, 238),
                               foregroundColor: Colors.black),
                           child: Text('S')),
                       SizedBox(
@@ -227,8 +228,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                       TextButton(
                           onPressed: () {
                             setState(() {
-                            selectedSensing = 'N';
-                          });
+                              selectedSensing = 'N';
+                            });
                           },
                           style: TextButton.styleFrom(
                               minimumSize: Size(170, 50),
@@ -236,8 +237,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               backgroundColor: selectedSensing == 'N'
-                                ? Color.fromARGB(255, 254, 145, 145)
-                                : Color.fromARGB(255, 239, 238, 238),
+                                  ? Color.fromARGB(255, 254, 145, 145)
+                                  : Color.fromARGB(255, 239, 238, 238),
                               foregroundColor: Colors.black),
                           child: Text('N')),
                     ],
@@ -258,8 +259,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                       TextButton(
                           onPressed: () {
                             setState(() {
-                            selectedThinking = 'T';
-                          });
+                              selectedThinking = 'T';
+                            });
                           },
                           style: TextButton.styleFrom(
                               minimumSize: Size(170, 50),
@@ -267,8 +268,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               backgroundColor: selectedThinking == 'T'
-                                ? Color.fromARGB(255, 254, 145, 145)
-                                : Color.fromARGB(255, 239, 238, 238),
+                                  ? Color.fromARGB(255, 254, 145, 145)
+                                  : Color.fromARGB(255, 239, 238, 238),
                               foregroundColor: Colors.black),
                           child: Text('T')),
                       SizedBox(
@@ -277,8 +278,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                       TextButton(
                           onPressed: () {
                             setState(() {
-                            selectedThinking = "F";
-                          });
+                              selectedThinking = "F";
+                            });
                           },
                           style: TextButton.styleFrom(
                               minimumSize: Size(170, 50),
@@ -286,8 +287,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               backgroundColor: selectedThinking == 'F'
-                                ? Color.fromARGB(255, 254, 145, 145)
-                                : Color.fromARGB(255, 239, 238, 238),
+                                  ? Color.fromARGB(255, 254, 145, 145)
+                                  : Color.fromARGB(255, 239, 238, 238),
                               foregroundColor: Colors.black),
                           child: Text('F')),
                     ],
@@ -308,8 +309,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                       TextButton(
                           onPressed: () {
                             setState(() {
-                            selectedJudging = "J";
-                          });
+                              selectedJudging = "J";
+                            });
                           },
                           style: TextButton.styleFrom(
                               minimumSize: Size(170, 50),
@@ -317,8 +318,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               backgroundColor: selectedJudging == 'J'
-                                ? Color.fromARGB(255, 254, 145, 145)
-                                : Color.fromARGB(255, 239, 238, 238),
+                                  ? Color.fromARGB(255, 254, 145, 145)
+                                  : Color.fromARGB(255, 239, 238, 238),
                               foregroundColor: Colors.black),
                           child: Text('J')),
                       SizedBox(
@@ -326,9 +327,9 @@ class _SignUpFourthState extends State<SignUpFourth> {
                       ),
                       TextButton(
                           onPressed: () {
-                          setState(() {
-                            selectedJudging = "P";
-                          });
+                            setState(() {
+                              selectedJudging = "P";
+                            });
                           },
                           style: TextButton.styleFrom(
                               minimumSize: Size(170, 50),
@@ -336,8 +337,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               backgroundColor: selectedJudging == "P"
-                                ? Color.fromARGB(255, 254, 145, 145)
-                                : Color.fromARGB(255, 239, 238, 238),
+                                  ? Color.fromARGB(255, 254, 145, 145)
+                                  : Color.fromARGB(255, 239, 238, 238),
                               foregroundColor: Colors.black),
                           child: Text('P')),
                     ],
@@ -350,7 +351,22 @@ class _SignUpFourthState extends State<SignUpFourth> {
                   padding: const EdgeInsets.fromLTRB(15, 25, 15, 50),
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.to(HomeWidget());
+                      if (selectedSmoke.isEmpty ||
+                          selectedExtroverted.isEmpty ||
+                          selectedSensing.isEmpty ||
+                          selectedThinking.isEmpty ||
+                          selectedJudging.isEmpty) {
+                        // 값이 비어있을 때 SnackBar 표시
+                        Get.snackbar(
+                          "ERROR",
+                          "모든 항목을 선택해 주세요.",
+                          snackPosition: SnackPosition.BOTTOM,
+                          duration: Duration(seconds: 2),
+                          backgroundColor: Color.fromARGB(255, 247, 228, 162),
+                        );
+                      } else {
+                        insertAction();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(400, 50),
@@ -374,5 +390,29 @@ class _SignUpFourthState extends State<SignUpFourth> {
         ),
       ),
     );
+  }
+
+  //----------Functions
+  insertAction() async {
+    var url = Uri.parse(
+        'http://localhost:8080/Flutter/dateapp_user_insert_flutter.jsp?uid=${UserModel.uid}&upw=${UserModel.upw}&unickname=${UserModel.unickname}&uhobbyimg1=${UserModel.uhobbyimg1}&uhobbyimg2=${UserModel.uhobbyimg2}&uhobbyimg3=${UserModel.uhobbyimg3}&ufaceimg1=${UserModel.ufaceimg1}&ufaceimg2=${UserModel.ufaceimg2}&ugender=${UserModel.ugender}&ubirth=${UserModel.ubirth}&uaddress=${UserModel.uaddress}&umbti=${UserModel.umbti}&usmoke=${UserModel.usmoke}');
+    await http.get(url);
+    showDialog();
+  }
+
+  showDialog() {
+    Get.defaultDialog(
+        title: '회원가입 완료',
+        middleText: '회원가입이 완료되었습니다.',
+        backgroundColor: Color.fromARGB(255, 247, 228, 162),
+        barrierDismissible: false,
+        actions: [
+          TextButton(
+              onPressed: () {
+                // 모든 값이 선택되었을 때 홈 화면으로 이동
+                Get.to(HomeWidget());
+              },
+              child: Text('닫기'))
+        ]);
   }
 }

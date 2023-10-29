@@ -1,4 +1,5 @@
 import 'package:blind_dating/homewidget.dart';
+import 'package:blind_dating/model/user.dart';
 import 'package:blind_dating/view/profilemodify.dart';
 import 'package:blind_dating/view/signupfirst.dart';
 import 'package:blind_dating/view/signupsecond.dart';
@@ -17,15 +18,19 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late TextEditingController SubscriptionController;
   late TextEditingController ContractController;
-  late Future<String> _imageURL;
+  late Future<String> imageURL;
 
   @override
   void initState() {
     super.initState();
     SubscriptionController = TextEditingController();
     ContractController = TextEditingController();
-  _imageURL = loadImageURL('user/profile/0105749143_profile_1');
+    imageURL = loadImageURL('user/profile/${UserModel.uid}_profile_1');
+    imageURL.then((url) {
+      UserModel.setImageURL(url); // 이미지 URL을 UserModel의 imageURL 변수에 저장
+    });
   }
+
 
   Future<String> loadImageURL(String path) async {
     Reference _ref = FirebaseStorage.instance.ref().child(path);
@@ -45,7 +50,7 @@ class _ProfileState extends State<Profile> {
             child: Column(
               children: [
                 FutureBuilder<String>(
-                  future: _imageURL,
+                  future: imageURL,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // While waiting for the image to load, you can display a loading indicator or placeholder.

@@ -1,10 +1,9 @@
 import 'dart:io';
-
-import 'package:blind_dating/model/user_messages.dart';
+import 'package:blind_dating/model/user.dart';
 import 'package:blind_dating/view/signupfourth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart'; 
+import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class SignUpThird extends StatefulWidget {
@@ -15,20 +14,20 @@ class SignUpThird extends StatefulWidget {
 }
 
 class _SignUpThirdState extends State<SignUpThird> {
-  List<XFile?> _imageprofile = List.generate(2, (_) => null); // 이미지를 담을 변수 선언
-  List<XFile?> _imagehobby = List.generate(3, (_) => null); // 이미지를 담을 변수 선언
-  final ImagePicker picker = ImagePicker(); // ImagePicker 초기화
+  // 프로필 이미지 및 취미 이미지를 저장하는 리스트
+  List<XFile?> _imageprofile = List.generate(2, (_) => null);
+  List<XFile?> _imagehobby = List.generate(3, (_) => null);
+  final ImagePicker picker = ImagePicker();
 
-  // 이미지를 가져오는 함수
+  // 이미지 가져오는 함수
   Future getImage(int index, ImageSource imageSource) async {
     final XFile? pickedFile = await picker.pickImage(source: imageSource);
     if (pickedFile != null) {
       setState(() {
         if (index < _imageprofile.length) {
-          _imageprofile[index] = pickedFile; // 가져온 이미지를 _imageprofile 리스트에 저장
+          _imageprofile[index] = pickedFile; // 프로필 이미지 리스트에 저장
         } else if (index < _imageprofile.length + _imagehobby.length) {
-          _imagehobby[index - _imageprofile.length] =
-              pickedFile; // 가져온 이미지를 _imagehobby 리스트에 저장
+          _imagehobby[index - _imageprofile.length] = pickedFile; // 취미 이미지 리스트에 저장
         }
       });
     }
@@ -38,15 +37,18 @@ class _SignUpThirdState extends State<SignUpThird> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-                        title: Text('Sign Up', style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromRGBO(94, 88, 176, 0.945),
-                        fontWeight: FontWeight.bold),),
-
+        title: Text(
+          'Sign Up',
+          style: TextStyle(
+            fontSize: 20,
+            color: Color.fromRGBO(94, 88, 176, 0.945),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Get.back(); // Get 패키지를 사용하여 이전 페이지로 이동합니다.
+            Get.back();
           },
         ),
       ),
@@ -59,106 +61,84 @@ class _SignUpThirdState extends State<SignUpThird> {
             child: Column(
               children: [
                 Image.asset('images/stepthird.png'),
-                                SizedBox(
-                  height: 50,
-                ),
+                SizedBox(height: 50),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 180, 0),
                   child: Text(
                     '프로필 사진을 등록해 주세요',
                     style: TextStyle(
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 54, 54, 58),
-                        fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 54, 54, 58),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 SizedBox(height: 0, width: double.infinity),
                 _buildPhotoArea(),
-                SizedBox(height: 10), 
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
-                  child: ElevatedButton(onPressed: () {
-                    List<File> profiles = [];
-                    for (XFile? xFile in _imageprofile){
-                      if (xFile != null){
-                        File file = File(xFile.path);
-                        profiles.add(file);
-                      }
-                    }
-
-                    int i = 1;
-                    for (File file in profiles){
-                      print("프로필");
-                      print(profiles.length);
-                      FirebaseStorage.instance
-                                    .ref("user/profile/${Message.id}_profile_$i")
-                                    .putFile(file);
-                      i++;
-                    }
-                    
-
-
-                  }, 
-                        style: TextButton.styleFrom(
-                          minimumSize: Size(100, 40),
-                            shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            ),
-                            backgroundColor: Color.fromARGB(255, 152, 175, 250),
-                            foregroundColor: Color.fromARGB(255, 234, 234, 236)
-                        ),
-                  child: Text('프로필 사진 저장', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
+                SizedBox(height: 10),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
+                //   child: ElevatedButton(
+                //     onPressed: () {
+                //       // 프로필 이미지와 URL을 UserModel에 저장
+                //       saveProfileImageURLs();
+                //     },
+                //     style: TextButton.styleFrom(
+                //       minimumSize: Size(100, 40),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(10),
+                //       ),
+                //       backgroundColor: Color.fromARGB(255, 152, 175, 250),
+                //       foregroundColor: Color.fromARGB(255, 234, 234, 236),
+                //     ),
+                //     child: Text(
+                //       '프로필 사진 저장',
+                //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                //     ),
+                //   ),
+                // ),
+                SizedBox(height: 50),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 190, 0),
                   child: Text(
                     '취미 사진을 등록해 주세요',
                     style: TextStyle(
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 54, 54, 58),
-                        fontWeight: FontWeight.bold),
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 54, 54, 58),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 _buildPhotoHobbyArea(),
                 SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
-                  child: ElevatedButton(onPressed: () {
-                    List<File> hobbies = [];
-                    for (XFile? xFile in _imagehobby){
-                      if (xFile != null){
-                        File file = File(xFile.path);
-                        hobbies.add(file);
-                      }
-                    }
-
-                    int i = 1;
-                    for (File file in hobbies){
-                      FirebaseStorage.instance
-                                    .ref("user/hobby/${Message.id}_hobby_$i")
-                                    .putFile(file);
-                      i++;
-                    }
-                  }, 
-                      style: TextButton.styleFrom(
-                        minimumSize: Size(100, 40),
-                          shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          ),
-                          backgroundColor: Color.fromARGB(255, 152, 175, 250),
-                          foregroundColor: Color.fromARGB(255, 234, 234, 236)
-                      ),
-                  child: Text('취미 사진 저장', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)),
-                ),
-                SizedBox(height: 30),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
+                //   child: ElevatedButton(
+                //     onPressed: () {
+                //       // 취미 이미지와 URL을 UserModel에 저장
+                //       saveHobbyImageURLs();
+                //     },
+                //     style: TextButton.styleFrom(
+                //       minimumSize: Size(100, 40),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(10),
+                //       ),
+                //       backgroundColor: Color.fromARGB(255, 152, 175, 250),
+                //       foregroundColor: Color.fromARGB(255, 234, 234, 236),
+                //     ),
+                //     child: Text(
+                //       '취미 사진 저장',
+                //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                //     ),
+                //   ),
+                // ),
+                SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 50, 15, 80),
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.to(() => SignUpFourth());
+                      // 이미지 저장 여부를 확인하여 다음 화면으로 이동
+                      checkImagesStatus();
                     },
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(400, 50),
@@ -177,6 +157,7 @@ class _SignUpThirdState extends State<SignUpThird> {
                     ),
                   ),
                 ),
+                SizedBox(height: 20,)
               ],
             ),
           ),
@@ -185,7 +166,44 @@ class _SignUpThirdState extends State<SignUpThird> {
     );
   }
 
+  // 프로필 이미지가 모두 업로드되었는지 확인하는 함수
+  bool areAllProfileImagesUploaded() {
+    return _imageprofile.every((element) => element != null);
+  }
+
+  // 취미 이미지가 모두 업로드되었는지 확인하는 함수
+  bool areAllHobbyImagesUploaded() {
+    return _imagehobby.every((element) => element != null);
+  }
+
+  // 이미지 업로드 상태를 확인하여 사용자에게 메시지를 표시하는 함수
+  void checkImagesStatus() {
+    if (!areAllProfileImagesUploaded()) {
+      Get.snackbar(
+        "ERROR",
+        "프로필 사진을 선택해 주세요.",
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 2),
+        backgroundColor: Color.fromARGB(255, 247, 228, 162),
+      );
+    } else if (!areAllHobbyImagesUploaded()) {
+      Get.snackbar(
+        "ERROR",
+        "취미 사진을 선택해 주세요.",
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 2),
+        backgroundColor: Color.fromARGB(255, 252, 199, 249),
+      );
+    } else {
+      // 프로필 이미지와 취미 이미지가 모두 선택되면 UserModel에 저장 후, SignUpFourth로 이동
+      saveProfileImageURLs();
+      saveHobbyImageURLs();
+      Get.to(() => SignUpFourth());
+    }
+  }
+
   Widget _buildPhotoArea() {
+    // 프로필 이미지 영역 위젯
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Row(
@@ -194,7 +212,7 @@ class _SignUpThirdState extends State<SignUpThird> {
             Row(
               children: [
                 _buildImagePicker(i, _imageprofile),
-                SizedBox(width: 10), // 이미지 간의 간격 조절
+                SizedBox(width: 10),
               ],
             ),
         ],
@@ -203,17 +221,16 @@ class _SignUpThirdState extends State<SignUpThird> {
   }
 
   Widget _buildPhotoHobbyArea() {
+    // 취미 이미지 영역 위젯
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Row(
         children: [
-          for (int j = 0;
-              j < _imagehobby.length;
-              j++) // 변경된 부분: _imagehobby.length 사용
+          for (int j = 0; j < _imagehobby.length; j++)
             Row(
               children: [
-                _buildImagePicker(j, _imagehobby), // 변경된 부분: _imagehobby 사용
-                SizedBox(width: 10), // 이미지 간의 간격 조절
+                _buildImagePicker(j, _imagehobby),
+                SizedBox(width: 10),
               ],
             ),
         ],
@@ -251,5 +268,47 @@ class _SignUpThirdState extends State<SignUpThird> {
             : null,
       ),
     );
+  }
+
+  // 프로필 이미지 URL을 UserModel에 저장하는 함수
+  Future<void> saveProfileImageURLs() async {
+    List<String> profileImageURLs = [];
+    for (XFile? file in _imageprofile) {
+      if (file != null) {
+        String url = await uploadImageAndGetURL(
+            'user/profile/${UserModel.uid}_profile_${profileImageURLs.length + 1}',
+            File(file.path));
+        profileImageURLs.add(url);
+      }
+    }
+    UserModel.ufaceimg1 = profileImageURLs.length > 0 ? profileImageURLs[0] : '';
+    UserModel.ufaceimg2 = profileImageURLs.length > 1 ? profileImageURLs[1] : '';
+  }
+
+  // 취미 이미지 URL을 UserModel에 저장하는 함수
+  Future<void> saveHobbyImageURLs() async {
+    List<String> hobbyImageURLs = [];
+    for (XFile? file in _imagehobby) {
+      if (file != null) {
+        String url = await uploadImageAndGetURL(
+            'user/hobby/${UserModel.uid}_hobby_${hobbyImageURLs.length + 1}',
+            File(file.path));
+        hobbyImageURLs.add(url);
+      }
+    }
+    UserModel.uhobbyimg1 = hobbyImageURLs.length > 0 ? hobbyImageURLs[0] : '';
+    UserModel.uhobbyimg2 = hobbyImageURLs.length > 1 ? hobbyImageURLs[1] : '';
+    UserModel.uhobbyimg3 = hobbyImageURLs.length > 2 ? hobbyImageURLs[2] : '';
+  }
+
+  // 이미지를 Firebase Storage에 업로드하고 URL을 얻는 함수
+  Future<String> uploadImageAndGetURL(String path, File file) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child(path);
+    UploadTask uploadTask = ref.putFile(file);
+
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadURL = await snapshot.ref.getDownloadURL();
+    return downloadURL;
   }
 }

@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:blind_dating/homewidget.dart';
-import 'package:blind_dating/model/user_messages.dart';
+import 'package:blind_dating/model/user.dart';
+import 'package:blind_dating/view/login.dart';
 import 'package:blind_dating/view/signupfirst.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:http/http.dart' as http;
 
 class phoneNumberScreen extends StatefulWidget {
   const phoneNumberScreen({super.key});
@@ -14,24 +18,12 @@ class phoneNumberScreen extends StatefulWidget {
 }
 
 class _phoneNumberScreenState extends State<phoneNumberScreen> {
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController phoneController = TextEditingController(text: '+82');
   TextEditingController otpController = TextEditingController();
 
   FirebaseAuth auth = FirebaseAuth.instance;
   String verificationIDReceived = "";
   bool otpCodeVisible = false;
-
-//   FirebaseAuth.instance.currentUser!.verificationIDReceived();
-
-//   final user = FirebaseAuth.instance.currentUser;
-//     if (user != null) {
-//     final name = user.displayName; //사용자 이름
-//     final email = user.email; // 사용자 이메일
-//     final photoUrl = user.photoURL; //사용자 프로필 사진
-//     final emailVerified = user.emailVerified; //사용자의 이메일 인증 여부
-//     final uid = user.uid; //사용자의 uid
-// }
-
 
   @override
   Widget build(BuildContext context) {
@@ -41,80 +33,92 @@ class _phoneNumberScreenState extends State<phoneNumberScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        
         child: SingleChildScrollView(
           child: Column(
             children: [
               Row(
                 children: [
-                  SizedBox(height: 150,),
+                  SizedBox(
+                    height: 150,
+                  ),
                   IconButton(
-                    onPressed: () {
-                      //
-                    },
-                    // onPressed: () => Get.back(),
-                              icon: Icon(Icons.arrow_back_ios)),
-
-                  Text('',),
+                      onPressed: () {
+                        //
+                      },
+                      // onPressed: () => Get.back(),
+                      icon: Icon(Icons.arrow_back_ios)),
+                  Text(
+                    '',
+                  ),
                 ],
               ),
-              
-                SizedBox(
+              SizedBox(
                 height: 10,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 50, 45, 0),
-                                  child: Text('전화번호를 입력해 주세요.',
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold)
-                            ),
+                child: Text('전화번호를 입력해 주세요.',
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold)),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
-                child: Text('가입 여부 확인에만 활용되며, 절대 노출되지 않아요.',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey),
-                        ),
+                child: Text(
+                  '가입 여부 확인에만 활용되며, 절대 노출되지 않아요.',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
               ),
-              SizedBox(height: 50,),
+              SizedBox(
+                height: 50,
+              ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextField(
                   style: TextStyle(fontSize: 18),
                   controller: phoneController,
-                  decoration: InputDecoration(labelText: "+821012345678",
+                  decoration: InputDecoration(
+                    labelText: "💙+821012345678의 형식으로 입력해 주세요💙",
                   ),
-                  keyboardType: TextInputType.phone,),
+                  keyboardType: TextInputType.phone,
+                ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Visibility(
                 visible: otpCodeVisible,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextField(
-                    style: TextStyle(fontSize: 18),
-                    controller: otpController,
-                    decoration: InputDecoration(labelText: "code")),
+                      style: TextStyle(fontSize: 18),
+                      controller: otpController,
+                      decoration: InputDecoration(labelText: "code")),
                 ),
               ),
-              SizedBox(height: 50,),
-              ElevatedButton(onPressed: () {
-                if(otpCodeVisible){
-                  verifyCode();
-                }else{
-                  verifyNumber();
-                }
-              }, 
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(350, 50),
-                backgroundColor: Color.fromARGB(255, 141, 148, 244),
-                foregroundColor:  Color.fromARGB(255, 245, 245, 245)
+              SizedBox(
+                height: 50,
               ),
-              child: Text(otpCodeVisible? "로그인" : "인증번호 요청", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              ElevatedButton(
+                onPressed: () {
+                  if (otpCodeVisible) {
+                    verifyCode();
+                  } else {
+                    verifyNumber();
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                    minimumSize: Size(350, 50),
+                    backgroundColor: Color.fromARGB(255, 141, 148, 244),
+                    foregroundColor: Color.fromARGB(255, 245, 245, 245)),
+                child: Text(
+                  otpCodeVisible ? "로그인" : "인증번호 요청",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               )
             ],
           ),
@@ -126,9 +130,9 @@ class _phoneNumberScreenState extends State<phoneNumberScreen> {
   void verifyNumber() {
     String phoneNumber = phoneController.text;
     // + 및 8을 제거하고 앞에 0을 추가하여 전화번호 형식을 수정
-    String formattedPhoneNumber = '0' + phoneNumber.replaceAll('+', '').replaceAll('8', '').replaceAll('2', '');
+    String formattedPhoneNumber = '0' + phoneNumber.replaceAll('+82', '');
 
-    Message.id = formattedPhoneNumber;
+    UserModel.uid = formattedPhoneNumber;
     auth.verifyPhoneNumber(
         phoneNumber: phoneController.text,
         verificationCompleted: (PhoneAuthCredential credential) {
@@ -147,13 +151,33 @@ class _phoneNumberScreenState extends State<phoneNumberScreen> {
         codeAutoRetrievalTimeout: (String verificationID) {});
   }
 
-  void verifyCode() async {
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationIDReceived, smsCode: otpController.text);
+ void verifyCode() async {
+  PhoneAuthCredential credential = PhoneAuthProvider.credential(
+    verificationId: verificationIDReceived,
+    smsCode: otpController.text,
+  );
 
-    await auth.signInWithCredential(credential).then((value) {
-      Get.to(const SignUpFirst());
-    });
-  }
+  await auth.signInWithCredential(credential).then((value) {
+    checkUIDInMySQL(UserModel.uid);
+  });
 }
 
+void checkUIDInMySQL(String uid) async {
+  try {
+    var url = Uri.parse(
+        'http://localhost:8080/Flutter/dateapp_user_infocheck_flutter.jsp?uid=$uid');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      // uid가 존재하는 경우
+      Get.offAll(() => HomeWidget());
+    } else {
+      // uid가 존재하지 않는 경우
+      Get.off(() => SignUpFirst());
+    }
+  } catch (error) {
+    // 오류 처리
+    print('Error occurred while checking UID: $error');
+  }
+}
+}
