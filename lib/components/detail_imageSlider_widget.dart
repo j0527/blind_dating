@@ -4,9 +4,11 @@ import 'dart:ui';
 
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 
 class DetailImageSliderWidget extends StatelessWidget {
   const DetailImageSliderWidget(
@@ -102,72 +104,73 @@ class detailImageSliderWidget extends StatelessWidget {
         : ["닮은 강아지", "얼굴사진1", "얼굴사진2", "취미힌트1", "취미힌트2", "취미힌트3"];
     int currentIndex = 0; // 슬라이드의 현재 페이지 인덱스
 
-// // userFaceImagePath1는 항상 추가
-// if (loginGrant == 1) {
-//     images.add(userFaceImagePath1);
-// // userFaceImagePath2 조건에 따라 추가
-
-//       images.add(userFaceImagePath2);
-//     }
-// // userHobbyImagePath1는 항상 추가
-//     images.add(userHobbyImagePath1);
-// // userHobbyImagePath2는 항상 추가
-//     images.add(userHobbyImagePath2);
-  // for (images in imagesUrl){
-
-  // }
-
-
-if (loginGrant == 1) {
-  for (int i = 0; i < categories.length; i++) {
-    images.add(
-      SizedBox(
-        height: 550,
-        width: MediaQuery.of(context).size.width,
-        child: Image.network(
-          imagesUrl[i],
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-} else {
-  for (int i = 0; i < categories.length; i++) {
-    if (i == 1 || i == 2) {
-      images.add(
-        Container(
-          height: 550,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(imagesUrl[i]),
+    // images리스트에 이미지 추가 과정
+    if (loginGrant == 1) {
+      for (int i = 0; i < categories.length; i++) {
+        images.add(
+          SizedBox(
+            height: 550,
+            width: MediaQuery.of(context).size.width,
+            child: CachedNetworkImage(
               fit: BoxFit.cover,
+              imageUrl: imagesUrl[i],
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           ),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-            child: Container(color: Colors.black.withOpacity(0.1)),
-          ),
-        ),
-      );
+        );
+      }
     } else {
-      images.add(
-        SizedBox(
-          height: 550,
-          width: MediaQuery.of(context).size.width,
-          child: Image.network(
-            imagesUrl[i],
-            fit: BoxFit.cover,
-          ),
-        )
-      );
+      for (int i = 0; i < categories.length; i++) {
+        if (i == 1 || i == 2) {
+          images.add(
+                SizedBox(
+                width: MediaQuery.of(context).size.width, // 화면 가로폭
+                height: 550, // 원하는 높이
+                child: CachedNetworkImage(
+                  imageUrl: imagesUrl[i],
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  imageBuilder: (context, imageProvider) => Stack(
+                    children: [
+                      Image(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width,
+                        height: 550,
+                      ),
+                      ClipRRect( // ClipRRect가 없으면 상위 위젯까지 감싸서 잔상이 생겨버림
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                          child: Container(
+                            color: Colors.black.withOpacity(0.1),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+          );
+        } else {
+          images.add(
+            SizedBox(
+              height: 550,
+              width: MediaQuery.of(context).size.width,
+              child: CachedNetworkImage(
+                imageUrl: imagesUrl[i],
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+            ),
+          );
+        }
       }
     }
-  }
 
     return Column(
-      // mainAxisAlignment: MainAxisAlignment.center,
-      // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CarouselSlider(
           items: images.asMap().entries.map((entry) {
@@ -183,17 +186,7 @@ if (loginGrant == 1) {
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // SizedBox(
-                //   height: 550,
-                //   width: MediaQuery.of(context).size.width,
-                //   child: Image.network(
-                //     imageUrl,
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
+                const SizedBox(height: 10),
                 images[index]
               ],
             );
