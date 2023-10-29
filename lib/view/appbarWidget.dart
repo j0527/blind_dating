@@ -19,19 +19,8 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             List? loginData = snapshot.data?[0]; // 로그인된 유저의 데이터
-            if (snapshot.hasData) {
-              List? loginData = snapshot.data?[0];
-              if (loginData != null && loginData.isNotEmpty) {
-                // ... 이하 생략
-              } else {
-                return const Text("로그인 데이터가 없습니다.");
-              }
-            } else {
-              return const Text("데이터가 없음");
-            }
-            String grantMark = loginData?[0]['ugrant'] == 1
-                ? "Premium🏅"
-                : "남은 채팅횟수: ${loginData?[0]['uchatcount']}";
+            loginData?[0]['unickname'];
+            String grantMark = loginData?[0]['ugrant'] == 1 ? "Premium🏅" : "남은 채팅횟수: ${loginData?[0]['uchatcount']}";
 
             // print("로그인된 앱바 유저닉네임: $unickname");
             return AppBar(
@@ -42,10 +31,8 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
               actions: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
-                  child: Text(
-                    grantMark,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                  child: Text(grantMark,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
                 // 여기서 불러오고 싶은거 불러오면 됨 loginData[0]['unickname'] 하면 유저 닉네임 불러와짐

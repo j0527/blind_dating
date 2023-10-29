@@ -11,6 +11,7 @@ class PayMentsPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('결제창'),
+            
           ],
         ),
       ),
