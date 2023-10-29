@@ -50,7 +50,7 @@ class _ChatsState extends State<Chats> {
   @override
   Widget build(BuildContext context) {
     // print("chatRoomId : ${value[0]}, chatRoomName : ${value[1]} - 지니 확인용");
-    print("chatRoomId : ${value[0]}, chatRoomName : ${value[1]} - 지니 확인용 (넘긴 후)");
+    // print("chatRoomId : ${value[0]}, chatRoomName : ${value[1]} - 지니 확인용 (넘긴 후)");
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
