@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:blind_dating/model/sliderItems_model.dart';
+import 'package:blind_dating/view/paymentspage.dart';
 import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -101,7 +102,14 @@ class detailImageSliderWidget extends StatelessWidget {
     List<Widget> images = [];
     final List<String> categories = loginGrant == 1
         ? ["닮은 강아지", "얼굴사진1", "얼굴사진2", "취미힌트1", "취미힌트2", "취미힌트3"]
-        : ["닮은 강아지", "얼굴사진1", "얼굴사진2", "취미힌트1", "취미힌트2", "취미힌트3"];
+        : [
+            "닮은 강아지",
+            "Premium 구독시 보입니다",
+            "Premium 구독시 보입니다",
+            "취미힌트1",
+            "취미힌트2",
+            "취미힌트3"
+          ];
     int currentIndex = 0; // 슬라이드의 현재 페이지 인덱스
 
     // images리스트에 이미지 추가 과정
@@ -109,13 +117,13 @@ class detailImageSliderWidget extends StatelessWidget {
       for (int i = 0; i < categories.length; i++) {
         images.add(
           SizedBox(
-            height: 550,
+            height: 500,
             width: MediaQuery.of(context).size.width,
             child: CachedNetworkImage(
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
               imageUrl: imagesUrl[i],
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ),
         );
@@ -123,45 +131,45 @@ class detailImageSliderWidget extends StatelessWidget {
     } else {
       for (int i = 0; i < categories.length; i++) {
         if (i == 1 || i == 2) {
-          images.add(
-                SizedBox(
-                width: MediaQuery.of(context).size.width, // 화면 가로폭
-                height: 550, // 원하는 높이
-                child: CachedNetworkImage(
-                  imageUrl: imagesUrl[i],
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                  imageBuilder: (context, imageProvider) => Stack(
-                    children: [
-                      Image(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width,
-                        height: 550,
-                      ),
-                      ClipRRect( // ClipRRect가 없으면 상위 위젯까지 감싸서 잔상이 생겨버림
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                          child: Container(
-                            color: Colors.black.withOpacity(0.1),
-                          ),
-                        ),
-                      ),
-                    ],
+          images.add(SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 500,
+            child: CachedNetworkImage(
+              imageUrl: imagesUrl[i],
+              fit: BoxFit.fill,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              imageBuilder: (context, imageProvider) => Stack(
+                children: [
+                  Image(
+                    image: imageProvider,
+                    fit: BoxFit.fill,
+                    width: MediaQuery.of(context).size.width,
+                    height: 500,
                   ),
-                ),
-              )
-          );
+                  ClipRRect(
+                    // ClipRRect가 없으면 상위 위젯까지 감싸서 잔상이 생겨버림
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: Container(
+                        color: Colors.black.withOpacity(0.1),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ));
         } else {
           images.add(
             SizedBox(
-              height: 550,
+              height: 500,
               width: MediaQuery.of(context).size.width,
               child: CachedNetworkImage(
                 imageUrl: imagesUrl[i],
-                fit: BoxFit.cover,
-                placeholder: (context, url) => const CircularProgressIndicator(),
+                fit: BoxFit.fill,
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
@@ -192,7 +200,7 @@ class detailImageSliderWidget extends StatelessWidget {
             );
           }).toList(),
           options: CarouselOptions(
-            height: 600,
+            height: 550,
             viewportFraction: 1.0,
             onPageChanged: (index, reason) {
               detailCurrent.value = index;
@@ -230,7 +238,86 @@ class DetailUserInfoWidget extends StatelessWidget {
     final String userAddress = currentItem.userAddress;
     final String userDistance = currentItem.userDistance;
     final String userMBTI = currentItem.userMBTI;
-    // 챗 카운트도 쓰기
+
+    void openBottomSheet() {
+      if (loginGrant == 0 && loginChatCount > 0) {
+        Get.defaultDialog(
+            title: '채팅 보내기 ❤️',
+            middleText: '채팅 기회가 $loginChatCount회 남았습니다\n 채팅을 진행하시겠습니까?',
+            // backgroundColor: Colors.yellowAccent,
+            barrierDismissible: true,
+            actions: [
+              Column(
+                children: [
+                  TextButton(
+                      onPressed: () => Get.back(),
+                      style: TextButton.styleFrom(
+                          // backgroundColor: Colors.purple,
+                          minimumSize:
+                              Size(MediaQuery.of(context).size.width, 30)),
+                      child: const Text(
+                        '채팅 보내기',
+                      )),
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: const Text(
+                      '취소',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+            ]);
+      } else if (loginGrant == 0 && loginChatCount < 1) {
+        // 구독도 안하고 채팅 카운드도 다쓴경우
+        Get.defaultDialog(
+            title: '채팅 보내기 ❤️',
+            middleText: '무료 채팅 기회가 모두 소진되었습니다.\n구독권 구매를 진행하시겠습니까?',
+            // backgroundColor: Colors.yellowAccent,
+            barrierDismissible: true,
+            actions: [
+              Column(
+                children: [
+                  TextButton(
+                    onPressed: () => Get.to(const PayMentsPage()),
+                    child: const Text('구매하기'),
+                  ),
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: const Text(
+                      '취소',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+            ]);
+      } else {
+        // 구독한 경우
+        Get.defaultDialog(
+            title: '채팅 보내기 ❤️',
+            middleText: '채팅을 진행하시겠습니까?',
+            // backgroundColor: Colors.yellowAccent,
+            barrierDismissible: true,
+            actions: [
+              Column(
+                children: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: const Text('채팅 보내기'),
+                  ),
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: const Text(
+                      '취소',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ],
+              ),
+            ]);
+      }
+    }
 
     return Column(
       children: [
@@ -323,67 +410,7 @@ class DetailUserInfoWidget extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-          onPressed: () {
-            if (loginGrant == 0 && loginChatCount > 0) {
-              // 구독은 안하고 잔여 채팅은 남아있을 때
-              Get.defaultDialog(
-                  title: '채팅 보내기 ❤️',
-                  middleText: '채팅 기회가$loginChatCount번 남았습니다\n 채팅을 진행하시겠습니까?',
-                  backgroundColor: Colors.yellowAccent,
-                  barrierDismissible: false,
-                  actions: [
-                    Column(
-                      children: [
-                        TextButton(
-                          onPressed: () => Get.back(),
-                          child: const Text('채팅 보내기'),
-                        ),
-                        TextButton(
-                          onPressed: () => Get.back(),
-                          child: const Text('Exit'),
-                        ),
-                      ],
-                    ),
-                  ]);
-            } else if (loginGrant == 0 && loginChatCount < 1) {
-              // 구독도 안하고 채팅 카운드도 다쓴경우
-              Get.defaultDialog(
-                  title: '채팅 보내기 ❤️',
-                  middleText: '무료 채팅 기회가 모두 소진되었습니다.\n구독권 구매를 진행하시겠습니까?',
-                  backgroundColor: Colors.yellowAccent,
-                  barrierDismissible: false,
-                  actions: [
-                    TextButton(
-                      onPressed: () => Get.back(),
-                      child: const Text(
-                        '취소',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => Get.back(),
-                      child: const Text('구매하기'),
-                    ),
-                  ]);
-            } else {
-              // 구독한 경우
-              Get.defaultDialog(
-                  title: '채팅 보내기 ❤️',
-                  middleText: '무료 채팅 기회가 모두 소진되었습니다.\n채팅을 진행하시겠습니까?',
-                  backgroundColor: Colors.yellowAccent,
-                  barrierDismissible: false,
-                  actions: [
-                    TextButton(
-                      onPressed: () => Get.back(),
-                      child: const Text('채팅 보내기'),
-                    ),
-                    TextButton(
-                      onPressed: () => Get.back(),
-                      child: const Text('취소'),
-                    ),
-                  ]);
-            }
-          },
+          onPressed: () => openBottomSheet(),
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.orangeAccent,
               foregroundColor: Colors.white,
@@ -401,20 +428,6 @@ class DetailUserInfoWidget extends StatelessWidget {
     );
   }
 }
-
-// Future isGrant() {
-//   return Get.defaultDialog(
-//       title: 'Dialog',
-//       middleText: '$loginChatCount',
-//       backgroundColor: Colors.yellowAccent,
-//       barrierDismissible: false,
-//       actions: [
-//         TextButton(
-//           onPressed: () => Get.back(),
-//           child: const Text('Exit'),
-//         ),
-//       ]);
-// }
 
 // indicator를 담당하는 위젯
 class DetailCarouselIndicatorWidget extends StatelessWidget {
