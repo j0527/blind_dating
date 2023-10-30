@@ -25,14 +25,15 @@ class _SignUpFirstState extends State<SignUpFirst> {
   @override
   void initState() {
     super.initState();
-    IDController = TextEditingController(text: UserModel.uid);
-    // IDController = TextEditingController(text: '임시아이디');
+    // IDController = TextEditingController(text: UserModel.uid);
+    IDController = TextEditingController(text: "임시아이디");
     PWController = TextEditingController();
     PWCheckController = TextEditingController();
     AddressController = TextEditingController();
     NickNameController = TextEditingController();
     inputValue = "";
   }
+  
 
   DateTime dateTime = DateTime(2000, 1, 1);
 
@@ -41,9 +42,17 @@ class _SignUpFirstState extends State<SignUpFirst> {
     UserModel.upw = PWController.text;
     UserModel.uaddress = AddressController.text;
     UserModel.unickname = NickNameController.text;
-    UserModel.ugender = selectedGender; // 저장된 성별값
+    UserModel.ugender = (selectedGender == "Male") ? '0' : '1';
     UserModel.ubirth =
         '${dateTime.year}-${dateTime.month}-${dateTime.day}'; // 저장된 생년월일 값
+
+      print('id: ${UserModel.uid}');
+      print('upw: ${UserModel.upw}');
+      print('unickname: ${UserModel.unickname}');
+      print('ugender: ${UserModel.ugender}');
+      print('ubirth: ${UserModel.ubirth}');
+      print('uaddress: ${UserModel.uaddress}');
+    
   }
 
 

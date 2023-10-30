@@ -188,7 +188,7 @@ class _ProfileModifyState extends State<ProfileModify> {
                   child: ElevatedButton(
                       onPressed: () {
                         userInfoUpdate();
-                        updateShowDialog();
+                        // updateShowDialog();
                       },
                       style: TextButton.styleFrom(
                           minimumSize: Size(170, 50),
@@ -287,13 +287,11 @@ userInfoUpdate() async {
   if (dataConvertedJSON['results'] != null && dataConvertedJSON['results'].isNotEmpty) {
   result = dataConvertedJSON['results'][0];
   }// Map으로 변경
-  if (result['status'] == 'OK') {
-    updateShowDialog();
-  } else if (!RegExp(r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,15}$').hasMatch(PWController.text)) {
+  if (!RegExp(r'^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).{8,15}$').hasMatch(PWController.text)) {
     Get.snackbar(
       "Error",
       '비밀번호는 영문 대소문자, 숫자를 혼합하여 8~15자여야 합니다.',
-      snackPosition: SnackPosition.BOTTOM, 
+      snackPosition: SnackPosition.BOTTOM,
       duration: Duration(seconds: 2),
       backgroundColor: Color.fromARGB(255, 232, 157, 157),
     );
@@ -301,10 +299,12 @@ userInfoUpdate() async {
     Get.snackbar(
       "Error",
       '비밀번호가 일치하지 않습니다.',
-      snackPosition: SnackPosition.BOTTOM, 
+      snackPosition: SnackPosition.BOTTOM,
       duration: Duration(seconds: 2),
       backgroundColor: Color.fromARGB(255, 232, 157, 157),
     );
+  } else {
+    updateShowDialog();
   }
 }
 
@@ -324,38 +324,5 @@ updateShowDialog() {
     ],
   );
 }
-
-
-// Future<List> getLoginData() async {
-//     List loginData = [];
-//     // initSharedPreferences에서 uid만 가져와서 요청 보내기
-//     String getUid = await initSharedPreferences();
-//     // print("getLoginData uid:$getUid");
-//     var url = Uri.parse(
-//         'http://localhost:8080/Flutter/dateapp_login_quary_flutter.jsp?uid=$getUid');
-//     // print(url);
-//     var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
-//     loginData.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기
-//     var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
-//     List result = dataConvertedJSON['results'];
-//     loginData.addAll(result);
-//     // print("Login result: $result");
-//     return result;
-//   }
-
-
-
-
-
-// Get.snackbar(
-//                           "수정완료",
-//                           "변경된 사항이 저장되었습니다.",
-//                           snackPosition: SnackPosition.BOTTOM, //스낵바 위치설정
-//                           duration: Duration(seconds: 2),
-//                           backgroundColor: Color.fromARGB(255, 59, 160, 237),
-//                         );
-//                         Get.to(() => HomeWidget());
-
-
 
 }

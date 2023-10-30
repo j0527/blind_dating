@@ -25,18 +25,28 @@ class _ProfileState extends State<Profile> {
     super.initState();
     SubscriptionController = TextEditingController();
     ContractController = TextEditingController();
-    imageURL = loadImageURL('user/profile/${UserModel.uid}_profile_1');
-    imageURL.then((url) {
-      UserModel.setImageURL(url); // 이미지 URL을 UserModel의 imageURL 변수에 저장
-    });
-  }
 
+    try {
+      print('uid: ${UserModel.uid}');
+      imageURL = loadImageURL('user/profile/${UserModel.uid}_profile_1');
+      imageURL.then((url) {
+        UserModel.setImageURL(url); // 이미지 URL을 UserModel의 imageURL 변수에 저장
+      });
+    } catch (e) {
+      print('Error in initState: $e'); // 에러를 콘솔에 출력
+    }
+  }
 
   Future<String> loadImageURL(String path) async {
-    Reference _ref = FirebaseStorage.instance.ref().child(path);
+  Reference _ref = FirebaseStorage.instance.ref().child(path);
+  try {
     String url = await _ref.getDownloadURL();
     return url;
+  } catch (e) {
+    print('FirebaseException: $e'); // 에러 발생 시 예외 던지기
+    return '';
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +118,8 @@ class _ProfileState extends State<Profile> {
                       ),
                       IconButton(
                           onPressed: () {
-                      Get.to(HomeWidget());
-                    },
+                            Get.to(HomeWidget());
+                          },
                           icon: Icon(Icons.arrow_forward_ios))
                     ],
                   ),
@@ -142,45 +152,70 @@ class _ProfileState extends State<Profile> {
                       ),
                       IconButton(
                           onPressed: () {
-                  Get.bottomSheet(Container(
-                    height: 500,
-                    width: 500,
-                    color: Color.fromARGB(255, 217, 217, 217),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 25,),
-                          Text('-개인정보 이용약관-', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                          SizedBox(height: 5,),
-                          Text('*개인정보 수집 및 이용 목적*', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),),
-                          Text('회사는 사용자의 개인정보를 다음 목적을 위해 수집하고 사용합니다.'),
-                          Text('가입, 회원 로그인, 회원탈퇴'),
-                          Text('서비스 제공 및 운영'),
-                          Text('고객 지원 및 문의 응대'),
-                          SizedBox(height: 15,),
-                          Text('*수집하는 개인정보 항목*', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),),
-                          Text('회사는 다음과 같은 개인정보를 수집할 수 있습니다'),
-                          Text('회원 가입 및 로그인 정보: 이름, 이메일 주소, 비밀번호'),
-                          Text('서비스 이용 기록: 접속 일시, 서비스 이용 기록, 기기 정보, 쿠키 및 로그 데이터'),
-                          SizedBox(height: 15,),
-                          Text('*개인정보의 보유 및 이용 기간*', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),),
-                          Text('회사는 사용자의 개인정보를 수집한 목적이 달성되거나 개인정보 보유 및 이용기간이 경과한 경우 \n 해당 정보를 지체 없이 파기합니다.'),
-                          SizedBox(height: 50,),
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                          
-                        ],
-                      ),
-                    ),
-                  ));
-                },
+                            Get.bottomSheet(Container(
+                              height: 500,
+                              width: 500,
+                              color: Color.fromARGB(255, 217, 217, 217),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 25,
+                                    ),
+                                    Text(
+                                      '-개인정보 이용약관-',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      '*개인정보 수집 및 이용 목적*',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                        '회사는 사용자의 개인정보를 다음 목적을 위해 수집하고 사용합니다.'),
+                                    Text('가입, 회원 로그인, 회원탈퇴'),
+                                    Text('서비스 제공 및 운영'),
+                                    Text('고객 지원 및 문의 응대'),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Text(
+                                      '*수집하는 개인정보 항목*',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text('회사는 다음과 같은 개인정보를 수집할 수 있습니다'),
+                                    Text('회원 가입 및 로그인 정보: 이름, 이메일 주소, 비밀번호'),
+                                    Text(
+                                        '서비스 이용 기록: 접속 일시, 서비스 이용 기록, 기기 정보, 쿠키 및 로그 데이터'),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Text(
+                                      '*개인정보의 보유 및 이용 기간*',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                        '회사는 사용자의 개인정보를 수집한 목적이 달성되거나 개인정보 보유 및 이용기간이 경과한 경우 \n 해당 정보를 지체 없이 파기합니다.'),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ));
+                          },
                           icon: Icon(Icons.arrow_forward_ios))
                     ],
                   ),

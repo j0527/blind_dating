@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:blind_dating/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -71,11 +72,16 @@ class LoadUserData extends GetxController {
   Future<String> initSharedPreferences() async {
     String uid = "";
     String upw = "";
+    String nickname = "";
     final prefs = await SharedPreferences.getInstance();
     uid = prefs.getString('uid') ?? " ";
+    uid = UserModel.uid;
     upw = prefs.getString('upw') ?? " ";
+    upw = UserModel.upw;
+    nickname = UserModel.unickname;
     print("로그인된 아이디: $uid");
     print("로그인된 패스워드: $upw");
+    print("로그인된 nickname: $nickname");
     return uid;
   }
 
@@ -90,8 +96,10 @@ class LoadUserData extends GetxController {
     // initSharedPreferences에서 uid만 가져와서 요청 보내기
     String getUid = await initSharedPreferences();
     // print("getLoginData uid:$getUid");
+    print('유저아이디는');
+    print(UserModel.uid);
     var url = Uri.parse(
-        'http://localhost:8080/Flutter/dateapp_login_quary_flutter.jsp?uid=$getUid');
+        'http://localhost:8080/Flutter/dateapp_login_quary_flutter.jsp?uid=${UserModel.uid}');
     // print(url);
     var response = await http.get(url); // 데이터가 불러오기 전까지 화면을 구성하기 위해 기다려야됨
     loginData.clear(); // then해주면 계속 쌓일 수 있으니 클리어해주기

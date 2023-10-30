@@ -29,6 +29,9 @@ class _SignUpFourthState extends State<SignUpFourth> {
         selectedSensing +
         selectedThinking +
         selectedJudging);
+
+        print('usmoke: ${UserModel.usmoke}');
+        print('umbti: ${UserModel.umbti}');
   }
 
   @override
@@ -350,7 +353,7 @@ class _SignUpFourthState extends State<SignUpFourth> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 25, 15, 50),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (selectedSmoke.isEmpty ||
                           selectedExtroverted.isEmpty ||
                           selectedSensing.isEmpty ||
@@ -365,7 +368,8 @@ class _SignUpFourthState extends State<SignUpFourth> {
                           backgroundColor: Color.fromARGB(255, 247, 228, 162),
                         );
                       } else {
-                        insertAction();
+                        await insertAction();
+                        Get.to(HomeWidget());
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -392,11 +396,25 @@ class _SignUpFourthState extends State<SignUpFourth> {
     );
   }
 
+
   //----------Functions
   insertAction() async {
+
+    print('요청 url:http://localhost:8080/Flutter/dateapp_user_insert_flutter.jsp?uid=${UserModel.uid}&upw=${UserModel.upw}&unickname=${UserModel.unickname}&uhobbyimg1=${UserModel.uhobbyimg1}&uhobbyimg2=${UserModel.uhobbyimg2}&uhobbyimg3=${UserModel.uhobbyimg3}&ufaceimg1=${UserModel.ufaceimg1}&ufaceimg2=${UserModel.ufaceimg2}&ugender=${UserModel.ugender}&ubirth=${UserModel.ubirth}&uaddress=${UserModel.uaddress}&umbti=${UserModel.umbti}&usmoke=${UserModel.usmoke}');
+    saveDataToUserSecondModel();
     var url = Uri.parse(
         'http://localhost:8080/Flutter/dateapp_user_insert_flutter.jsp?uid=${UserModel.uid}&upw=${UserModel.upw}&unickname=${UserModel.unickname}&uhobbyimg1=${UserModel.uhobbyimg1}&uhobbyimg2=${UserModel.uhobbyimg2}&uhobbyimg3=${UserModel.uhobbyimg3}&ufaceimg1=${UserModel.ufaceimg1}&ufaceimg2=${UserModel.ufaceimg2}&ugender=${UserModel.ugender}&ubirth=${UserModel.ubirth}&uaddress=${UserModel.uaddress}&umbti=${UserModel.umbti}&usmoke=${UserModel.usmoke}');
-    await http.get(url);
+    var response = await http.get(url);
+
+      // 응답 확인 및 출력
+    if (response.statusCode == 200) {
+      // HTTP 요청이 성공하면 응답을 출력합니다.
+      print('HTTP 요청 성공: ${response.body}');
+      // 여기서 response.body는 서버로부터 받은 데이터입니다.
+    } else {
+      // HTTP 요청이 실패한 경우 에러를 출력합니다.
+      print('HTTP 요청 실패: ${response.statusCode}');
+    }
     showDialog();
   }
 

@@ -27,9 +27,21 @@ class _SignUpThirdState extends State<SignUpThird> {
         if (index < _imageprofile.length) {
           _imageprofile[index] = pickedFile; // 프로필 이미지 리스트에 저장
         } else if (index < _imageprofile.length + _imagehobby.length) {
-          _imagehobby[index - _imageprofile.length] = pickedFile; // 취미 이미지 리스트에 저장
+          _imagehobby[index - _imageprofile.length] =
+              pickedFile; // 취미 이미지 리스트에 저장
         }
       });
+    }
+  }
+
+  Future<String> loadImageURL(String path) async {
+    Reference _ref = FirebaseStorage.instance.ref().child(path);
+    try {
+      String url = await _ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      print('FirebaseException: $e'); // 에러 발생 시 예외 던지기
+      return '';
     }
   }
 
@@ -157,7 +169,9 @@ class _SignUpThirdState extends State<SignUpThird> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20,)
+                SizedBox(
+                  height: 20,
+                )
               ],
             ),
           ),
@@ -283,6 +297,11 @@ class _SignUpThirdState extends State<SignUpThird> {
     }
     UserModel.ufaceimg1 = profileImageURLs.length > 0 ? profileImageURLs[0] : '';
     UserModel.ufaceimg2 = profileImageURLs.length > 1 ? profileImageURLs[1] : '';
+    //UserModel.ufaceimg1 = '${UserModel.uid}_profile_1';
+    //UserModel.ufaceimg2 = '${UserModel.uid}_profile_2';
+
+    print('ufaceimg1: ${UserModel.ufaceimg1}');
+    print('ufaceimg2: ${UserModel.ufaceimg2}');
   }
 
   // 취미 이미지 URL을 UserModel에 저장하는 함수
@@ -299,6 +318,13 @@ class _SignUpThirdState extends State<SignUpThird> {
     UserModel.uhobbyimg1 = hobbyImageURLs.length > 0 ? hobbyImageURLs[0] : '';
     UserModel.uhobbyimg2 = hobbyImageURLs.length > 1 ? hobbyImageURLs[1] : '';
     UserModel.uhobbyimg3 = hobbyImageURLs.length > 2 ? hobbyImageURLs[2] : '';
+    // UserModel.uhobbyimg1 = '${UserModel.uid}_hobby_1';
+    // UserModel.uhobbyimg2 = '${UserModel.uid}_hobby_2';
+    // UserModel.uhobbyimg3 = '${UserModel.uid}_hobby_3';
+
+    print('uhobbyimg1: ${UserModel.uhobbyimg1}');
+    print('uhobbyimg2: ${UserModel.uhobbyimg2}');
+    print('uhobbyimg3: ${UserModel.uhobbyimg3}');
   }
 
   // 이미지를 Firebase Storage에 업로드하고 URL을 얻는 함수
@@ -309,6 +335,7 @@ class _SignUpThirdState extends State<SignUpThird> {
 
     TaskSnapshot snapshot = await uploadTask;
     String downloadURL = await snapshot.ref.getDownloadURL();
+    print("Download URL: $downloadURL");
     return downloadURL;
   }
 }

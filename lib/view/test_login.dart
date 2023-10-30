@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:blind_dating/homewidget.dart';
+import 'package:blind_dating/model/user.dart';
 import 'package:blind_dating/view/mainpage.dart';
 import 'package:blind_dating/view/signupfirst.dart';
 import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -100,8 +102,8 @@ class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver {
             ),
             ElevatedButton(
               onPressed: () {
-                Get.to(const HomeWidget(), // 페이지로 저장시킬 id정보 넘기기
-                    arguments: _saveSharePreferencese());
+                saveSharePreferencese();
+                Get.to(const HomeWidget(),); // 페이지로 저장시킬 id정보 넘기기
               },
               child: const Text('로그인'),
             ),
@@ -132,10 +134,13 @@ class _TestLoginState extends State<TestLogin> with WidgetsBindingObserver {
 
   // 이 함수가 내 기기에 id정보를 저장시키는 것이고 Get.to로 넘겨주는 부분
   //_initSharedPreferences에서 설정한 key값 uid, upw를 넘김
-  _saveSharePreferencese() async {
+  saveSharePreferencese() async {
     final prefs = await SharedPreferences.getInstance();
+
     prefs.setString('uid', idText.text.trim());
     prefs.setString('upw', pwText.text.trim());
+    UserModel.uid = idText.text.trim();
+    UserModel.upw = pwText.text.trim();
   }
 
   _disposeSharedPreferences() async {
