@@ -1,3 +1,5 @@
+import 'package:blind_dating/view/appbarWidget.dart';
+import 'package:blind_dating/components/paymentsWidget.dart';
 import 'package:flutter/material.dart';
 
 class PayMentsPage extends StatelessWidget {
@@ -5,14 +7,16 @@ class PayMentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('결제창'),
-            
-          ],
+    return const Scaffold(
+      appBar: AppbarWidget(),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              PayMentsWidget(),
+            ],
+          ),
         ),
       ),
     );

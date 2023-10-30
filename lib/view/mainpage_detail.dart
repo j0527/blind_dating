@@ -51,7 +51,7 @@ class MainPageDetail extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             closeDetailPage(); // 디테일페이지 인디케이터 index 초기화
-            Get.back(); // Get 패키지를 사용하여 이전 페이지로 이동합니다.
+            Get.back(); 
           },
         ),
       ),
