@@ -11,6 +11,7 @@ class UserModel {
   static String umbti = ''; // 유저 MBTI
   static String ubirth = ''; // 유저 생일
   static String ubreed = ''; // 유저 견종
+  static String udogimg = ''; // 유저 견종
   static String usmoke = ''; // 유저 흡연 여부
   static String uid = ''; // 유저 아이디
   static String upw = ''; // 유저 비밀번호
@@ -30,6 +31,7 @@ class UserModel {
     uhobbyimg1 = '';
     uhobbyimg2 = '';
     uhobbyimg3 = '';
+    udogimg = '';
     userName = '';
     ugender = '';
     uaddress = '';
