@@ -3,6 +3,7 @@ import 'package:blind_dating/home.dart';
 import 'package:blind_dating/view/login.dart';
 import 'package:blind_dating/view/phone_numbers_creen.dart';
 import 'package:blind_dating/view/test_login.dart';
+import 'package:blind_dating/viewmodel/chat_controller.dart';
 import 'package:blind_dating/viewmodel/chat_request.dart';
 import 'package:blind_dating/viewmodel/firebase_messages.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +15,7 @@ Future<void> main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final ChatController chatController = Get.put(ChatController());
   
   runApp(const MyApp());
 }

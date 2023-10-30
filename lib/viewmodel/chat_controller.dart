@@ -39,9 +39,10 @@ class ChatController extends GetxController {
     loginData = users[2];   // 현재 기기 로그인한 유저 정보
     userData = users[1];    // 상대 유저 정보
 
-    print("지니 컨트롤러 확인 : ${loginData[0]['uid']}");
+    // print("지니 컨트롤러 확인 : ${loginData[0]['uid']}");
+    // print("지니 컨트롤러 닉네임 확인 : ${loginData[0]['unickname']}");
 
-    // receiveChatResponse();
+    // receiveChatResponse("${loginData[0]['uid']}");
   }
 
   // 상대에게 요청 보내기
@@ -60,11 +61,12 @@ class ChatController extends GetxController {
   // }
 
   // 나에게 요청이 들어올 때 (내가 요청 받음)
-  void receiveChatResponse() async{
+  void receiveChatResponse(String userId) async{
     await getUserData();
-    
+    // print("지니 컨트롤러 확인 : ${loginData[0]['uid']}");
+    // print("지니 컨트롤러 닉네임 확인 : ${loginData[0]['unickname']}");
     FirebaseFirestore.instance.collection('requestChats')
-    .where('to', isEqualTo: userData[0]['uid'])
+    .where('to', isEqualTo: userId)
     .where('acceptState', isEqualTo: 'wait')
     .snapshots()
     .listen((snapshot) { 

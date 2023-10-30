@@ -270,7 +270,7 @@ class DetailUserInfoWidget extends StatelessWidget {
                             'requestedAt': FieldValue.serverTimestamp()
                           }
                         );
-                        chatController.receiveChatResponse();
+                        chatController.receiveChatResponse(loginUid);
                         showDialog(
                           context: context, 
                           builder: (BuildContext context) {
@@ -352,7 +352,7 @@ class DetailUserInfoWidget extends StatelessWidget {
                           'requestedAt': FieldValue.serverTimestamp()
                         }
                       );
-                      chatController.receiveChatResponse();
+                      chatController.receiveChatResponse(loginUid);
                       showDialog(
                         context: context, 
                         builder: (BuildContext context) {
