@@ -11,6 +11,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
 
 class DetailImageSliderWidget extends StatelessWidget {
@@ -247,6 +248,7 @@ class DetailUserInfoWidget extends StatelessWidget {
 
     // 채팅 요청 보내기 위한 firebase instance 생성
     final FirebaseFirestore _requestChating = FirebaseFirestore.instance;
+    final ChatController chatController = Get.put(ChatController());
 
     void openBottomSheet() {
       if (loginGrant == 0 && loginChatCount > 0) {
@@ -268,7 +270,7 @@ class DetailUserInfoWidget extends StatelessWidget {
                             'requestedAt': FieldValue.serverTimestamp()
                           }
                         );
-                        // ChatController().sendChatRequest();
+                        chatController.receiveChatResponse();
                         showDialog(
                           context: context, 
                           builder: (BuildContext context) {
@@ -350,6 +352,7 @@ class DetailUserInfoWidget extends StatelessWidget {
                           'requestedAt': FieldValue.serverTimestamp()
                         }
                       );
+                      chatController.receiveChatResponse();
                       showDialog(
                         context: context, 
                         builder: (BuildContext context) {
