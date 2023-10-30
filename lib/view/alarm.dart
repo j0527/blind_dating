@@ -76,7 +76,7 @@ class _AlarmPageState extends State<AlarmPage> {
                         },
                         child: Visibility(
                           visible: (loginData[0]['uid'] == from) || (loginData[0]['uid'] == to) && (acceptState == 'hold'),
-                          child: _listViewTile(loginData, chatRequest)
+                          child: _listViewTile(loginData, userData, chatRequest)
                         ),
                       );
                     },
@@ -96,8 +96,8 @@ class _AlarmPageState extends State<AlarmPage> {
     );
   }
 
-  Widget _listViewTile(List loginData, DocumentSnapshot doc) {
-    final chatRequest = doc.data() as Map<String, dynamic>;;
+  Widget _listViewTile(List loginData, List userData, DocumentSnapshot doc) {
+    final chatRequest = doc.data() as Map<String, dynamic>;
     final from = chatRequest['from'];
     final to = chatRequest['to'];
     final acceptState = chatRequest['acceptState'];
@@ -129,7 +129,7 @@ class _AlarmPageState extends State<AlarmPage> {
         radius: 50,
       ),
       title: Text(
-        "${loginData[0]['uid'] == from ? to : from} 님께서 \n채팅을 요청하셨습니다.",    // 상대 닉네임으로 바꾸기
+        "${loginData[0]['uid'] == from ? userData[1]['unickname'] : loginData[0]['unickname']} 님께서 \n채팅을 요청하셨습니다.",    // 상대 닉네임으로 바꾸기
         style: const TextStyle(
           fontSize: 20
         ),
