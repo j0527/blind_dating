@@ -295,6 +295,8 @@ class _SignUpThirdState extends State<SignUpThird> {
         profileImageURLs.add(url);
       }
     }
+    UserModel.ufaceimg1 =  profileImageURLs[0];
+    UserModel.ufaceimg2 = profileImageURLs[1];
     UserModel.ufaceimg1 = profileImageURLs.length > 0 ? profileImageURLs[0] : '';
     UserModel.ufaceimg2 = profileImageURLs.length > 1 ? profileImageURLs[1] : '';
     //UserModel.ufaceimg1 = '${UserModel.uid}_profile_1';
@@ -315,6 +317,9 @@ class _SignUpThirdState extends State<SignUpThird> {
         hobbyImageURLs.add(url);
       }
     }
+    // UserModel.uhobbyimg1 = hobbyImageURLs[0];
+    // UserModel.uhobbyimg2 = hobbyImageURLs[1];
+    // UserModel.uhobbyimg3 = hobbyImageURLs[2];
     UserModel.uhobbyimg1 = hobbyImageURLs.length > 0 ? hobbyImageURLs[0] : '';
     UserModel.uhobbyimg2 = hobbyImageURLs.length > 1 ? hobbyImageURLs[1] : '';
     UserModel.uhobbyimg3 = hobbyImageURLs.length > 2 ? hobbyImageURLs[2] : '';
