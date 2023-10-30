@@ -400,10 +400,10 @@ class _SignUpFourthState extends State<SignUpFourth> {
   //----------Functions
   insertAction() async {
 
-    print('요청 url:http://localhost:8080/Flutter/dateapp_user_insert_flutter.jsp?uid=${UserModel.uid}&upw=${UserModel.upw}&unickname=${UserModel.unickname}&uhobbyimg1=${UserModel.uhobbyimg1}&uhobbyimg2=${UserModel.uhobbyimg2}&uhobbyimg3=${UserModel.uhobbyimg3}&ufaceimg1=${UserModel.ufaceimg1}&ufaceimg2=${UserModel.ufaceimg2}&ugender=${UserModel.ugender}&ubirth=${UserModel.ubirth}&uaddress=${UserModel.uaddress}&umbti=${UserModel.umbti}&usmoke=${UserModel.usmoke}&udogimg=${UserModel.udogimg}');
+    print('요청 url:http://localhost:8080/Flutter/dateapp_user_insert_flutter.jsp?uid=${UserModel.uid}&upw=${UserModel.upw}&unickname=${UserModel.unickname}&uhobbyimg1=${UserModel.uhobbyimg1}&uhobbyimg2=${UserModel.uhobbyimg2}&uhobbyimg3=${UserModel.uhobbyimg3}&ufaceimg1=${UserModel.ufaceimg1}&ufaceimg2=${UserModel.ufaceimg2}&ugender=${UserModel.ugender}&ubirth=${UserModel.ubirth}&uaddress=${UserModel.uaddress}&umbti=${UserModel.umbti}&usmoke=${UserModel.usmoke}&udogimg=${UserModel.udogimg}&ubreed=${UserModel.ubreed}');
     saveDataToUserSecondModel();
     var url = Uri.parse(
-        'http://localhost:8080/Flutter/dateapp_user_insert_flutter.jsp?uid=${UserModel.uid}&upw=${UserModel.upw}&unickname=${UserModel.unickname}&uhobbyimg1=${UserModel.uhobbyimg1}&uhobbyimg2=${UserModel.uhobbyimg2}&uhobbyimg3=${UserModel.uhobbyimg3}&ufaceimg1=${UserModel.ufaceimg1}&ufaceimg2=${UserModel.ufaceimg2}&ugender=${UserModel.ugender}&ubirth=${UserModel.ubirth}&uaddress=${UserModel.uaddress}&umbti=${UserModel.umbti}&usmoke=${UserModel.usmoke}&udogimg=${UserModel.udogimg}');
+        'http://localhost:8080/Flutter/dateapp_user_insert_flutter.jsp?uid=${UserModel.uid}&upw=${UserModel.upw}&unickname=${UserModel.unickname}&uhobbyimg1=${UserModel.uhobbyimg1}&uhobbyimg2=${UserModel.uhobbyimg2}&uhobbyimg3=${UserModel.uhobbyimg3}&ufaceimg1=${UserModel.ufaceimg1}&ufaceimg2=${UserModel.ufaceimg2}&ugender=${UserModel.ugender}&ubirth=${UserModel.ubirth}&uaddress=${UserModel.uaddress}&umbti=${UserModel.umbti}&usmoke=${UserModel.usmoke}&udogimg=${UserModel.udogimg}&ubreed=${UserModel.ubreed}');
     var response = await http.get(url);
 
       // 응답 확인 및 출력
