@@ -8,6 +8,7 @@ class ChatRequest extends GetxController {
   // final LoadUserData userDataController = Get.put(LoadUserData());
   final LoadUserData userDataController = Get.put(LoadUserData());   // LoadUserData 컨트롤러 가져오기
   // 사용자 로그인 정보 받아둘 리스트
+  late List users = [];
   late List loginData = [];     // 현재 사용자
   late List userData = [];      // 상대 사용자
 
@@ -23,10 +24,12 @@ class ChatRequest extends GetxController {
   }
 
   void getUserData() async{
-    final data = await Future.wait([userDataController.getLoginData()]);
+    users.add(await userDataController.getLoginData());
+    users.add(await userDataController.getUserData());
+    // final data = await Future.wait([userDataController.getLoginData()]);
 
-    loginData = data[0];
-    // userData = data[1];
+    loginData = users[0];
+    userData = users[1];
     _checkChatRequests(loginData[0]['uid']);
   }
 
@@ -61,7 +64,9 @@ class ChatRequest extends GetxController {
 
 
   void _showChatRequestDialog(DocumentSnapshot requestDoc) {
-    final from = requestDoc['from'];
+    // final from = requestDoc['from'];
+    final from = userData[0]['unickname'];
+    
     Get.defaultDialog(
       title: "채팅 요청",
       content: Text(
