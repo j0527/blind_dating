@@ -27,7 +27,7 @@ class ChatResponse extends GetxController {
 
     loginData = users[0];   // 현재 기기 로그인한 유저 정보
     userData = users[1];    // 상대 유저 정보
-    _checkChatResponse(userData[0]['uid']);
+    _checkChatResponse(loginData[0]['uid']);
     // _checkChatRequests(userData[0]['uid']);
     // _checkResponse(userData[0]['uid']);
   }
