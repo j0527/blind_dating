@@ -62,21 +62,21 @@ class ChatRequest extends GetxController {
             TextButton(
               onPressed: () {
                 _updateRequest(requestDoc.reference, 'accept');
-                _checkResponse(userData[0]['uid']);
+                // _checkResponse(userData[0]['uid']);
               }, 
               child: const Text("수락하기"),
             ),
             TextButton(
               onPressed: () {
                 _updateRequest(requestDoc.reference, 'reject');
-                _checkResponse(userData[0]['uid']);
+                // _checkResponse(userData[0]['uid']);
               }, 
               child: const Text("거절하기"),
             ),
             TextButton(
               onPressed: () {
                 _updateRequest(requestDoc.reference, 'hold');
-                _checkResponse(userData[0]['uid']);
+                // _checkResponse(userData[0]['uid']);
               }, 
               child: const Text("보류하기"),
             ),
@@ -86,26 +86,30 @@ class ChatRequest extends GetxController {
     );
   }
 
-  Future<void> _updateRequest(DocumentReference chatReq, String state) {
-    return chatReq.update({'acceptState' : state});
+  Future<void> _updateRequest(DocumentReference chatReq, String state) async {
+    await chatReq.update({'acceptState' : state});
+    showResponseDialog(state);
   }
 
-  void _checkResponse(String userId) {
-    _requestChatFirestore.collection('requestChats')
-    .where('from', isEqualTo: userId)
-    .where('acceptState', isNotEqualTo: 'wait')
-    .snapshots()
-    .listen((snapshot) { 
-      for (final doc in snapshot.docs) {
-        showResponseDialog(doc);
-      }
-    });
-  }
+  // void _checkResponse(String userId) {
+  //   _requestChatFirestore.collection('requestChats')
+  //   .where('from', isEqualTo: userId)
+  //   .where('acceptState', isNotEqualTo: 'wait')
+  //   .snapshots()
+  //   .listen((snapshot) { 
+  //     for (final doc in snapshot.docs) {
+  //       showResponseDialog(doc);
+  //     }
+  //   });
+  // }
 
-  void showResponseDialog(DocumentSnapshot requestDoc) {
-    final acceptState = requestDoc['acceptState'];
+  // void showResponseDialog(DocumentSnapshot requestDoc) {
+  void showResponseDialog(String state) {
+    // String message = '';
+    // final acceptState = requestDoc['acceptState'];
 
-    acceptState == 'accept' 
+    // acceptState == 'accept' 
+    state == 'accept' 
       ? Get.defaultDialog(
         title: '채팅 요청 수락',
         content: Text(
@@ -131,7 +135,8 @@ class ChatRequest extends GetxController {
           )
         ]
       )
-      : acceptState == 'reject'
+      // : acceptState == 'reject'
+      : state == 'reject'
         ? Get.defaultDialog(
           title: '채팅 요청 거절',
           content: Text(
