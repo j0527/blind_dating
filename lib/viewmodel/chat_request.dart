@@ -88,7 +88,7 @@ class ChatRequest extends GetxController {
 
   Future<void> _updateRequest(DocumentReference chatReq, String state) async {
     await chatReq.update({'acceptState' : state});
-    showResponseDialog(state);
+    // showResponseDialog(state);
   }
 
   // void _checkResponse(String userId) {
@@ -103,69 +103,69 @@ class ChatRequest extends GetxController {
   //   });
   // }
 
-  // void showResponseDialog(DocumentSnapshot requestDoc) {
-  void showResponseDialog(String state) {
-    // String message = '';
-    // final acceptState = requestDoc['acceptState'];
+  // // void showResponseDialog(DocumentSnapshot requestDoc) {
+  // void showResponseDialog(String state) {
+  //   // String message = '';
+  //   // final acceptState = requestDoc['acceptState'];
 
-    // acceptState == 'accept' 
-    state == 'accept' 
-      ? Get.defaultDialog(
-        title: '채팅 요청 수락',
-        content: Text(
-          "${userData[0]['unickname']} 님께서 요청을 수락하셨습니다. \n바로 채팅방으로 이동하시겠습니까?"
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: () {
-                  // 채팅 화면으로 보내기 
-                }, 
-                child: const Text("확인")
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                }, 
-                child: const Text("나중에")
-              ),
-            ],
-          )
-        ]
-      )
-      // : acceptState == 'reject'
-      : state == 'reject'
-        ? Get.defaultDialog(
-          title: '채팅 요청 거절',
-          content: Text(
-            "${userData[0]['unickname']} 님께서 요청을 거절하셨습니다. "
-          ),
-          actions: [
-            Center(
-              child: TextButton(
-                onPressed: () => Get.back(), 
-                child: const Text("확인"),
-              ),
-            )
-          ]
-        )
-        : Get.defaultDialog(
-          title: '채팅 요청 보류',
-          content: Text(
-            "${userData[0]['unickname']} 님께서 요청 수락을 보류하셨습니다. "
-          ),
-          actions: [
-            Center(
-              child: TextButton(
-                onPressed: () => Get.back(), 
-                child: const Text("확인"),
-              ),
-            )
-          ]
-        );
-  }
+  //   // acceptState == 'accept' 
+  //   state == 'accept' 
+  //     ? Get.defaultDialog(
+  //       title: '채팅 요청 수락',
+  //       content: Text(
+  //         "${userData[0]['unickname']} 님께서 요청을 수락하셨습니다. \n바로 채팅방으로 이동하시겠습니까?"
+  //       ),
+  //       actions: [
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             TextButton(
+  //               onPressed: () {
+  //                 // 채팅 화면으로 보내기 
+  //               }, 
+  //               child: const Text("확인")
+  //             ),
+  //             TextButton(
+  //               onPressed: () {
+  //                 Get.back();
+  //               }, 
+  //               child: const Text("나중에")
+  //             ),
+  //           ],
+  //         )
+  //       ]
+  //     )
+  //     // : acceptState == 'reject'
+  //     : state == 'reject'
+  //       ? Get.defaultDialog(
+  //         title: '채팅 요청 거절',
+  //         content: Text(
+  //           "${userData[0]['unickname']} 님께서 요청을 거절하셨습니다. "
+  //         ),
+  //         actions: [
+  //           Center(
+  //             child: TextButton(
+  //               onPressed: () => Get.back(), 
+  //               child: const Text("확인"),
+  //             ),
+  //           )
+  //         ]
+  //       )
+  //       : Get.defaultDialog(
+  //         title: '채팅 요청 보류',
+  //         content: Text(
+  //           "${userData[0]['unickname']} 님께서 요청 수락을 보류하셨습니다. "
+  //         ),
+  //         actions: [
+  //           Center(
+  //             child: TextButton(
+  //               onPressed: () => Get.back(), 
+  //               child: const Text("확인"),
+  //             ),
+  //           )
+  //         ]
+  //       );
+  // }
 
 
 }
