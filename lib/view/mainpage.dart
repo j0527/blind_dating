@@ -4,6 +4,7 @@ import 'package:blind_dating/components/main_imageSlider_widget.dart';
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/view/mainpage_detail.dart';
 import 'package:blind_dating/view/paymentspage.dart';
+import 'package:blind_dating/viewmodel/chat_controller.dart';
 import 'package:blind_dating/viewmodel/chat_request.dart';
 import 'package:blind_dating/viewmodel/chat_response.dart';
 import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
@@ -16,9 +17,7 @@ import 'package:get/get.dart';
 
 class MainPage extends StatelessWidget {
   MainPage({super.key});
-  // 앱 전역에서 사용자에게 채팅 요청 및 응답 다이어로그 보여주는 컨트롤러
-  final chatRequestController = Get.put(ChatRequest());
-  // final chatResponseController = Get.put(ChatResponse());
+
 
   // 이미지 슬라이더를 제어하기 위한 기본적인 컨트롤러
   final CarouselController sliderController = CarouselController();
@@ -28,6 +27,12 @@ class MainPage extends StatelessWidget {
   final GetXLocation locationController = Get.put(GetXLocation());
   // 유저와 관련된 getX
   final LoadUserData userDataController = Get.put(LoadUserData());
+
+  // 앱 전역에서 사용자에게 채팅 요청 및 응답 다이어로그 보여주는 컨트롤러
+  // final chatRequestController = Get.put(ChatRequest());
+  // final chatResponseController = Get.put(ChatResponse());
+  final chatController = Get.put(ChatController());
+
   // 유저 거리를 담아놓을 변수
   String reciveUserDistance = "";
   // 유저 정보 JSON으로 받아올 리스트
@@ -100,6 +105,8 @@ class MainPage extends StatelessWidget {
                       Position? userPosition = snapshot.data?[0]; // 현재 내 위치
                       List? userList = snapshot.data?[1]; // db에서 불러온 유저 정보 리스트
                       List? loginData = snapshot.data?[2]; // 로그인된 유저의 데이터
+
+                      // Get.put(ChatController());
         
                       print("로그인된 유저닉네임: ${loginData![0]['unickname']}");
                       print(

@@ -9,6 +9,7 @@ import 'package:blind_dating/view/favorite.dart';
 import 'package:blind_dating/view/login.dart';
 import 'package:blind_dating/view/mainpage.dart';
 import 'package:blind_dating/view/profile.dart';
+import 'package:blind_dating/viewmodel/chat_controller.dart';
 import 'package:blind_dating/viewmodel/chat_request.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +24,7 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateMixin{
 
-  final chatRequestController = Get.put(ChatRequest());
+  final chatController = Get.put(ChatController());
 
   // property
   late TabController tabController;

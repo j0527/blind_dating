@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/view/paymentspage.dart';
+import 'package:blind_dating/viewmodel/chat_controller.dart';
 import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -259,14 +260,15 @@ class DetailUserInfoWidget extends StatelessWidget {
                 children: [
                   TextButton(
                       onPressed: () {
-                        _requestChating.collection('requestChats').add(
-                          {
-                            'from': loginUid,
-                            'to': userid,
-                            'acceptState': 'wait',
-                            'requestedAt': FieldValue.serverTimestamp()
-                          }
-                        );
+                        // _requestChating.collection('requestChats').add(
+                        //   {
+                        //     'from': loginUid,
+                        //     'to': userid,
+                        //     'acceptState': 'wait',
+                        //     'requestedAt': FieldValue.serverTimestamp()
+                        //   }
+                        // );
+                        ChatController().sendChatRequest();
                         showDialog(
                           context: context, 
                           builder: (BuildContext context) {
