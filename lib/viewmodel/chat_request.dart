@@ -62,21 +62,21 @@ class ChatRequest extends GetxController {
             TextButton(
               onPressed: () {
                 _updateRequest(requestDoc.reference, 'accept');
-                _checkResponse(loginData[0]['uid']);
+                _checkResponse(userData[0]['uid']);
               }, 
               child: const Text("수락하기"),
             ),
             TextButton(
               onPressed: () {
                 _updateRequest(requestDoc.reference, 'reject');
-                _checkResponse(loginData[0]['uid']);
+                _checkResponse(userData[0]['uid']);
               }, 
               child: const Text("거절하기"),
             ),
             TextButton(
               onPressed: () {
                 _updateRequest(requestDoc.reference, 'hold');
-                _checkResponse(loginData[0]['uid']);
+                _checkResponse(userData[0]['uid']);
               }, 
               child: const Text("보류하기"),
             ),
