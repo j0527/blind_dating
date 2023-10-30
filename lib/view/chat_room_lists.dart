@@ -16,7 +16,7 @@ class ChatRoomLists extends StatefulWidget {
 
 class _ChatListsState extends State<ChatRoomLists> {
   //// property
-  late String chatRoomId;
+  // late String chatRoomId;
   // class 아래 BuildContext 위에 유저 데이터를 관리하는 컨트롤러 인스턴스 선언
   final LoadUserData userDataController = Get.put(LoadUserData());
   // 사용자 로그인 정보 받아둘 리스트
