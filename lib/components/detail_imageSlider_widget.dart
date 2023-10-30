@@ -260,15 +260,15 @@ class DetailUserInfoWidget extends StatelessWidget {
                 children: [
                   TextButton(
                       onPressed: () {
-                        // _requestChating.collection('requestChats').add(
-                        //   {
-                        //     'from': loginUid,
-                        //     'to': userid,
-                        //     'acceptState': 'wait',
-                        //     'requestedAt': FieldValue.serverTimestamp()
-                        //   }
-                        // );
-                        ChatController().sendChatRequest();
+                        _requestChating.collection('requestChats').add(
+                          {
+                            'from': loginUid,
+                            'to': userid,
+                            'acceptState': 'wait',
+                            'requestedAt': FieldValue.serverTimestamp()
+                          }
+                        );
+                        // ChatController().sendChatRequest();
                         showDialog(
                           context: context, 
                           builder: (BuildContext context) {

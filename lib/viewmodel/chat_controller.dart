@@ -18,13 +18,18 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getUserData();
-    sendChatRequest();
+    init();
+    // getUserData();
+    // sendChatRequest();
     // receiveChatResponse();
   }
 
+  void init() async{
+    await getUserData();
+  }
+
   // 유저 & 상대방 정보 가져오기
-  void getUserData() async{
+  Future<void> getUserData() async{
     users.add(await userDataController.initLocation());
     users.add(await userDataController.getUserData());
     users.add(await userDataController.getLoginData());
@@ -33,22 +38,24 @@ class ChatController extends GetxController {
 
     loginData = users[2];   // 현재 기기 로그인한 유저 정보
     userData = users[1];    // 상대 유저 정보
+
+    receiveChatResponse();
   }
 
   // 상대에게 요청 보내기
-  void sendChatRequest() {
-    // firebase - requestChat collection에  데이터 추가
-    FirebaseFirestore.instance.collection('requestChats').add(
-      {
-        'from': loginData[0]['uid'],
-        'to': userData[0]['uid'],
-        'acceptState': 'wait',
-        'requestedAt': FieldValue.serverTimestamp()
-      }
-    );
-    // 보낸 요청 받기
-    receiveChatResponse();
-  }
+  // void sendChatRequest() {
+  //   // firebase - requestChat collection에  데이터 추가
+  //   FirebaseFirestore.instance.collection('requestChats').add(
+  //     {
+  //       'from': loginData[0]['uid'],
+  //       'to': userData[0]['uid'],
+  //       'acceptState': 'wait',
+  //       'requestedAt': FieldValue.serverTimestamp()
+  //     }
+  //   );
+  //   // 보낸 요청 받기
+  //   receiveChatResponse();
+  // }
 
   // 나에게 요청이 들어올 때 (내가 요청 받음)
   void receiveChatResponse() {
@@ -58,17 +65,18 @@ class ChatController extends GetxController {
     .snapshots()
     .listen((snapshot) { 
       for (final doc in snapshot.docs) {
-        if (doc['acceptState'] != 'wait') {
-          _showChatRequestDialog(doc, userData[0]['uid'], doc['acceptState']);    // 누구로 부터 요청이 왔다 보여주기
+          _showChatRequestDialog(doc);    // 누구로 부터 요청이 왔다 보여주기
+        // if (doc['acceptState'] == 'wait') {
           // _showResponseDialog(doc);     
         }
-      }
+      // }
     });
   }
 
   // 요청 받는 사람이 보는 다이어 로그 함수 : 누구로부터 채팅이 왔는지, 수락 / 거부 / 보류 선택
   // 과정 : 각 선택에 따라 파이어베이스 필드 수정 - fromUser에게 dialog 보냄 - 다이어로그 닫음
-  void _showChatRequestDialog(DocumentSnapshot requestCollection, String fromUser, String state) {    // 상대에게 보여주는 다이어로그
+  void _showChatRequestDialog(DocumentSnapshot requestCollection) {    // 상대에게 보여주는 다이어로그
+    final fromUser = userData[0]['unickname'];    // 나로부터 상대에게 
     Get.defaultDialog(
       title: "채팅 요청",
       content: Text(
