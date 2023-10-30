@@ -44,6 +44,7 @@ class _ProfileModifyState extends State<ProfileModify> {
   }
 
   Future<String> loadImageURL(String path) async {
+    print('path: $path');
     Reference _ref = FirebaseStorage.instance.ref().child(path);
     String url = await _ref.getDownloadURL();
     return url;
@@ -54,8 +55,8 @@ class _ProfileModifyState extends State<ProfileModify> {
     super.initState();
     late Map<String, dynamic> userdata = {};
     getJSONData();
-    // IDController = TextEditingController(text: UserModel.uid);
-    IDController = TextEditingController(text: '임시아이디');
+    IDController = TextEditingController(text: UserModel.uid);
+    // IDController = TextEditingController(text: '임시아이디');
     PWController = TextEditingController();
     PWCheckController = TextEditingController();
     AddressController = TextEditingController();
@@ -265,7 +266,7 @@ class _ProfileModifyState extends State<ProfileModify> {
 
 
 getJSONData() async {
-  var url = Uri.parse('http://localhost:8080/Flutter/dateapp_user_query_flutter.jsp?uid=01077778888');
+  var url = Uri.parse('http://localhost:8080/Flutter/dateapp_user_query_flutter.jsp?uid=${UserModel.uid}');
   var response = await http.get(url);
   // print(response.body);
   var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));

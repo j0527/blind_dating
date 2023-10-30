@@ -151,33 +151,65 @@ class _phoneNumberScreenState extends State<phoneNumberScreen> {
         codeAutoRetrievalTimeout: (String verificationID) {});
   }
 
- void verifyCode() async {
-  PhoneAuthCredential credential = PhoneAuthProvider.credential(
-    verificationId: verificationIDReceived,
-    smsCode: otpController.text,
-  );
+  void verifyCode() async {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationIDReceived,
+      smsCode: otpController.text,
+    );
 
-  await auth.signInWithCredential(credential).then((value) {
-    checkUIDInMySQL(UserModel.uid);
-  });
-}
-
-void checkUIDInMySQL(String uid) async {
-  try {
-    var url = Uri.parse(
-        'http://localhost:8080/Flutter/dateapp_user_infocheck_flutter.jsp?uid=$uid');
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      // uid가 존재하는 경우
-      Get.offAll(() => HomeWidget());
-    } else {
-      // uid가 존재하지 않는 경우
-      Get.off(() => SignUpFirst());
-    }
-  } catch (error) {
-    // 오류 처리
-    print('Error occurred while checking UID: $error');
+    await auth.signInWithCredential(credential).then((value) {
+      print('uid 저장되나?${UserModel.uid}');
+      checkUIDInMySQL(UserModel.uid);
+    });
   }
-}
+
+  void checkUIDInMySQL(String uid) async {
+    try {
+      var url = Uri.parse(
+          'http://localhost:8080/Flutter/dateapp_user_infocheck_flutter.jsp?uid=$uid');
+
+      var response = await http.get(url);
+
+      String responseData = response.body; // JSP 페이지로부터의 응답을 문자열로 받음
+
+      // 받은 응답값을 변수에 담기
+      String result = responseData.trim();
+
+      print('리턴값: $result');
+
+      // result에 따라 다른 작업 수행
+      if (result == "-1") {
+        // 탈퇴한 유저
+        Get.to(() => SignUpFirst());
+      } else if (result == "0") {
+        // 신규 유저
+        Get.to(() => SignUpFirst());
+      } else if (result == "1") {
+        // 기존 유저
+        Get.to(() => Login());
+      } else {
+        // 처리 로직 (다른 경우)
+      }
+
+      // if (response.statusCode == 200) {
+      //   // 백엔드에서 받은 응답을 확인하여 로그인 또는 회원가입 화면으로 이동
+      //   if (response.body == 'Login') {
+      //     // 백엔드에서 'login'을 받으면 로그인 화면으로 이동
+      //     Get.offAll(() => Login());
+      //   } else if (response.body == 'SignUpFirst') {
+      //     // 백엔드에서 'signup'을 받거나 udelete column의 값이 1인 경우 회원가입 화면으로 이동
+      //     Get.off(() => SignUpFirst());
+      //   } else {
+      //     // 기타 경우 처리
+      //     print('Unknown response from the server: ${response.body}');
+      //   }
+      // } else {
+      //   // 요청 실패 시의 처리
+      //   print('Request failed with status: ${response.statusCode}');
+      // }
+    } catch (error) {
+      // 오류 처리
+      print('Error occurred while checking UID: $error');
+    }
+  }
 }

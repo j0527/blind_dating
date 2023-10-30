@@ -1,5 +1,6 @@
 import 'package:blind_dating/homewidget.dart';
 import 'package:blind_dating/model/user.dart';
+import 'package:blind_dating/view/login.dart';
 import 'package:blind_dating/view/profilemodify.dart';
 import 'package:blind_dating/view/signupfirst.dart';
 import 'package:blind_dating/view/signupsecond.dart';

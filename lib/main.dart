@@ -1,5 +1,7 @@
 import 'package:blind_dating/firebase_options.dart';
 import 'package:blind_dating/home.dart';
+import 'package:blind_dating/view/login.dart';
+import 'package:blind_dating/view/phone_numbers_creen.dart';
 import 'package:blind_dating/view/test_login.dart';
 import 'package:blind_dating/viewmodel/chat_request.dart';
 import 'package:blind_dating/viewmodel/firebase_messages.dart';
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const TestLogin(),
+      home: const phoneNumberScreen(),
     );
   }
 }

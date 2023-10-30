@@ -23,6 +23,28 @@ class UserModel {
     imageURL = url;
   }
 
+  // 함수를 사용하여 모든 속성을 비움
+  static void clearAllProperties() {
+    ufaceimg1 = '';
+    ufaceimg2 = '';
+    uhobbyimg1 = '';
+    uhobbyimg2 = '';
+    uhobbyimg3 = '';
+    userName = '';
+    ugender = '';
+    uaddress = '';
+    unickname = '';
+    umbti = '';
+    ubirth = '';
+    ubreed = '';
+    usmoke = '';
+    uid = '';
+    upw = '';
+    loginUid = '';
+    loginName = '';
+    imageURL = '';
+  }
+
   UserModel();
 
   // MBTI 정보를 UserModel의 umbti 변수에 저장하는 함수
