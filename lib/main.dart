@@ -12,7 +12,7 @@ Future<void> main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Get.put(ChatRequest());     // 채팅요청 컨트롤러 (채팅 요청시 다이어로그 뜨도록) GetX에 등록
+  
   runApp(const MyApp());
 }
 
@@ -34,3 +34,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

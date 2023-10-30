@@ -7,6 +7,7 @@ import 'package:blind_dating/view/paymentspage.dart';
 import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
@@ -238,6 +239,13 @@ class DetailUserInfoWidget extends StatelessWidget {
     final String userAddress = currentItem.userAddress;
     final String userDistance = currentItem.userDistance;
     final String userMBTI = currentItem.userMBTI;
+    final String loginUid = currentItem.loginUid;
+    final String userid = currentItem.userId;
+    final String loginName = currentItem.loginName;
+    
+
+    // 채팅 요청 보내기 위한 firebase instance 생성
+    final FirebaseFirestore _requestChating = FirebaseFirestore.instance;
 
     void openBottomSheet() {
       if (loginGrant == 0 && loginChatCount > 0) {
@@ -250,13 +258,41 @@ class DetailUserInfoWidget extends StatelessWidget {
               Column(
                 children: [
                   TextButton(
-                      onPressed: () => Get.back(),
+                      onPressed: () {
+                        _requestChating.collection('requestChats').add(
+                          {
+                            'from': loginUid,
+                            'to': userid,
+                            'acceptState': 'wait',
+                            'requestedAt': FieldValue.serverTimestamp()
+                          }
+                        );
+                        showDialog(
+                          context: context, 
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: Text("$loginName님께 채팅 요청을 보냈습니다."),
+                              actions: [
+                                Center(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                      Get.back();
+                                    }, 
+                                    child: const Text("확인")
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
                       style: TextButton.styleFrom(
                           // backgroundColor: Colors.purple,
                           minimumSize:
                               Size(MediaQuery.of(context).size.width, 30)),
                       child: const Text(
-                        '채팅 보내기',
+                        '채팅 요청하기',
                       )),
                   TextButton(
                     onPressed: () => Get.back(),
@@ -303,8 +339,36 @@ class DetailUserInfoWidget extends StatelessWidget {
               Column(
                 children: [
                   TextButton(
-                    onPressed: () => Get.back(),
-                    child: const Text('채팅 보내기'),
+                    onPressed: () {
+                      _requestChating.collection('requestChats').add(
+                        {
+                          'from': loginUid,
+                          'to': userid,
+                          'acceptState': 'wait',
+                          'requestedAt': FieldValue.serverTimestamp()
+                        }
+                      );
+                      showDialog(
+                        context: context, 
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text("$loginName님께 채팅 요청을 보냈습니다."),
+                            actions: [
+                              Center(
+                                child: TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                    Get.back();
+                                  }, 
+                                  child: const Text("확인")
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: const Text('채팅 요청하기'),
                   ),
                   TextButton(
                     onPressed: () => Get.back(),

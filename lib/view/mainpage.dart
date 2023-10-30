@@ -96,7 +96,7 @@ class MainPage extends StatelessWidget {
         
                       print("로그인된 유저닉네임: ${loginData![0]['unickname']}");
                       print(
-                          "로그인된 유저권한: ${loginData[0]['ugender'] == 0 ? "남성" : "여성"}");
+                          "로그인된 유저권한: ${loginData[0]['ugender'] == "0" ? "남성" : "여성"}");
                       print(
                           "로그인된 유저권한: ${loginData[0]['ugrant'] == 1 ? "구독자" : "무료 사용자"}");
                       print("로그인된 유저 채팅카운트: ${loginData[0]['uchatcount']}");
@@ -122,7 +122,7 @@ class MainPage extends StatelessWidget {
                       isSmoke() {
                         List<String> uSmoke = [];
                         for (int i = 0; i < userList!.length; i++) {
-                          uSmoke.add(userList[i]['usmoke'] == 1 ? "🚬" : "❌");
+                          uSmoke.add(userList[i]['usmoke'] == "1" ? "🚬" : "❌");
                         }
                         return uSmoke;
                       }
@@ -131,8 +131,9 @@ class MainPage extends StatelessWidget {
                       final List<SliderlItems> carouselItems = [
                         // 첫번째 유저
                         SliderlItems(
+                            userId: userList![0]['uid'],
                             userMainImagePath: userImagepath1,
-                            userFaceImagePath1: userList![0]['ufaceimg1'],
+                            userFaceImagePath1: userList[0]['ufaceimg1'],
                             userFaceImagePath2: userList[0]['ufaceimg2'],
                             userHobbyImagePath1: userList[0]['uhobbyimg1'],
                             userHobbyImagePath2: userList[0]['uhobbyimg2'],
@@ -151,6 +152,7 @@ class MainPage extends StatelessWidget {
                             loginChatCount: loginData[0]['uchatcount']),
                         // 두번째 유저
                         SliderlItems(
+                            userId: userList[1]['uid'],
                             userMainImagePath: userImagepath2,
                             userFaceImagePath1: userList[1]['ufaceimg1'],
                             userFaceImagePath2: userList[1]['ufaceimg2'],
@@ -172,6 +174,7 @@ class MainPage extends StatelessWidget {
                             ),
                             // 세번째 유저
                         SliderlItems(
+                            userId: userList[2]['uid'],
                             userMainImagePath: userImagepath3,
                             userFaceImagePath1: userList[2]['ufaceimg1'],
                             userFaceImagePath2: userList[2]['ufaceimg2'],
@@ -219,7 +222,7 @@ class MainPage extends StatelessWidget {
                           //     "첫 번째 유저의 성별 = ${userList[0]['ugender'] == 0 ? "남성" : "여성"}");
                           // print(
                           //     "두 번째 유저의 성별 = ${userList[1]['ugender'] == 0 ? "남성" : "여성"}");
-                          bool user1IsMale = userList[0]['ugender'] == 0;
+                          bool user1IsMale = userList[0]['ugender'] == "0";
         
                           // 여성일 때와 남성일 때의 색상을 Map에 정의
                           Map<bool, Color> colorMap = {

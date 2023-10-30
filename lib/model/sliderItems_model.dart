@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 class SliderlItems {
+  final String userId;
   final String
       userMainImagePath; // 유저 메인페이지 이미지 (구독 여부에 따라 다른 이미지로 전달됨)
   final String userFaceImagePath1; // 유저 얼굴이미지1
@@ -22,6 +23,7 @@ class SliderlItems {
   final int loginChatCount; // 로그인된 유저 
 
   SliderlItems({
+      required this.userId,
       required this.userMainImagePath,
       required this.userFaceImagePath1,
       required this.userFaceImagePath2,
