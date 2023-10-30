@@ -44,6 +44,7 @@ class _AlarmPageState extends State<AlarmPage> {
               return StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                   .collection('requestChats')
+                  .where('acceptState', isEqualTo: 'hold')
                   .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {

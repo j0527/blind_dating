@@ -271,7 +271,7 @@ class DetailUserInfoWidget extends StatelessWidget {
                           context: context, 
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              content: Text("$loginName님께 채팅 요청을 보냈습니다."),
+                              content: Text("$userName님께 채팅 요청을 보냈습니다."),
                               actions: [
                                 Center(
                                   child: TextButton(
@@ -352,7 +352,7 @@ class DetailUserInfoWidget extends StatelessWidget {
                         context: context, 
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            content: Text("$loginName님께 채팅 요청을 보냈습니다."),
+                            content: Text("$userName님께 채팅 요청을 보냈습니다."),
                             actions: [
                               Center(
                                 child: TextButton(

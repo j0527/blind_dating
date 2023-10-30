@@ -3,6 +3,7 @@
 import 'package:blind_dating/components/main_imageSlider_widget.dart';
 import 'package:blind_dating/model/sliderItems_model.dart';
 import 'package:blind_dating/view/mainpage_detail.dart';
+import 'package:blind_dating/viewmodel/chat_request.dart';
 import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
 import 'package:blind_dating/viewmodel/location_ctrl.dart';
 import 'package:blind_dating/viewmodel/indicatorCurrent_crtl.dart';
@@ -13,6 +14,9 @@ import 'package:get/get.dart';
 
 class MainPage extends StatelessWidget {
   MainPage({super.key});
+  
+  final chatRequestControlelr = Get.put(ChatRequest());
+
   // 이미지 슬라이더를 제어하기 위한 기본적인 컨트롤러
   final CarouselController sliderController = CarouselController();
   // 현재 이미지 슬라이더의 상태를 관리하는 GetX 컨트롤러
