@@ -203,7 +203,57 @@ class _ProfileModifyState extends State<ProfileModify> {
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       )),
-                )
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(300, 0, 0, 20),
+                  child: InkWell(
+                    onTap: () {
+                      Get.defaultDialog(
+                        title: '회원탈퇴',
+                        middleText: '정말 탈퇴하시겠습니까?',
+                        backgroundColor: Color.fromARGB(255, 245, 153, 150),
+                        barrierDismissible: false,
+                        actions: [
+                            TextButton(
+                            onPressed: () {
+                              userDelete();
+                              Get.to(() => HomeWidget());
+                            },
+                            child: Text(
+                              '확인',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: Text(
+                              '아니오',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    child: Text(
+                      '회원탈퇴',
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 253, 91, 79),fontSize: 15,fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline, // 밑줄 추가
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -324,6 +374,23 @@ updateShowDialog() {
       ),
     ],
   );
+}
+
+userDelete() async {
+  var url = Uri.parse(
+      'http://localhost:8080/Flutter/dateapp_user_delete_flutter.jsp?uid=${IDController.text}&udelete=1');
+  var response = await http.get(url);
+  print(response.body);
+  var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
+  Map<String, dynamic> result = {};
+
+  if (dataConvertedJSON['result'] == 'OK') {
+    // 회원 삭제 성공 시 수행할 작업
+    Get.to(() => HomeWidget());
+  } else {
+    // 회원 삭제 실패 시 수행할 작업
+    // 에러 메시지를 표시하거나, 다른 동작을 수행할 수 있습니다.
+  }
 }
 
 }
