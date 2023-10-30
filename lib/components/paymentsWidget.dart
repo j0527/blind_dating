@@ -2,6 +2,7 @@ import 'package:blind_dating/util/arguments.dart';
 import 'package:blind_dating/viewmodel/payments_ctrl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PayMentsWidget extends StatelessWidget {
   const PayMentsWidget({super.key});
@@ -16,6 +17,18 @@ class PayMentsWidget extends StatelessWidget {
     bool userInfoThirdParties = false; // 제 3자 정보제공 동의 체크박스
 
     String selectedPaymentsList = "";
+    Future<String> uid = payMentsController.initSharedPreferences();
+    ;
+    RxString upw = payMentsController.selectedPayment;
+
+    //     Future<String> initSharedPreferences() async {
+    //   final prefs = await SharedPreferences.getInstance();
+    //   uid = prefs.getString('uid') ?? " ";
+    //   upw = prefs.getString('upw') ?? " ";
+    //   print("pay send uid: $uid");
+    //   print("pay send upw: $upw");
+    //   return uid;
+    // }
 
     // 전자거래 이용약관
     electroPayDialog() {
@@ -125,6 +138,50 @@ class PayMentsWidget extends StatelessWidget {
             ],
           );
         },
+      );
+    }
+
+    // 결제 성공 결과
+    void purchaseSuccsessResultDialog() {
+      Get.defaultDialog(
+        title: 'Primium 구독권 결제가\n완료되었습니다!',
+        middleText: '이제 마음에 드는 이성과 자유롭게 채팅해보세요!',
+        // backgroundColor: Colors.yellowAccent,
+        barrierDismissible: true,
+        actions: [
+          Column(
+            children: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                  Get.back();
+                },
+                child: const Text("확인"),
+              ),
+            ],
+          )
+        ],
+      );
+    }
+    // 결제 실패 결과
+    void failedDialog() {
+      Get.defaultDialog(
+        title: '결제에 실패했습니다 😢',
+        middleText: '결제 수단을 다시 확인해주세요.',
+        // backgroundColor: Colors.yellowAccent,
+        barrierDismissible: true,
+        actions: [
+          Column(
+            children: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("확인"),
+              ),
+            ],
+          )
+        ],
       );
     }
 
@@ -505,7 +562,7 @@ class PayMentsWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // db에 결제 업데이트시키기
                 // if (payMentsController.electronicPay == false && payMentsController.userInfoUsage == false && payMentsController.userInfoThirdParties == false){
                 if (payMentsController.checkAll == false) {
@@ -551,10 +608,13 @@ class PayMentsWidget extends StatelessWidget {
                 } else {
                   // 결제 진행
                   print("결제 진행되었고 결제수단은 ${payMentsController.selectedPayment}");
-                  
+                  if (await payMentsController.purchaseAction(1)) {
+                    // 상품 코드만 넣어서 결제 진행
+                    purchaseSuccsessResultDialog();
+                  } else{
+                    failedDialog();
+                  }
                 }
-
-
               },
               style: ElevatedButton.styleFrom(
                   shape: BeveledRectangleBorder(
