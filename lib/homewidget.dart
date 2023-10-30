@@ -1,15 +1,12 @@
 import 'package:blind_dating/model/sliderItems_model.dart';
-import 'package:blind_dating/model/user.dart';
 import 'package:blind_dating/util/theme.dart';
 import 'package:blind_dating/view/alarm.dart';
 import 'package:blind_dating/view/appbarWidget.dart';
 import 'package:blind_dating/view/chat_room_lists.dart';
 import 'package:blind_dating/view/chats.dart';
 import 'package:blind_dating/view/favorite.dart';
-import 'package:blind_dating/view/login.dart';
 import 'package:blind_dating/view/mainpage.dart';
 import 'package:blind_dating/view/profile.dart';
-import 'package:blind_dating/viewmodel/chat_controller.dart';
 import 'package:blind_dating/viewmodel/chat_request.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,7 +21,7 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateMixin{
 
-  final chatController = Get.put(ChatController());
+  final chatRequestController = Get.put(ChatRequest());
 
   // property
   late TabController tabController;
@@ -98,25 +95,7 @@ class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateM
           ),
           ListTile(
             onTap: () {
-              Get.defaultDialog(
-              title: '로그아웃',
-        middleText: '로그아웃 하시겠습니까?',
-        backgroundColor: Color.fromARGB(255, 247, 228, 162),
-        barrierDismissible: false,
-        actions: [
-          TextButton(
-              onPressed: () {
-               //로그아웃 실행하고 login으로 이동
-                UserModel.clearAllProperties();
-                Get.to(Login());
-              },
-              child: Text('예')),
-          TextButton(
-              onPressed: () {
-                Get.back();
-              },
-              child: Text('닫기'))
-        ]);
+              // Get.to(ShowLogout())
             },
             leading: const Icon(Icons.login,
             // color: Theme.of(context).colorScheme.secondary,
