@@ -210,7 +210,7 @@ class _ProfileModifyState extends State<ProfileModify> {
                     onTap: () {
                       Get.defaultDialog(
                         title: '회원탈퇴',
-                        middleText: '정말 탈퇴하시겠습니까?',
+                        middleText: '탈퇴 후 1주일간은 재가입이 불가합니다. \n 탈퇴하시겠습니까?',
                         backgroundColor: Color.fromARGB(255, 245, 153, 150),
                         barrierDismissible: false,
                         actions: [

@@ -335,15 +335,39 @@ class _SignUpThirdState extends State<SignUpThird> {
     print('uhobbyimg3: ${UserModel.uhobbyimg3}');
   }
 
-  // 이미지를 Firebase Storage에 업로드하고 URL을 얻는 함수
-  Future<String> uploadImageAndGetURL(String path, File file) async {
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref = storage.ref().child(path);
-    UploadTask uploadTask = ref.putFile(file);
+  // // 이미지를 Firebase Storage에 업로드하고 URL을 얻는 함수
+  // Future<String> uploadImageAndGetURL(String path, File file) async {
+  //   FirebaseStorage storage = FirebaseStorage.instance;
+  //   Reference ref = storage.ref().child(path);
+  //   UploadTask uploadTask = ref.putFile(file);
 
-    TaskSnapshot snapshot = await uploadTask;
-    String downloadURL = await snapshot.ref.getDownloadURL();
-    print("Download URL: $downloadURL");
-    return downloadURL;
-  }
+  //   TaskSnapshot snapshot = await uploadTask;
+  //   String downloadURL = await snapshot.ref.getDownloadURL();
+  //   print("Download URL: $downloadURL");
+  //   return downloadURL;
+  // }
+
+
+// 이미지를 Firebase Storage에 업로드하고 URL을 얻는 함수
+Future<String> uploadImageAndGetURL(String path, File file) async {
+  FirebaseStorage storage = FirebaseStorage.instance;
+  Reference ref = storage.ref().child(path);
+  UploadTask uploadTask = ref.putFile(file);
+
+  TaskSnapshot snapshot = await uploadTask;
+  String downloadURL = await snapshot.ref.getDownloadURL();
+  String encodedURL = Uri.encodeFull(downloadURL);  // URL 인코딩 추가
+  print("Download URL: $encodedURL");
+  return encodedURL;  // 인코딩된 URL 반환
+}
+
+
+
+
+
+
+
+
+
+
 }
