@@ -35,7 +35,7 @@ class ChatResponse extends GetxController {
   void _checkChatResponse(String userId) {      
     _responseChatFirestore.collection('requestChats')
     .where('from', isEqualTo: userId)
-    .where('acceptState', isNotEqualTo: 'wait')
+    .where('acceptState', whereIn: ['accept', 'reject', 'hold'])
     .snapshots()
     .listen((snapshot) { 
       for (final doc in snapshot.docs) {
