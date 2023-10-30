@@ -62,21 +62,24 @@ class ChatRequest extends GetxController {
             TextButton(
               onPressed: () {
                 _updateRequest(requestDoc.reference, 'accept');
-                _checkResponse(loginData[0]['uid']);
+                Get.back(); // 나중에 채팅창 개설로 바꾸기
+                _checkResponse(userData[0]['uid']);
               }, 
               child: const Text("수락하기"),
             ),
             TextButton(
               onPressed: () {
                 _updateRequest(requestDoc.reference, 'reject');
-                _checkResponse(loginData[0]['uid']);
+                showCheckResponse('reject');
+                _checkResponse(userData[0]['uid']);
               }, 
               child: const Text("거절하기"),
             ),
             TextButton(
               onPressed: () {
                 _updateRequest(requestDoc.reference, 'hold');
-                _checkResponse(loginData[0]['uid']);
+                showCheckResponse('hold');
+                _checkResponse(userData[0]['uid']);
               }, 
               child: const Text("보류하기"),
             ),
@@ -86,14 +89,81 @@ class ChatRequest extends GetxController {
     );
   }
 
-  Future<void> _updateRequest(DocumentReference chatReq, String state) {
-    return chatReq.update({'acceptState' : state});
+  Future<void> _updateRequest(DocumentReference chatReq, String state) async {
+    await chatReq.update({'acceptState' : state});
+    // showResponseDialog(state);
   }
 
-  void _checkResponse(String userId) {
+  void showCheckResponse(String state) {
+    state == 'reject' 
+      ? Get.defaultDialog(
+        title: "채팅 거부",
+        content: const Text(
+          "채팅요청을 거부했습니다."
+        ),
+        actions: [
+          Center(
+            child: TextButton(
+              onPressed: () {
+                Get.back();
+                Get.back();
+              }, 
+              child: const Text("확인")
+            ),
+          )
+        ]
+      )
+      : state == 'hold'
+        ? Get.defaultDialog(
+          title: "채팅 보류",
+          content: const Text(
+            "채팅요청 수락을 보류했습니다."
+          ),
+          actions: [
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Get.back();
+                  Get.back();
+                }, 
+                child: const Text("확인")
+              ),
+            )
+          ]
+        )
+        : Get.defaultDialog(
+          // 수락했을 때 채팅ㅂㅏㅇ 개설 시키기
+          title: "채팅 수락",
+          content: const Text(
+            "채팅요청을 수락하셨습니다. \n채팅방으로 이동하시겠습니까?"
+          ),
+          actions: [
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    //Get.to(page);     // 채팅방 페이지 개설하기
+                  }, 
+                  child: const Text("확인")
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                    Get.back();
+                  }, 
+                  child: const Text("취소")
+                ),
+              ]
+            )
+          ]
+        );
+  }
+
+  // 요청에 대한 응답 데이터 불러오기
+  void _checkResponse(String userId) {      // 유저 아이디에 상대 아이디!
     _requestChatFirestore.collection('requestChats')
     .where('from', isEqualTo: userId)
-    .where('acceptState', isNotEqualTo: 'wait')
+    .where('acceptState', whereIn: ['accept', 'reject', 'hold'])
     .snapshots()
     .listen((snapshot) { 
       for (final doc in snapshot.docs) {
@@ -103,13 +173,17 @@ class ChatRequest extends GetxController {
   }
 
   void showResponseDialog(DocumentSnapshot requestDoc) {
+  // void showResponseDialog(String state) {
+    // String message = '';
+    final to = loginData[0]['unickname'];
     final acceptState = requestDoc['acceptState'];
 
     acceptState == 'accept' 
+    // state == 'accept' 
       ? Get.defaultDialog(
         title: '채팅 요청 수락',
         content: Text(
-          "${userData[0]['unickname']} 님께서 요청을 수락하셨습니다. \n바로 채팅방으로 이동하시겠습니까?"
+          "$to 님께서 요청을 수락하셨습니다. \n바로 채팅방으로 이동하시겠습니까?"
         ),
         actions: [
           Row(
@@ -132,10 +206,11 @@ class ChatRequest extends GetxController {
         ]
       )
       : acceptState == 'reject'
+      // : state == 'reject'
         ? Get.defaultDialog(
           title: '채팅 요청 거절',
           content: Text(
-            "${userData[0]['unickname']} 님께서 요청을 거절하셨습니다. "
+            "$to 님께서 요청을 거절하셨습니다. "
           ),
           actions: [
             Center(
@@ -149,7 +224,7 @@ class ChatRequest extends GetxController {
         : Get.defaultDialog(
           title: '채팅 요청 보류',
           content: Text(
-            "${userData[0]['unickname']} 님께서 요청 수락을 보류하셨습니다. "
+            "$to 님께서 요청 수락을 보류하셨습니다. "
           ),
           actions: [
             Center(
