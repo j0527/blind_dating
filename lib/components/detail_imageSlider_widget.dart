@@ -478,7 +478,7 @@ class DetailUserInfoWidget extends StatelessWidget {
         ElevatedButton(
           onPressed: () => openBottomSheet(),
           style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orangeAccent,
+              backgroundColor: const Color.fromRGBO(94, 88, 176, 0.945),
               foregroundColor: Colors.white,
               minimumSize: const Size(150, 40), // 버튼 사이즈 조절해서 통일성주기
               shape: RoundedRectangleBorder(
