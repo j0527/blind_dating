@@ -248,7 +248,7 @@ class _ChatsState extends State<Chats> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         CircleAvatar(
-          backgroundImage: AssetImage("${userData[0]['ufaceimg1']}"),
+          backgroundImage: NetworkImage("${userData[0]['ufaceimg1']}"),
         ),
         Expanded(
           child: Column(
