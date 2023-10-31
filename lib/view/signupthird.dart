@@ -324,9 +324,6 @@ class _SignUpThirdState extends State<SignUpThird> {
     // UserModel.uhobbyimg2 = hobbyImageURLs[1];
     // UserModel.uhobbyimg3 = hobbyImageURLs[2];
 
-    //지워야 할 것 ----------------------------------------
-    UserModel.udogimg = hobbyImageURLs.length > 2 ? hobbyImageURLs[2] : '';
-    UserModel.ubreed = '멍멍이';
     // UserModel.uhobbyimg1 = '${UserModel.uid}_hobby_1';
     // UserModel.uhobbyimg2 = '${UserModel.uid}_hobby_2';
     // UserModel.uhobbyimg3 = '${UserModel.uid}_hobby_3';

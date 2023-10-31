@@ -431,7 +431,7 @@ class _SignUpFourthState extends State<SignUpFourth> {
                 // 모든 값이 선택되었을 때 홈 화면으로 이동
                 Get.to(Login());
               },
-              child: Text('닫기'))
+              child: Text('닫기',style: TextStyle(color: Colors.black, fontSize: 13),))
         ]);
   }
 }

@@ -1,10 +1,12 @@
 import 'package:blind_dating/model/sliderItems_model.dart';
+import 'package:blind_dating/model/user.dart';
 import 'package:blind_dating/util/theme.dart';
 import 'package:blind_dating/view/alarm.dart';
 import 'package:blind_dating/view/appbarWidget.dart';
 import 'package:blind_dating/view/chat_room_lists.dart';
 import 'package:blind_dating/view/chats.dart';
 import 'package:blind_dating/view/favorite.dart';
+import 'package:blind_dating/view/login.dart';
 import 'package:blind_dating/view/mainpage.dart';
 import 'package:blind_dating/view/profile.dart';
 import 'package:blind_dating/viewmodel/chat_request.dart';
@@ -95,7 +97,42 @@ class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateM
           ),
           ListTile(
             onTap: () {
-              // Get.to(ShowLogout())
+                                    Get.defaultDialog(
+                        title: '로그아웃',
+                        middleText: '로그아웃 하시겠습니까?',
+                        backgroundColor: Color.fromARGB(255, 123, 166, 241),
+                        barrierDismissible: false,
+                        actions: [
+                            TextButton(
+                            onPressed: () {
+                              // UserModel.clearAllProperties();
+                              Get.to(() => Login());
+                            },
+                            child: Text(
+                              '확인',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: Text(
+                              '아니오',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
             },
             leading: const Icon(Icons.login,
             // color: Theme.of(context).colorScheme.secondary,
