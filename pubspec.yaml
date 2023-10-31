@@ -35,21 +35,36 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  get: ^4.6.6 # 상태관리
-  carousel_slider: ^4.2.1 # 이미지 슬라이더
-  geolocator: ^10.1.0 # 위치정보 받아오기
-  permission_handler: ^11.0.1 # 사용권한 동의
+  # 상태관리
+  get: ^4.6.6
+  # 이미지 슬라이더
+  carousel_slider: ^4.2.1
+  # 위치정보 받아오기
+  geolocator: ^10.1.0
+  # 사용권한 동의
+  permission_handler: ^11.0.1 
+  # Firebase
   firebase_core: ^2.19.0
   cloud_firestore: ^4.11.0
-  firebase_auth: ^4.11.1 # 전화인증
-  image_picker: ^1.0.4 # 앨범 사용 위해
-  http: ^1.1.0 # 네트워크타고 JSON 받아오기위함
-  shared_preferences: ^2.2.2 # 로그인 관리
-  chat_bubbles: ^1.5.0    # 채팅 말풍선
-  firebase_storage: ^11.4.0 #이미지 업로드 위해
-  camera: ^0.10.5+5 #camera실시간 사용
-  cached_network_image: ^3.3.0 # 이미지 캐싱
-  firebase_messaging: ^14.7.2     # 앱 알림
+  # Firebase 전화인증
+  firebase_auth: ^4.11.1
+  # Firebase Storage이미지 업로드 위해    
+  firebase_storage: ^11.4.0 
+  # 앱 알림
+  firebase_messaging: ^14.7.2     
+  # 기기내부 앨범 사용
+  image_picker: ^1.0.4 
+  # 네트워크타고 JSON 받아오기위함
+  http: ^1.1.0 
+  # 로그인 관리
+  shared_preferences: ^2.2.2 
+  # 채팅창 말풍선
+  chat_bubbles: ^1.5.0
+  # camera실시간 사용
+  camera: ^0.10.5+5
+  # 이미지 캐싱 
+  cached_network_image: ^3.3.0 
+  
 
 dev_dependencies:
   flutter_test:
