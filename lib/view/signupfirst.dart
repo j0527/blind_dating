@@ -25,8 +25,8 @@ class _SignUpFirstState extends State<SignUpFirst> {
   @override
   void initState() {
     super.initState();
-    IDController = TextEditingController(text: UserModel.uid);
-    // IDController = TextEditingController(text: "01010910910");
+    // IDController = TextEditingController(text: UserModel.uid);
+    IDController = TextEditingController(text: "01036488391");
     PWController = TextEditingController();
     PWCheckController = TextEditingController();
     AddressController = TextEditingController();

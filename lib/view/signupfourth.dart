@@ -1,4 +1,5 @@
 import 'package:blind_dating/model/user.dart';
+import 'package:blind_dating/view/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -369,7 +370,7 @@ class _SignUpFourthState extends State<SignUpFourth> {
                         );
                       } else {
                         await insertAction();
-                        Get.to(HomeWidget());
+                        // Get.to(Login());
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -380,7 +381,7 @@ class _SignUpFourthState extends State<SignUpFourth> {
                       ),
                     ),
                     child: const Text(
-                      "홈 화면으로 이동",
+                      "회원가입 완료",
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -428,7 +429,7 @@ class _SignUpFourthState extends State<SignUpFourth> {
           TextButton(
               onPressed: () {
                 // 모든 값이 선택되었을 때 홈 화면으로 이동
-                Get.to(HomeWidget());
+                Get.to(Login());
               },
               child: Text('닫기'))
         ]);
