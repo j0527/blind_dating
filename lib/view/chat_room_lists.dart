@@ -38,6 +38,8 @@ class _ChatListsState extends State<ChatRoomLists> {
             if (snapshot.hasData) {
               loginData = snapshot.data![0];
               userData = snapshot.data![1];
+              // final checkAccept = FirebaseFirestore.instance.collection('requestChats').snapshots();
+              // if checkAccept['acceptState'] == 'accpet'
               return StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                   .collection('chatRooms')
@@ -80,8 +82,8 @@ class _ChatListsState extends State<ChatRoomLists> {
                             contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                             leading: CircleAvatar(
                               backgroundImage: AssetImage(
-                                'images/퍼그.png'
-                                // loginData[0]['ufaceimg1'],
+                                // 'images/퍼그.png'
+                                loginData[0]['ufaceimg1'],
                               ),
                               radius: 50,
                             ),

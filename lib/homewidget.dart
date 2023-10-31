@@ -21,7 +21,7 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> with SingleTickerProviderStateMixin{
 
-  final chatRequestController = Get.put(ChatRequest());
+  // final chatRequestController = Get.put(ChatRequest());
 
   // property
   late TabController tabController;

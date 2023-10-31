@@ -259,6 +259,8 @@ class DetailUserInfoWidget extends StatelessWidget {
                 children: [
                   TextButton(
                       onPressed: () {
+                        final requests = FirebaseFirestore.instance.collection('requestChats').snapshots();
+                        // requests['from'];
                         _requestChating.collection('requestChats').add(
                           {
                             'from': loginUid,

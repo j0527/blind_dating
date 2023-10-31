@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 class MainPage extends StatelessWidget {
   MainPage({super.key});
   // 앱 전역에서 사용자에게 채팅 요청 및 응답 다이어로그 보여주는 컨트롤러
-  final chatRequestController = Get.put(ChatRequest());
+  // final chatRequestController = Get.put(ChatRequest());
 
   // 이미지 슬라이더를 제어하기 위한 기본적인 컨트롤러
   final CarouselController sliderController = CarouselController();

@@ -22,6 +22,7 @@ class _ChatsState extends State<Chats> {
   final LoadUserData userDataController = Get.put(LoadUserData());
   // 사용자 로그인 정보 받아둘 리스트
   late List loginData = [];   
+  late List userData = [];      // 상대 사용자
   // 사용자와 메시지 전송자 일치 여부
   late bool isSender;
 
@@ -59,12 +60,13 @@ class _ChatsState extends State<Chats> {
         ),
       ),
       body: FutureBuilder(
-        future: userDataController.getLoginData(),
+        future: Future.wait([userDataController.getLoginData(), userDataController.getUserData()]),
         // 에러 처리 로직 추가 가능
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              loginData = snapshot.data!; // 로그인된 유저의 데이터
+              loginData = snapshot.data![0]; // 로그인된 유저의 데이터
+              userData = snapshot.data![1];
               // 데이터가 있다면 여기 화면이 그려짐 (원치 않을경우 이부분 없애고 그냥 전역변수에 저장시키는 용도로 써도됨)
               // return Text("User ID: ${loginData[0]['uid']}");
               // return loginData;
@@ -245,8 +247,8 @@ class _ChatsState extends State<Chats> {
     : Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const CircleAvatar(
-          backgroundImage: AssetImage("images/퍼그.png"),
+        CircleAvatar(
+          backgroundImage: AssetImage("${userData[0]['ufaceimg1']}"),
         ),
         Expanded(
           child: Column(

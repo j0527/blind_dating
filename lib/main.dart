@@ -15,7 +15,7 @@ Future<void> main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final ChatController chatController = Get.put(ChatController());
+  // final ChatController chatController = Get.put(ChatController());
   
   runApp(const MyApp());
 }

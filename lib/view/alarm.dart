@@ -44,7 +44,7 @@ class _AlarmPageState extends State<AlarmPage> {
               return StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                   .collection('requestChats')
-                  .where('acceptState', isEqualTo: 'hold')
+                  .where('acceptState', isEqualTo: 'wait')
                   .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
@@ -55,7 +55,7 @@ class _AlarmPageState extends State<AlarmPage> {
                     return const Center(child: CircularProgressIndicator(),);
                   }
                   final chatReqestDocs = snapshot.data!.docs;
-                  print(chatReqestDocs);
+                  print("지니 알람창 확인 :$chatReqestDocs");
                   return ListView.builder(
                     itemCount: chatReqestDocs.length,
                     itemBuilder: (context, index) {
@@ -75,7 +75,7 @@ class _AlarmPageState extends State<AlarmPage> {
                             : print("");    // acceptState == 'hold' ||  acceptState == 'reject' 일때 채팅요청 거절 시키기 (or 안보이게 하기)
                         },
                         child: Visibility(
-                          visible: (loginData[0]['uid'] == from) || (loginData[0]['uid'] == to) && (acceptState == 'hold'),
+                          visible: (loginData[0]['uid'] == from) || (loginData[0]['uid'] == to) && (acceptState != 'reject'),
                           child: _listViewTile(loginData, userData, chatRequest)
                         ),
                       );
@@ -123,27 +123,54 @@ class _AlarmPageState extends State<AlarmPage> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
       leading: CircleAvatar(
         backgroundImage: AssetImage(
-          'images/퍼그.png'
-          // loginData[0]['ufaceimg1'],
+          // 'images/퍼그.png'
+          userData[0]['ufaceimg1'],
         ),
         radius: 50,
       ),
-      title: Text(
-        "${loginData[0]['uid'] == from ? userData[1]['unickname'] : loginData[0]['unickname']} 님께서 \n채팅을 요청하셨습니다.",    // 상대 닉네임으로 바꾸기
-        style: const TextStyle(
-          fontSize: 20
-        ),
+      title: Row(
+        children: [
+          Text(
+            "${loginData[0]['uid'] == from ? userData[0]['unickname'] : loginData[0]['unickname']} 님께서 \n채팅을 요청하셨습니다.",    // 상대 닉네임으로 바꾸기
+            style: const TextStyle(
+              fontSize: 20
+            ),
+          ),
+          Text(
+            isSameDay(requestedAt, now) ? requestedTime(requestedAt)
+            : isSameDay(requestedAt, now.subtract(const Duration(days: 1))) ? "어제"
+            : (requestedAt.year != now.year) ? "${requestedAt.year}년 ${requestedAt.month}월 ${requestedAt.day}일" 
+            : '${requestedAt.month}월 ${requestedAt.day}일',
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 13
+            ),
+          textAlign: TextAlign.right,
+          ),
+        ],
       ),
-      subtitle: Text(
-        isSameDay(requestedAt, now) ? "${requestedTime(requestedAt)}"
-        : isSameDay(requestedAt, now.subtract(const Duration(days: 1))) ? "어제"
-        : (requestedAt.year != now.year) ? "${requestedAt.year}년 ${requestedAt.month}월 ${requestedAt.day}일" 
-        : '${requestedAt.month}월 ${requestedAt.day}일',
-        style: const TextStyle(
-          color: Colors.grey,
-          fontSize: 13
-        ),
-      textAlign: TextAlign.right,
+      subtitle: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          TextButton(
+            onPressed: () {
+              // 파베 상태 업데이트
+            }, 
+            child: const Text("거부"),
+          ),
+          TextButton(
+            onPressed: () {
+              
+            }, 
+            child: const Text("보류"),
+          ),
+          TextButton(
+            onPressed: () {
+              
+            }, 
+            child: const Text("수락"),
+          ),
+        ],
       ),
     );
   }
