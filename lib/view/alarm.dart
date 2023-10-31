@@ -53,6 +53,12 @@ class _AlarmPageState extends State<AlarmPage> {
             if (snapshot.hasData) {
               loginData = snapshot.data![0];
               userData = snapshot.data![1];
+
+              // print("로그인 사용자 id 데이터 (지니 알람창 페이지): ${loginData[0]['uid']}");
+              // print("상대방 사용자 id 데이터 (지니 알람창 페이지): ${userData[0]['uid']}");
+              // print("로그인 사용자 닉네임 데이터 (지니 알람창 페이지): ${loginData[0]['unickname']}");
+              // print("상대방 사용자 닉네임 데이터 (지니 알람창 페이지): ${userData[0]['unickname']}");
+
               return StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                   .collection('requestChats')
@@ -101,7 +107,7 @@ class _AlarmPageState extends State<AlarmPage> {
                         return requestedTime;
                       }
                       return Visibility(
-                        visible: (loginData[0]['uid'] == from) || (loginData[0]['uid'] == to) && (acceptState != 'reject'),
+                        visible: ((loginData[0]['uid'] == from) || (loginData[0]['uid'] == to)) && ((acceptState == 'hold') || (acceptState == 'wait')),
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                           leading: CircleAvatar(

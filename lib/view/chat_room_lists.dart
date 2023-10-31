@@ -83,7 +83,7 @@ class _ChatListsState extends State<ChatRoomLists> {
                             leading: CircleAvatar(
                               backgroundImage: NetworkImage(
                                 // 'images/퍼그.png'
-                                loginData[0]['ufaceimg1'],
+                                userData[0]['ufaceimg1'],
                               ),
                               radius: 50,
                             ),
