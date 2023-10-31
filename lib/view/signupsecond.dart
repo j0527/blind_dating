@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:blind_dating/model/user.dart';
 
 
 //image를 flask로 보내는 함수
@@ -46,11 +47,56 @@ import 'package:http/http.dart' as http;
 // }
 
 //3차수정
-Future<String> uploadImage(XFile? imageFile) async {
+// Future<String?> uploadImage(XFile? imageFile) async {
+//   if (imageFile == null) {
+//     throw Exception('No image provided');
+//   }
+  
+//   final Uri uri = Uri.parse('http://ec2-52-78-36-96.ap-northeast-2.compute.amazonaws.com:5000/upload');
+//   final http.MultipartFile file = await http.MultipartFile.fromPath('image', imageFile.path);
+
+//   final http.MultipartRequest request = http.MultipartRequest('POST', uri);
+//   request.files.add(file);
+
+//   final http.StreamedResponse response = await request.send();
+
+
+//   print(response.stream);
+//   // if (response.statusCode == 200) {
+//   //   final Map<String, dynamic> responseBody = json.decode(await response.stream.bytesToString());
+//   //   // return responseBody['results']; 
+//   //   return json.encode(responseBody);
+
+//   // } else {
+//   //   throw Exception('Failed to upload image');
+//   // }
+//   if (response.statusCode == 200) {
+//     final Map<String, dynamic> responseBody = json.decode(await response.stream.bytesToString());
+    
+//     String? resultDogType;
+//     responseBody.forEach((key, value) {
+//       if (value == '100.00%') {
+//         resultDogType = key;
+//       }
+//   });
+  
+//     if (resultDogType != null) {
+//       return resultDogType;
+//     } else {
+//       throw Exception('No dog type matched 100.00%');
+//     }
+//   } else {
+//     throw Exception('Failed to upload image');
+//   }
+
+// }
+
+//4차수정
+Future<String?> uploadImage(XFile? imageFile) async {
   if (imageFile == null) {
     throw Exception('No image provided');
   }
-  
+
   final Uri uri = Uri.parse('http://ec2-52-78-36-96.ap-northeast-2.compute.amazonaws.com:5000/upload');
   final http.MultipartFile file = await http.MultipartFile.fromPath('image', imageFile.path);
 
@@ -61,7 +107,26 @@ Future<String> uploadImage(XFile? imageFile) async {
 
   if (response.statusCode == 200) {
     final Map<String, dynamic> responseBody = json.decode(await response.stream.bytesToString());
-    return responseBody['results']; 
+
+    String? resultDogType;
+    responseBody.forEach((key, value) {
+      if (value == '100.00%') {
+        resultDogType = key;
+      }
+    });
+
+    if (resultDogType != null) {
+      // 반환된 강아지 종류를 user.dart의 ubreed 변수에 저장합니다.
+      UserModel.ubreed = resultDogType!;
+
+      // 반환된 강아지 종류의 이름에 해당하는 .png 이미지 경로를 user.dart의 udogimg 변수에 저장합니다.
+      // 이미지의 경로는 프로젝트의 구조에 따라 적절히 수정해야 합니다.
+      UserModel.udogimg = 'path_to_images/$resultDogType.png';
+
+      return resultDogType;
+    } else {
+      throw Exception('No dog type matched 100.00%');
+    }
   } else {
     throw Exception('Failed to upload image');
   }
@@ -187,6 +252,7 @@ class _SignUpSecondState extends State<SignUpSecond> {
         });
       } catch (e) {
         // TODO: 오류 메시지 표시
+        print("Error: $e");
       }
     }
 },
@@ -294,6 +360,8 @@ class _SignUpSecondState extends State<SignUpSecond> {
     );
   }
 
+
+
   Widget _buildPhotoArea() {
     return _photoImage != null
         ? Container(
@@ -338,7 +406,7 @@ class _SignUpSecondState extends State<SignUpSecond> {
     ],
   );
 }
-
+}
 
   // Widget _buildButton() {
   //   return Row(
@@ -363,4 +431,4 @@ class _SignUpSecondState extends State<SignUpSecond> {
   //     ],
   //   );
   // }
-}
+// }
