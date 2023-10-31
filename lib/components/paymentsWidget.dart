@@ -1,4 +1,6 @@
+import 'package:blind_dating/homewidget.dart';
 import 'package:blind_dating/util/arguments.dart';
+import 'package:blind_dating/view/mainpage.dart';
 import 'package:blind_dating/viewmodel/payments_ctrl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -154,7 +156,8 @@ class PayMentsWidget extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   Get.back();
-                  Get.back();
+                  Get.to((const HomeWidget()));
+                  // Get.back();
                 },
                 child: const Text("확인"),
               ),
@@ -611,6 +614,7 @@ class PayMentsWidget extends StatelessWidget {
                   if (await payMentsController.purchaseAction(1)) {
                     // 상품 코드만 넣어서 결제 진행
                     purchaseSuccsessResultDialog();
+                    // Get.to(MainPage());
                   } else{
                     failedDialog();
                   }

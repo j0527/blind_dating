@@ -83,11 +83,14 @@ class MainPage extends StatelessWidget {
                 future: () async {
                   // 리스트로 집어넣어서 순서를 줌으로써 기존의 future빌더의 wait의 모두 실행될때까지라는 조건의 단점을 보완함 (이거 안해주면 null값 불러와서 오류남)
                   List results = [];
-                  results.add(await userDataController.initLocation()); // 내 위치 가져오기
+                  results.add(
+                      await userDataController.initLocation()); // 내 위치 가져오기
+                  results.add(
+                      await userDataController.userGrantUpdate()); // 권한 업데이트
                   results.add(await userDataController
                       .getUserData()); // 먼저 내 위치를 업데이트 해주고 추천받을 유저 띄우기
-                  results.add(
-                      await userDataController.getLoginData()); // 로그인된 유저 정보 가져오기
+                  results.add(await userDataController
+                      .getLoginData()); // 로그인된 유저 정보 가져오기
                   return results;
                 }(),
                 builder: (context, snapshot) {
@@ -96,16 +99,16 @@ class MainPage extends StatelessWidget {
                     if (snapshot.hasData) {
                       // ================== 조건부 Select ==================
                       Position? userPosition = snapshot.data?[0]; // 현재 내 위치
-                      List? userList = snapshot.data?[1]; // db에서 불러온 유저 정보 리스트
-                      List? loginData = snapshot.data?[2]; // 로그인된 유저의 데이터
-        
+                      List? userList = snapshot.data?[2]; // db에서 불러온 유저 정보 리스트
+                      List? loginData = snapshot.data?[3]; // 로그인된 유저의 데이터
+
                       print("로그인된 유저닉네임: ${loginData![0]['unickname']}");
                       print(
                           "로그인된 유저권한: ${loginData[0]['ugender'] == "0" ? "남성" : "여성"}");
                       print(
                           "로그인된 유저권한: ${loginData[0]['ugrant'] == 1 ? "구독자" : "무료 사용자"}");
                       print("로그인된 유저 채팅카운트: ${loginData[0]['uchatcount']}");
-        
+
                       if (loginData != null) {
                         // 유저에게 결제해서 권한이 있을경우 얼굴 이미지 띄워줌
                         if (loginData[0]['ugrant'] == 1) {
@@ -131,7 +134,7 @@ class MainPage extends StatelessWidget {
                         }
                         return uSmoke;
                       }
-        
+
                       // 이미지와 텍스트 가지는 데이터 리스트
                       final List<SliderlItems> carouselItems = [
                         // 첫번째 유저
@@ -175,9 +178,8 @@ class MainPage extends StatelessWidget {
                             loginUid: loginData[0]['uid'],
                             loginGrant: loginData[0]['ugrant'],
                             loginName: loginData[0]['unickname'],
-                            loginChatCount: loginData[0]['uchatcount']
-                            ),
-                            // 세번째 유저
+                            loginChatCount: loginData[0]['uchatcount']),
+                        // 세번째 유저
                         SliderlItems(
                             userId: userList[2]['uid'],
                             userMainImagePath: userImagepath3,
@@ -197,30 +199,32 @@ class MainPage extends StatelessWidget {
                             loginUid: loginData[0]['uid'],
                             loginGrant: loginData[0]['ugrant'],
                             loginName: loginData[0]['unickname'],
-                            loginChatCount: loginData[0]['uchatcount']
-                            ),
+                            loginChatCount: loginData[0]['uchatcount']),
                       ];
-        
+
                       // 유저의 위치를 가져와서 거리랑 단위 변환하는 과정
                       if (userPosition != null) {
                         List<double> distances = userDataController
                             .calculateDistances(); // 컨트롤러에서 거리 계산하는 인스턴스
                         if (distances.length >= 2) {
-                          double distanceWithUser1 = distances[0]; // 첫 번째 사용자와의 거리
-                          double distanceWithUser2 = distances[1]; // 두 번째 사용자와의 거리
-                          double distanceWithUser3 = distances[2]; // 두 번째 사용자와의 거리
+                          double distanceWithUser1 =
+                              distances[0]; // 첫 번째 사용자와의 거리
+                          double distanceWithUser2 =
+                              distances[1]; // 두 번째 사용자와의 거리
+                          double distanceWithUser3 =
+                              distances[2]; // 두 번째 사용자와의 거리
                           String user1DistanceText =
                               getFormattedDistance(distanceWithUser1);
                           String user2DistanceText =
                               getFormattedDistance(distanceWithUser2);
                           String user3DistanceText =
                               getFormattedDistance(distanceWithUser3);
-        
+
                           carouselItems[0].userDistance = user1DistanceText;
                           carouselItems[1].userDistance = user2DistanceText;
                           carouselItems[2].userDistance = user3DistanceText;
                         }
-        
+
                         // 성별에 따라 다른 배경컬러 적용
                         Color genderColors() {
                           // print(
@@ -228,24 +232,23 @@ class MainPage extends StatelessWidget {
                           // print(
                           //     "두 번째 유저의 성별 = ${userList[1]['ugender'] == 0 ? "남성" : "여성"}");
                           bool user1IsMale = userList[0]['ugender'] == "0";
-        
+
                           // 여성일 때와 남성일 때의 색상을 Map에 정의
                           Map<bool, Color> colorMap = {
-                            true: const Color.fromARGB(255, 67, 136, 196), // 남성 색상
-                            false: const Color.fromARGB(255, 154, 47, 187), // 여성 색상
+                            true: const Color.fromARGB(
+                                255, 67, 136, 196), // 남성 색상
+                            false: const Color.fromARGB(
+                                255, 154, 47, 187), // 여성 색상
                           };
-        
+
                           return colorMap[user1IsMale] ?? Colors.black;
                         }
-        
+
                         // ================== 조건부 Select ==================
-        
+
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            TextButton(
-                              onPressed: () => Get.to(PayMentsPage()), 
-                              child: const Text("Test 결제")),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                               child: Text(
@@ -270,14 +273,15 @@ class MainPage extends StatelessWidget {
                               child: Container(
                                 // 여기가 전체 슬라이더 크기를 담당
                                 color: genderColors(),
-                                width: MediaQuery.of(context).size.width, // 화면 최대 넓이
+                                width: MediaQuery.of(context)
+                                    .size
+                                    .width, // 화면 최대 넓이
                                 height: 600,
                                 child: Stack(
                                   children: [
                                     GetBuilder<IndicatorCurrent>(
                                       builder: (controller) {
-                                        return 
-                                        CarouselSliderWidget(
+                                        return CarouselSliderWidget(
                                           controller: sliderController,
                                           userInfoList: carouselItems,
                                           current: controller.current,
@@ -306,7 +310,7 @@ class MainPage extends StatelessWidget {
                       return Text('위치를 가져오는 중에 오류가 발생했습니다: ${snapshot.error}');
                     }
                   }
-        
+
                   return const CircularProgressIndicator();
                 },
               ),

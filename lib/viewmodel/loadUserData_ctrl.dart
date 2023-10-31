@@ -17,6 +17,11 @@ class LoadUserData extends GetxController {
   Rx<Position?> myLocation = Rx<Position?>(null);
   var isPermissionGranted = false.obs;
   var userList = [].obs; // 유저 정보를 저장할 리스트
+  RxInt userGrant = 0.obs;
+
+  grantStatus(value){
+    userGrant.value = value;
+  }
 
   // 두 지점 간의 거리 계산
   List<double> calculateDistances() {
@@ -218,6 +223,27 @@ Future<bool> updateLocation() async {
       ],
     );
   }
+
+// 구독 관리 (select 해봐서 만료일이 현재일을 지났으면 사용자 권한을 0으로 업데이트)
+Future<bool> userGrantUpdate() async {
+  String getUid = await initSharedPreferences();
+
+  var url = Uri.parse(
+    "http://localhost:8080/Flutter/dateapp_ugrant_update_flutter.jsp?user_uid=$getUid");
+
+        var response = await http.get(url);
+    var dataConvertedJSON =
+        json.decode(utf8.decode(response.bodyBytes)); // 딕셔너리로 바꾸는 과정
+    var result = dataConvertedJSON['result']; // return 해주는게 result라는 키값이라서
+    if (result == 'user unsubscribe') {
+      print("기간이 만료됨에따라 구독 해제되었습니다.");
+      return true;
+    } else {
+      print("아무일도 일어나지 않음");
+      return false;
+    }
+
+}
 
 // 권한요청
   Future<bool> _determinePermission() async {
