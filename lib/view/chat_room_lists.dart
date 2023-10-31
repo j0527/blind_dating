@@ -81,7 +81,7 @@ class _ChatListsState extends State<ChatRoomLists> {
                           child: ListTile(
                             contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                             leading: CircleAvatar(
-                              backgroundImage: AssetImage(
+                              backgroundImage: NetworkImage(
                                 // 'images/퍼그.png'
                                 loginData[0]['ufaceimg1'],
                               ),
@@ -112,12 +112,12 @@ class _ChatListsState extends State<ChatRoomLists> {
                                 )
                               ],
                             ),
-                            subtitle: Text(
-                              "마지막 채팅 메시지",
-                              style: TextStyle(
-                                fontSize: 17
-                              ),
-                            ),
+                            // subtitle: Text(
+                            //   "마지막 채팅 메시지",
+                            //   style: TextStyle(
+                            //     fontSize: 17
+                            //   ),
+                            // ),
                           ),
                         ),
                       );

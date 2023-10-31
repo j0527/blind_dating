@@ -217,26 +217,26 @@ class _ChatsState extends State<Chats> {
   Widget _buildItemWidget(DocumentSnapshot doc) {
     final content = doc['content'];
     final sender = doc['sender'];
-    DateTime dateTime = doc['chatedAt'].toDate();
-    int dateHour = dateTime.hour;
-    // 시간을 12시간제로 변환
-    String chatTime = (dateHour > 12)
-      ? '${(dateHour - 12).toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')} PM'
-      : '${dateHour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')} ${dateHour < 12 ? 'AM' : 'PM'}';
-    // 0 AM을 12 AM으로 표시
-    chatTime = (chatTime.startsWith('00')) ? '12${chatTime.substring(2)}' : chatTime;
+    // final chatedAt = doc['chatedAt'];
+    // int dateHour = chatedAt.toDate().hour;
+    // // 시간을 12시간제로 변환
+    // String chatTime = (dateHour > 12)
+    //   ? '${(dateHour - 12).toString().padLeft(2, '0')}:${chatedAt.minute.toString().padLeft(2, '0')} PM'
+    //   : '${dateHour.toString().padLeft(2, '0')}:${chatedAt.minute.toString().padLeft(2, '0')} ${dateHour < 12 ? 'AM' : 'PM'}';
+    // // 0 AM을 12 AM으로 표시
+    // chatTime = (chatTime.startsWith('00')) ? '12${chatTime.substring(2)}' : chatTime;
 
     return loginData[0]['uid'] == sender 
     ? Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(
-          chatTime,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey
-          ),
-        ),
+        // Text(
+        //   // chatTime,
+        //   style: TextStyle(
+        //     fontSize: 12,
+        //     color: Colors.grey
+        //   ),
+        // ),
         BubbleSpecialThree(
           text: content,
           color: const Color.fromARGB(255, 133, 195, 246),
@@ -254,11 +254,12 @@ class _ChatsState extends State<Chats> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+               Row(
                 children: [
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Text(
-                    "김정은",
+                    // "김정은",
+                    "${userData[0]['unickname']}",
                   ),
                 ],
               ),
@@ -269,15 +270,15 @@ class _ChatsState extends State<Chats> {
                     color: Color.fromARGB(255, 236, 234, 234),
                     isSender: false,
                   ),
-                  Expanded(
-                    child: Text(
-                      chatTime,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey
-                      ),
-                    ),
-                  ),
+                  // Expanded(
+                    // child: Text(
+                    //   chatTime,
+                    //   style: TextStyle(
+                    //     fontSize: 12,
+                    //     color: Colors.grey
+                    //   ),
+                    // ),
+                  // ),
                 ],
               ),
             ],

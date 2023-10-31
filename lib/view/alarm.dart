@@ -114,7 +114,7 @@ class _AlarmPageState extends State<AlarmPage> {
                           title: Row(
                             children: [
                               Text(
-                                "${loginData[0]['uid'] == from ? userData[0]['unickname'] : loginData[0]['unickname']} 님께서 \n채팅을 요청하셨습니다.",    // 상대 닉네임으로 바꾸기
+                                "${loginData[0]['uid'] == from? loginData[0]['unickname'] : userData[0]['unickname']} 님께서 \n채팅을 요청하셨습니다.",    // 상대 닉네임으로 바꾸기
                                 style: const TextStyle(
                                   fontSize: 20
                                 ),
