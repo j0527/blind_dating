@@ -110,7 +110,7 @@ Future<String?> uploadImage(XFile? imageFile) async {
 
     String? resultDogType;
     responseBody.forEach((key, value) {
-      if (value == '100.00%') {
+      if (double.parse(value.replaceAll('%', '')) >= 90.0) {
         resultDogType = key;
       }
     });
