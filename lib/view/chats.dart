@@ -1,10 +1,8 @@
-import 'package:blind_dating/model/chat_messages.dart';
 import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Chats extends StatefulWidget {
   const Chats({super.key});
@@ -254,7 +252,7 @@ class _ChatsState extends State<Chats> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Row(
+              Row(
                 children: [
                   const SizedBox(width: 20),
                   Text(

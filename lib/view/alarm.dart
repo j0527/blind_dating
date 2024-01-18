@@ -1,7 +1,5 @@
-import 'package:blind_dating/view/chats.dart';
 import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

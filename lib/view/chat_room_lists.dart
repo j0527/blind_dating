@@ -1,6 +1,3 @@
-import 'package:blind_dating/model/chat_messages.dart';
-import 'package:blind_dating/model/chat_rooms.dart';
-import 'package:blind_dating/model/chat_rooms_list.dart';
 import 'package:blind_dating/view/chats.dart';
 import 'package:blind_dating/viewmodel/loadUserData_ctrl.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +66,7 @@ class _ChatListsState extends State<ChatRoomLists> {
                       final accepter = chatRoomId['accepter'];
                       final createdAt = chatRoomId['createdAt'];
                       final chatRoomName = (loginData[0]['unickname'] == contacter ? accepter : contacter); // 상대방 닉네임
-                      final chats = FirebaseFirestore.instance.collection('chatRooms').doc().collection('chats');
+                      // final chats = FirebaseFirestore.instance.collection('chatRooms').doc().collection('chats');
                       
                       return GestureDetector(
                         onTap: () {
